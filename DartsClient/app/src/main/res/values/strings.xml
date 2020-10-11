@@ -1,0 +1,94 @@
+<resources>
+
+    <string name="cricketSharedPreference">cricketConfig</string>
+
+    <string name="app_name">DartsClient</string>
+    <string name="title_activity_config">Config</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="boardMode">Játékmód:</string>
+    <string name="offlineRadio">Tábla nélkül</string>
+    <string name="onlineRadio">Táblával:</string>
+    <string name="btDefault">Kérem válasszon táblát!</string>
+    <string name="btDevices">Bluetooth-eszközök listája:</string>
+
+    <string name="selectorTitle">Játékséma:</string>
+    <string name="dialogSelectorTitle">Játéksémák:</string>
+
+    <string name="tab1_name">Játék</string>
+    <string name="tab2_name">Játékosok</string>
+
+    <string name="cricketTypeName">Típus:</string>
+
+    <string name="cricketType1">Score</string>
+    <string name="cricketType2">No-Score</string>
+    <string name="cricketType3">Cut-Throat</string>
+
+    <string name="cricketTypeM1">SCORE</string>
+    <string name="cricketTypeM2">NOSCORE</string>
+    <string name="cricketTypeM3">CUTTHROAT</string>
+
+    <string name="cricketSetName">Számhalmaz:</string>
+
+    <string name="cricketSet1">Klasszikus</string>
+    <string name="cricketSet2">Teljes</string>
+    <string name="cricketSet3">Egyéni</string>
+
+    <string name="cricketSetM1">CLASSIC</string>
+    <string name="cricketSetM2">ALL</string>
+    <string name="cricketSetM3">CUSTOM</string>
+
+    <string name="customName">Egyéni számhalmaz:</string>
+
+    <string name="nrOfNumbers">Számok száma:</string>
+
+    <string name="customSet1">Intervallum, kezdőértéke: </string>
+    <string name="customSet2">Random (Intervallum)</string>
+    <string name="customSet3">Kaotikus</string>
+    <string name="customSet4">Definiált (nincs kész)</string>
+
+    <string name="customSetM1">INTERVAL</string>
+    <string name="customSetM2">RANDOMINTERVAL</string>
+    <string name="customSetM3">CHAOTIC</string>
+    <string name="customSetM4">DEFINED</string>
+
+
+    <string name="choosePlayerDialogTitle">Játékos választása</string>
+
+    <string name="chosenPlayerText">Választott játékosok:</string>
+
+    <string name="addNewPlayer">Játékos hozzáadása</string>
+    <string name="createNewPlayer">Játékos létrehozása</string>
+
+    <string name="playerName">Név:</string>
+    <string name="playerNickname">Becenév:</string>
+    <string name="colorName">Szín:</string>
+
+    <string name="playerAlreadyChosen1">A játékos már hozzá van adva!</string>
+    <string name="playerAlreadyChosen2">A játékos használatban van, ezért nem törölhető!</string>
+
+    <string name="deleteTitle">Biztosan törölni szeretné?</string>
+    <string name="deleteExplanation">Ha igen, írja be hogy biztos!</string>
+    <string name="confirmString">Rendben</string>
+
+    <string name="creatorTitle">Játékos szerkesztése</string>
+    <string name="chooseColor">Kiválaszt</string>
+    <string name="cancel">mégse</string>
+
+    <string name="playerConfigTitle">Játékos választása</string>
+    <string name="searchHint">Játékos keresése...</string>
+
+    <string name="playerScores">Játékosok pontjai</string>
+
+    <string name="rematch">Visszavágó?</string>
+    <string name="newOrder">Játékosok új sorrendje:</string>
+    <string name="cyclical">Eltolás</string>
+    <string name="reversed">Fordított</string>
+    <string name="same">Változatlan</string>
+    <string name="backToMenu">Vissza a\n játékbeállításokhoz</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
