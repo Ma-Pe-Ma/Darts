@@ -1,0 +1,26 @@
+cmake_minimum_required(VERSION 3.4.1)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall -Werror")
+add_definitions("-DANDROID_NDK -DDISABLE_IMPORTGL")
+
+add_library(dartBoard SHARED
+        dartboardRender.cpp
+        shader.cpp
+        )
+
+set_target_properties(dartBoard
+        PROPERTIES
+        CXX_STANDARD 11
+        CXX_STANDARD_REQUIRED YES
+        CXX_EXTENSIONS NO
+        )
+
+# Include libraries needed for sanangeles lib
+target_link_libraries(dartBoard
+                      android
+                      dl
+                      log
+                      m
+                      GLESv3
+                      EGL
+        )
