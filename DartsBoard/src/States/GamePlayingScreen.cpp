@@ -35,7 +35,7 @@ void GamePlayingScreen::Start() {
         }
         
         Player::players[i].score = DartsGame::dartsGame->SetProperScoreContainer();
-		Player::players[i].score->position = -1;
+		Player::players[i].score->position = 0;
     }
     
     DartsGame::dartsGame->InitializeGame();
@@ -201,7 +201,7 @@ void GamePlayingScreen::SendDump() {
 	gBody["GAME"] = DartsGame::dartsGame->gameID;
 	gBody["CURRENT"] = Player::current->nickname;
 
-	gBody["FINISHED"] = gameFinished;
+	//gBody["FINISHED"] = gameFinished;
 	gBody["GAMENR"] = gameNr;
 
 	JsonObject config = gBody.createNestedObject("CONFIG");

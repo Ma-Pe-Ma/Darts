@@ -58,7 +58,7 @@ public:
 	Button offline, android;
 	Button delete1, delete2, delete3;
 
-	void GetDump();
+	void GetConfigDump();
 	void Run(Pair);
 
 	void ParsePlayers(JsonVariant);

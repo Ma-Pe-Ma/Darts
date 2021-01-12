@@ -61,7 +61,7 @@ void GameLogic::ParsePlayers(JsonVariant players) {
 	Player::number = players.size();	
 }
 
-void GameLogic::GetDump() {
+void GameLogic::GetConfigDump() {
 	StaticJsonDocument<1024> doc;
 	doc["STATE"] = "DUMP";
 	doc.createNestedObject("BODY");
