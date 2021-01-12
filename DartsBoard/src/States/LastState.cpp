@@ -11,5 +11,4 @@ void LastState::Update(Pair pair) {
 
 void LastState::ProcessMessage(JsonObject message) {
     gameLogic->bluetoothCommunicator->repeatLastMessage();
-    //gameLogic->TransitionTo(&(gameLogic->gamePlayingScreen));
 }

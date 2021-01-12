@@ -25,7 +25,7 @@ void MainScreen::Update(Pair pair) {
 	if (gameLogic->android.simple()) {	
 		gameLogic->androidMode = true;
 		Player::number = 0;
-		gameLogic->GetDump();
+		gameLogic->GetConfigDump();
         gameLogic->TransitionTo(&gameLogic->playerScreen);
 	}
 	
