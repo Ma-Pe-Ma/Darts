@@ -14,7 +14,6 @@ import java.io.OutputStream
 import java.util.*
 
 class BluetoothCommunicator(var appContext: Context)  {
-
     val MY_UUID : UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
 
     var bluetoothDevice :BluetoothDevice? = null
@@ -72,8 +71,6 @@ class BluetoothCommunicator(var appContext: Context)  {
         private val mmBuffer: ByteArray = ByteArray(1024) // mmBuffer store for the stream
 
         override fun run() {
-            Log.i("DARTS", "Trying to connect!")
-
             // Cancel discovery because it otherwise slows down the connection.
             bluetoothAdapter?.cancelDiscovery()
 
@@ -85,14 +82,14 @@ class BluetoothCommunicator(var appContext: Context)  {
 
                 try {
                     socket.connect()
-                    Log.i("DARTS", "Successfully connected!")
+                    //Log.i("DARTS", "Successfully connected!")
                     bluetoothSocket = socket
                     mmInStream = socket.inputStream
                     mmOutStream  = socket.outputStream
                     connected = true
                 }
                 catch (e: IOException) {
-                    Log.i("DARTS", "Could not connect!"+e.printStackTrace())
+                    //Log.i("DARTS", "Could not connect!"+e.printStackTrace())
                     sendState(false)
                     connected = false
                 }
@@ -133,7 +130,7 @@ class BluetoothCommunicator(var appContext: Context)  {
             var numBytes: Int // bytes returned from read()
             var counter : Int = 0
 
-            Log.i("DARTS","Started listening bt conn!")
+            //Log.i("DARTS","Started listening bt conn!")
 
             // Keep listening to the InputStream until an exception occurs.
             while (true) {
@@ -157,7 +154,7 @@ class BluetoothCommunicator(var appContext: Context)  {
                         processMessage(message)
                     }
                 } catch (e: IOException) {
-                    Log.i("DARTS", "Input stream was disconnected", e)
+                    //Log.i("DARTS", "Input stream was disconnected", e)
                     isConnected = false
                     break
                 }
@@ -235,7 +232,7 @@ class BluetoothCommunicator(var appContext: Context)  {
         for (i in 0 until (processable.length - lineEnding.length + 1)) {
             if (processable.substring(i, i +lineEnding.length) == lineEnding) {
                 var newEntry =  processable.substring(0, i)
-                Log.i("DARTS", "NEW ENTRY: "+newEntry)
+                //Log.i("DARTS", "NEW ENTRY: "+newEntry)
                 queue.add(newEntry)
 
                 var newProcessable : String = processable.substring(i+lineEnding.length)
@@ -260,7 +257,7 @@ class BluetoothCommunicator(var appContext: Context)  {
     fun sendMessage(jsonObject: JSONObject) {
         //var localBroadcastManager : LocalBroadcastManager = LocalBroadcastManager.getInstance(appContext)
         connectThread?.write((jsonObject.toString() + lineEnding).toByteArray())
-        Log.i("DARTS", "OUT: "+jsonObject.toString())
+        //Log.i("DARTS", "OUT: "+jsonObject.toString())
     }
 
     fun sendState(state : Boolean) {

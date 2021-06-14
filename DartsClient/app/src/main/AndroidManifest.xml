@@ -16,15 +16,15 @@
         android:roundIcon="@drawable/darts"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.GamePlay"
+        <activity android:name=".activities.gamePlay.GamePlay"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".activities.Config"
+            android:name=".activities.config.Config"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activities.StartActivity"
+        <activity android:name=".activities.start.StartActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

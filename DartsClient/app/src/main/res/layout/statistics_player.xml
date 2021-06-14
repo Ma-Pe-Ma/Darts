@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mpm.dartsclient.activities.config.ExpandableCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/statisticsGeneralAverage">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="12dp"
+                android:textSize="16sp"
+                android:id="@+id/statisticsPlayerID" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/statisticsPlayerNameText"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginStart="30dp"
+                android:textSize="16sp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="vertical"
+                android:id="@+id/statisticsAveragePosition"
+                android:layout_marginStart="84dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/statisticsAveragePositionKey"
+                    android:text="@string/statisticsAveragePositionKey"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/statisticsAveragePositionValue"
+                    android:textSize="12sp"
+                    android:layout_gravity="center_horizontal"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="vertical"
+                android:id="@+id/statisticsAverageRound"
+                android:layout_marginStart="150dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/statisticsAverageRoundKey"
+                    android:text="@string/statisticsAverageRoundKey"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/statisticsAverageRoundValue"
+                    android:textSize="12sp"
+                    android:layout_gravity="center_horizontal"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="vertical"
+                android:id="@+id/statisticsAverageScore"
+                android:layout_marginStart="214dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/statisticsAverageScoreKey"
+                    android:text="@string/statisticsAverageScoreKey"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/statisticsAverageScoreValue"
+                    android:textSize="12sp"
+                    android:layout_gravity="center_horizontal"/>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            layout="@layout/statistics_result_list_with_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/statisticsGeneralAverage"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:id="@+id/statisticResultListWithHeader"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.mpm.dartsclient.activities.config.ExpandableCardView>

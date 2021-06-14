@@ -1,11 +1,13 @@
 package com.mpm.dartsclient.games
 
-import android.app.Activity
 import androidx.fragment.app.Fragment
-import com.mpm.dartsclient.scoring.Score
+import com.mpm.dartsclient.games.cricket.Cricket
+import com.mpm.dartsclient.scoring.scoring.GameScore
 import org.json.JSONObject
 
 abstract class DartsGameContainer(var gameID : String, var name : String) {
+
+    var subtype : String = ""
 
     companion object {
         var games : MutableList<DartsGameContainer> = ArrayList()
@@ -17,7 +19,7 @@ abstract class DartsGameContainer(var gameID : String, var name : String) {
             games.add(X01("X01", "X01"))
         }
 
-        fun findGameByName ( ID: String) : DartsGameContainer?{
+        fun findGameByName (ID : String) : DartsGameContainer?{
             for (game in games) {
                 if (game.gameID == ID) {
                     return game
@@ -38,8 +40,8 @@ abstract class DartsGameContainer(var gameID : String, var name : String) {
         }
     }
 
-    abstract fun parseConfigParameters(jsonObject: JSONObject, activity: Activity)
-    abstract fun serializeConfigParameters(activity: Activity) : JSONObject
+    abstract fun parseConfigParameters(jsonObject: JSONObject)
+    abstract fun serializeConfigParameters() : JSONObject
     abstract fun getConfigFragment() : Fragment
-    abstract fun getScoreObject() : Score
+    abstract fun getScoreObject() : GameScore
 }

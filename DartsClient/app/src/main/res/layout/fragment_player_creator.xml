@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.PlayerCreatorDialogFragment">
+    tools:context=".activities.config.fragments.dialog.PlayerCreatorDialogFragment">
 
     <TextView
         android:layout_width="wrap_content"
@@ -66,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:id="@+id/colorLayout"
+        android:id="@+id/bakcColorLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nicknameLayout">
 
@@ -75,15 +75,40 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:layout_marginTop="6dp"
-            android:text="@string/colorName"
-            android:id="@+id/colorNameText" />
+            android:text="@string/backColorName"
+            android:id="@+id/backColorNameText" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:layout_marginStart="20dp"
-            android:id="@+id/colorButton"/>
+            android:id="@+id/backColorButton"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:id="@+id/textColorLayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bakcColorLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginTop="6dp"
+            android:text="@string/textColorName"
+            android:id="@+id/textColorNameText" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="20dp"
+            android:id="@+id/textColorButton"/>
 
     </LinearLayout>
 
@@ -91,7 +116,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/colorLayout"
+        app:layout_constraintTop_toBottomOf="@id/textColorLayout"
         android:layout_marginEnd="10dp"
         android:text="@string/confirmString"
         android:id="@+id/confirmPlayer"/>

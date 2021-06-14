@@ -343,13 +343,21 @@ public:
     }
 
     void drawBoard(int sector, int multiplier) {
+        std::string debugMes = "SECTOR: "+std::to_string(sector)+", MULT: "+std::to_string(multiplier);
+        const char* foo = debugMes.c_str();
+        LOGI("%s", foo);
+
         int location = sectorMap[sector];
 
+        if (location == -1) {
+            drawBull(multiplier);
+        }
+        else {
+            drawBull(0);
+        }
+
         for (int i = 0; i < 20; i++) {
-            if (location == -1) {
-                drawSector(i, -1 * multiplier);
-            }
-            else if (i == location) {
+            if (i == location) {
                 drawSector(i, multiplier);
             }
             else {
@@ -362,9 +370,6 @@ public:
         shader->use();
         glBindVertexArray(vao);
         shader->setMat4("sectorPos", orientationMap[position]);
-
-        drawSimpleBull(multiplier == -1);
-        drawDoubleBull(multiplier == -2);
 
         drawSimple(multiplier == 1, position);
         drawDouble(multiplier == 2, position);
@@ -393,6 +398,17 @@ public:
         }
         else {
             shader->setVec4("color", colorMap[pos%2][multiplier][0], colorMap[pos%2][multiplier][1], colorMap[pos%2][multiplier][2], colorMap[pos%2][multiplier][3]);
+        }
+    }
+
+    void drawBull(int multiplier) {
+        shader->use();
+        glBindVertexArray(vao);
+
+        for (int i = 0; i < 20; i++) {
+            shader->setMat4("sectorPos", orientationMap[i]);
+            drawSimpleBull(multiplier == 1);
+            drawDoubleBull(multiplier == 2);
         }
     }
 
@@ -476,14 +492,14 @@ DartsBoard dartsBoard;
 
 extern "C" {
     JNIEXPORT void JNICALL
-    Java_com_mpm_dartsclient_nativeElements_CustomRenderer_init(JNIEnv *env, jclass type, jobject assetManager) {
+    Java_com_mpm_dartsclient_nativeElements_CustomRenderer_init(JNIEnv *env, jobject type, jobject assetManager) {
         (void)type;
         AAssetManager *nativeAssetManager = AAssetManager_fromJava(env, assetManager);
         dartsBoard.init(nativeAssetManager);
     }
 
     JNIEXPORT void JNICALL
-    Java_com_mpm_dartsclient_nativeElements_CustomRenderer_surfaceCreated(JNIEnv *env, jclass type) {
+    Java_com_mpm_dartsclient_nativeElements_CustomRenderer_surfaceCreated(JNIEnv *env, jobject type) {
         (void)env;
         (void)type;
         dartsBoard.surfaceCreated();
@@ -491,16 +507,15 @@ extern "C" {
 
     JNIEXPORT void JNICALL
     Java_com_mpm_dartsclient_nativeElements_CustomRenderer_surfaceChanged(
-            JNIEnv *env, jclass type, jint width, jint height) {
+            JNIEnv *env, jobject type, jint width, jint height) {
         (void)env;
         (void)type;
         //dartsBoard.surfaceChanged(width, height);
     }
 
-
     JNIEXPORT void JNICALL
     Java_com_mpm_dartsclient_nativeElements_CustomRenderer_drawFrame(
-            JNIEnv *env, jclass type) {
+            JNIEnv *env, jobject type) {
         (void)env;
         (void)type;
 
@@ -510,7 +525,7 @@ extern "C" {
 
     JNIEXPORT void JNICALL
     Java_com_mpm_dartsclient_nativeElements_CustomRenderer_pause(
-            JNIEnv *env, jclass type) {
+            JNIEnv *env, jobject type) {
         (void)env;
         (void)type;
         dartsBoard.pause();
@@ -518,15 +533,15 @@ extern "C" {
 
     JNIEXPORT void JNICALL
     Java_com_mpm_dartsclient_nativeElements_CustomRenderer_resume(
-            JNIEnv *env, jclass type) {
+            JNIEnv *env, jobject type) {
         (void)env;
         (void)type;
         dartsBoard.resume();
     }
 
     JNIEXPORT void JNICALL
-    Java_com_mpm_dartsclient_nativeElements_CustomRenderer_highLightSector(
-            JNIEnv *env, jclass type, jint multiplier, jint sector) {
+    Java_com_mpm_dartsclient_nativeElements_CustomRenderer_highlightSectorInternal(
+            JNIEnv *env, jobject type, jint multiplier, jint sector) {
         (void)env;
         (void)type;
         dartsBoard.currentMultplier = multiplier;
@@ -535,14 +550,12 @@ extern "C" {
 
     JNIEXPORT void JNICALL
     Java_com_mpm_dartsclient_nativeElements_CustomRenderer_setCurrentColorNative(
-            JNIEnv *env, jclass type, jfloat red, jfloat green, jfloat blue, jfloat alpha) {
+            JNIEnv *env, jobject type, jfloat red, jfloat green, jfloat blue, jfloat alpha) {
         (void)env;
         (void)type;
         dartsBoard.currentColor[0] = red;
         dartsBoard.currentColor[1] = green;
         dartsBoard.currentColor[2] = blue;
         dartsBoard.currentColor[3] = alpha;
-
-}
-
+    }
 }
