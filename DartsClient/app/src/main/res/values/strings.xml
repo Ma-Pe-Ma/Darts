@@ -20,25 +20,25 @@
     <string name="tab1_name">Játék</string>
     <string name="tab2_name">Játékosok</string>
 
+    <string name="statisticsText">Statisztikák</string>
+    <string name="commonMatchNumber">Közös mérkőzések száma: </string>
+
+    <string name="statisticsAveragePositionKey">Átlag\nhelyezés</string>
+    <string name="statisticsAverageRoundKey">Átlag\nkörszám</string>
+    <string name="statisticsAverageScoreKey">Átlag\npontszám</string>
+    <string name="statisticsPositionRate">Helyezés\narány</string>
+
     <string name="cricketTypeName">Típus:</string>
 
     <string name="cricketType1">Score</string>
     <string name="cricketType2">No-Score</string>
     <string name="cricketType3">Cut-Throat</string>
 
-    <string name="cricketTypeM1">SCORE</string>
-    <string name="cricketTypeM2">NOSCORE</string>
-    <string name="cricketTypeM3">CUTTHROAT</string>
-
     <string name="cricketSetName">Számhalmaz:</string>
 
     <string name="cricketSet1">Klasszikus</string>
     <string name="cricketSet2">Teljes</string>
     <string name="cricketSet3">Egyéni</string>
-
-    <string name="cricketSetM1">CLASSIC</string>
-    <string name="cricketSetM2">ALL</string>
-    <string name="cricketSetM3">CUSTOM</string>
 
     <string name="customName">Egyéni számhalmaz:</string>
 
@@ -49,22 +49,18 @@
     <string name="customSet3">Kaotikus</string>
     <string name="customSet4">Definiált (nincs kész)</string>
 
-    <string name="customSetM1">INTERVAL</string>
-    <string name="customSetM2">RANDOMINTERVAL</string>
-    <string name="customSetM3">CHAOTIC</string>
-    <string name="customSetM4">DEFINED</string>
-
-
     <string name="choosePlayerDialogTitle">Játékos választása</string>
 
     <string name="chosenPlayerText">Választott játékosok:</string>
 
+    <string name="searchPlayer">Játékos keresése...</string>
     <string name="addNewPlayer">Játékos hozzáadása</string>
     <string name="createNewPlayer">Játékos létrehozása</string>
 
     <string name="playerName">Név:</string>
     <string name="playerNickname">Becenév:</string>
-    <string name="colorName">Szín:</string>
+    <string name="backColorName">Szín 1:</string>
+    <string name="textColorName">Szín 2:</string>
 
     <string name="playerAlreadyChosen1">A játékos már hozzá van adva!</string>
     <string name="playerAlreadyChosen2">A játékos használatban van, ezért nem törölhető!</string>
@@ -78,7 +74,6 @@
     <string name="cancel">mégse</string>
 
     <string name="playerConfigTitle">Játékos választása</string>
-    <string name="searchHint">Játékos keresése...</string>
 
     <string name="playerScores">Játékosok pontjai</string>
 
@@ -89,6 +84,23 @@
     <string name="same">Változatlan</string>
     <string name="backToMenu">Vissza a\n játékbeállításokhoz</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-->Texts used when player finishes!<-->
+
+    <string name="winningDefaultTitle">Új helyezés</string>
+    <string name="gameFinishedTitle">Játék vége</string>
+
+    <string name="defaultPartial">Részeredmény:</string>
+    <string name="finalPartial">Végeredmény:</string>
+
+    <string name="savingInProgress">Játék mentése folyamatban…</string>
+    <string name="savingSuccess">A játék mentése sikeres volt!</string>
+    <string name="savingFailure">A játék mentése sikertelen volt!</string>
+
+    <string name="points">Pont</string>
+    <string name="position">Hely.</string>
+    <string name="posAbbr">H.</string>
+    <string name="nick">Név</string>
+    <string name="round">Kör</string>
+    <string name="id">ID</string>
+    <string name="hashChar">#</string>
 </resources>

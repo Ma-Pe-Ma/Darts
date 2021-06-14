@@ -32,7 +32,7 @@ class CustomRenderer(var glSurface : GLSurfaceView) : GLSurfaceView.Renderer {
     private external fun drawFrame()
     external fun pause()
     external fun resume()
-    external fun highLightSector(multiplier: Int, sector: Int)
+    external fun highlightSectorInternal(multiplier: Int, sector: Int)
     external fun setCurrentColorNative(red: Float, green: Float, blue: Float, alpha: Float)
 
     //helper methods
@@ -42,6 +42,11 @@ class CustomRenderer(var glSurface : GLSurfaceView) : GLSurfaceView.Renderer {
         val B : Float= (color and 0xff) / 255.0f
 
         setCurrentColorNative(R, G, B, 1.0f)
+        glSurface.requestRender()
+    }
+
+    fun highlightSector(multiplier: Int, sector: Int) {
+        highlightSectorInternal(multiplier, sector)
         glSurface.requestRender()
     }
 }

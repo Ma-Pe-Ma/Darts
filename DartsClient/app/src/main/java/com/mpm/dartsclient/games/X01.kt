@@ -1,15 +1,14 @@
 package com.mpm.dartsclient.games
 
-import android.app.Activity
 import androidx.fragment.app.Fragment
-import com.mpm.dartsclient.fragments.gameconfig.X01Config
-import com.mpm.dartsclient.scoring.CricketScore
-import com.mpm.dartsclient.scoring.Score
+import com.mpm.dartsclient.activities.config.fragments.gameconfig.X01Config
+import com.mpm.dartsclient.scoring.scoring.CricketScore
+import com.mpm.dartsclient.scoring.scoring.GameScore
 import org.json.JSONObject
 
 class X01(gameID : String, name :String) : DartsGameContainer(gameID, name) {
 
-    override fun parseConfigParameters(jsonObject: JSONObject, activity: Activity) {
+    override fun parseConfigParameters(jsonObject: JSONObject) {
 
     }
 
@@ -17,16 +16,14 @@ class X01(gameID : String, name :String) : DartsGameContainer(gameID, name) {
         return X01Config()
     }
 
-    override fun serializeConfigParameters(activity: Activity): JSONObject {
+    override fun serializeConfigParameters(): JSONObject {
         var config = JSONObject()
-
-
 
 
         return config
     }
 
-    override fun getScoreObject(): Score {
+    override fun getScoreObject(): GameScore {
         //TODO("Not yet implemented")
         return CricketScore()
     }
