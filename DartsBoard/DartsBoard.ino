@@ -72,7 +72,7 @@ void setup() {
 		soft_uart::data_bit_codes::EIGHT_BITS,
 		soft_uart::parity_codes::NO_PARITY,
 		soft_uart::stop_bit_codes::ONE_STOP_BIT
-  );
+  	);
 
   GameLogic::gameLogic.TransitionTo(&GameLogic::gameLogic.mainScreen);
 }

@@ -22,7 +22,7 @@ void Throwing::Update(Pair pair) {
 					case PRESSED:								
 						BoardContainer::darts[BoardContainer::currentDart] = BoardContainer::SectorMapping(BoardContainer::boardContainer.dartsBoard->key[i].kchar);
 						
-
+						//DEBUGGING!
 						if (gamePlayingScreen->roundCounter == 2) {
 							gamePlayingScreen->TransitionTo(&gamePlayingScreen->winning);
 							return;
