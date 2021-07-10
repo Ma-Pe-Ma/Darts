@@ -4,26 +4,26 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.Context
-import android.content.Intent
 import android.util.Log
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.lang.NullPointerException
 import java.util.*
+import java.util.concurrent.ConcurrentLinkedQueue
 
 class BluetoothCommunicator(var appContext: Context)  {
     val MY_UUID : UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
 
-    var bluetoothDevice :BluetoothDevice? = null
-    var bluetoothSocket :BluetoothSocket? = null
+    var serverBluetoothDevice : BluetoothDevice? = null
     var connectThread : ConnectThread? = null
-    var boardID : String = ""
 
+    var boardID : String = ""
     var lineEnding : String = "\r\n"
     var partial : String = ""
-    var queue : Queue<String> = LinkedList<String>()
+    var inQueue : Queue<String> = LinkedList<String>()
+    var outQueue : Queue<String> = ConcurrentLinkedQueue<String>()
 
     var bluetoothAdapter : BluetoothAdapter? = null
         set(value) {
@@ -51,96 +51,65 @@ class BluetoothCommunicator(var appContext: Context)  {
             val deviceHardwareAddress = device.address // MAC address
 
             if (deviceName.equals(boardID)) {
-                bluetoothDevice = device
+                serverBluetoothDevice = device
                 return@devices
             }
         }
 
-        connectThread = ConnectThread(bluetoothDevice!!)
+        connectThread = ConnectThread(serverBluetoothDevice!!)
         connectThread?.start()
     }
 
-    inner class ConnectThread(device: BluetoothDevice) : Thread() {
+    fun send(message : String) {
+        outQueue.add(message)
 
-        private val mmSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
-            device.createRfcommSocketToServiceRecord(MY_UUID)
+        if (connectThread != null && connectThread!!.isAlive) {
+            connectThread!!.write()
         }
+        else {
+            if (serverBluetoothDevice != null) {
+                connectThread = ConnectThread(serverBluetoothDevice!!)
+            }
+        }
+    }
 
-        private var mmInStream: InputStream? = null
-        private var mmOutStream: OutputStream? = null
-        private val mmBuffer: ByteArray = ByteArray(1024) // mmBuffer store for the stream
+    fun finish() {
+        connectThread?.cancel()
+    }
 
-        override fun run() {
+    inner class ConnectThread(var device: BluetoothDevice) : Thread() {
+        private var bluetoothSocket : BluetoothSocket? = null
+        private var mmInStream : InputStream? = null
+        private var mmOutStream : OutputStream? = null
+        private var mmBuffer : ByteArray = ByteArray(1024) // mmBuffer store for the stream
+
+        init {
             // Cancel discovery because it otherwise slows down the connection.
             bluetoothAdapter?.cancelDiscovery()
-
-            mmSocket?.use { socket ->
-                // Connect to the remote device through the socket. This call blocks
-                // until it succeeds or throws an exception.
-
-                var connected : Boolean = false
-
-                try {
-                    socket.connect()
-                    //Log.i("DARTS", "Successfully connected!")
-                    bluetoothSocket = socket
-                    mmInStream = socket.inputStream
-                    mmOutStream  = socket.outputStream
-                    connected = true
-                }
-                catch (e: IOException) {
-                    //Log.i("DARTS", "Could not connect!"+e.printStackTrace())
-                    sendState(false)
-                    connected = false
-                }
-
-                //Original code:
-                // The connection attempt succeeded. Perform work associated with
-                // the connection in a separate thread.
-                //manageMyConnectedSocket(socket)
-
-                //VERY IMPORTANT: this note contradicts the previous one
-                //the receiving code should be on this thread, because if this thread finishes (ie. the socket creating thread) then the connection is lost
-
-                if (connected) {
-                    sendState(true)
-                    read()
-                }
-                else {
-                    sendState(false)
-                    Thread {
-                        connectThread = ConnectThread(bluetoothDevice!!)
-                        connectThread?.start()
-                    }.start()
-                }
-            }
+            start()
         }
 
-        // Closes the client socket and causes the thread to finish.
-        fun cancel() {
+        //private val mmSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
+        //    device.createRfcommSocketToServiceRecord(MY_UUID)
+        //}
+
+        override fun run() {
+            mmBuffer = ByteArray(1024)
+            var numBytes : Int = 0
+
             try {
-                mmSocket?.close()
-                sendState(false)
-            } catch (e: IOException) {
-                Log.e("DARTS", "Could not close the client socket", e)
+                bluetoothSocket = device.createRfcommSocketToServiceRecord(MY_UUID)
+                bluetoothSocket?.connect()
+                mmInStream = bluetoothSocket!!.inputStream
+                mmOutStream = bluetoothSocket!!.outputStream
             }
-        }
+            catch (e : IOException) {
 
-        private fun read() {
-            var numBytes: Int // bytes returned from read()
-            var counter : Int = 0
+                return
+            }
 
-            //Log.i("DARTS","Started listening bt conn!")
-
-            // Keep listening to the InputStream until an exception occurs.
             while (true) {
-
-                //Log.i("DARTS","Listening...")
-                var isConnected = bluetoothSocket!!.isConnected
-
-                // Read from the InputStream.
                 try {
-                    //Log.i("DARTS", "Listening?0")
                     numBytes = mmInStream!!.read(mmBuffer)
                     //Log.i("DARTS", "Listening?1")
                     if (numBytes > 0) {
@@ -153,38 +122,48 @@ class BluetoothCommunicator(var appContext: Context)  {
                         //Log.i("DARTS", "Read out: \""+message +"\", size: "+message.length)
                         processMessage(message)
                     }
-                } catch (e: IOException) {
-                    //Log.i("DARTS", "Input stream was disconnected", e)
-                    isConnected = false
+                }
+                catch (ex : Exception) {
+                    when (ex) {
+                        is NullPointerException -> {
+
+                        }
+
+                        is IOException -> {
+
+                        }
+
+                        else -> {
+
+                        }
+                    }
+
                     break
                 }
-
-                if (!isConnected) {
-                    cancel()
-                    break
-                }
-
-                /*// Send the obtained bytes to the UI activity.
-                val readMsg = handler.obtainMessage(
-                    MESSAGE_READ, numBytes, -1,
-                    mmBuffer)
-                readMsg.sendToTarget()*/
             }
+        }
 
-            //TODO(Reimplement this reconnection in a nicer way!)
-            var newConnection = Thread(
-                Runnable {
-                    connectThread = ConnectThread(bluetoothDevice!!)
-                    connectThread?.start()
-                })
-
-            newConnection.start()
+        // Closes the client socket and causes the thread to finish.
+        fun cancel() {
+            try {
+                bluetoothSocket?.close()
+                notifyNewState(false)
+            } catch (e: IOException) {
+                Log.e("DARTS", "Could not close the client socket", e)
+            }
         }
 
         // Call this from the main activity to send data to the remote device.
-        fun write(bytes: ByteArray) {
+        fun write() {
             try {
-                mmOutStream?.write(bytes)
+                var message: String? = null
+                while (run {
+                        message = outQueue.poll()
+                        message
+                    } != null) {
+                     mmOutStream?.write(message!!.toByteArray())
+                }
+
             } catch (e: IOException) {
                 /* Log.e(TAG, "Error occurred when sending data", e)
 
@@ -208,21 +187,27 @@ class BluetoothCommunicator(var appContext: Context)  {
     private fun processMessage(input: String) {
         processString(input)
 
-        var message: String? = null;
-        while ({message = queue.poll(); message}() != null) {
+        var message: String? = null
+        while (run {
+                message = inQueue.poll()
+                message
+            } != null) {
             executeMessage(message)
         }
     }
 
     private fun executeMessage(input: String?) {
-        var thread = Thread(Runnable {
-            var intent = Intent("boardMessage")
-            intent.putExtra("message", input)
+        try {
+            var jsonObject = JSONObject(input)
+            notifyNewMessagesReceived(jsonObject)
+        }
+        catch(e : Exception) {
+            MessageHandler.requestLastMessage()
+        }
+    }
 
-            LocalBroadcastManager.getInstance(appContext).sendBroadcast(intent)
-        })
-
-        thread.start()
+    fun sendMessage(jsonObject: JSONObject) {
+        send(jsonObject.toString() + lineEnding)
     }
 
     private fun processString(input : String) {
@@ -233,7 +218,7 @@ class BluetoothCommunicator(var appContext: Context)  {
             if (processable.substring(i, i +lineEnding.length) == lineEnding) {
                 var newEntry =  processable.substring(0, i)
                 //Log.i("DARTS", "NEW ENTRY: "+newEntry)
-                queue.add(newEntry)
+                inQueue.add(newEntry)
 
                 var newProcessable : String = processable.substring(i+lineEnding.length)
 
@@ -254,20 +239,44 @@ class BluetoothCommunicator(var appContext: Context)  {
         }
     }
 
-    fun sendMessage(jsonObject: JSONObject) {
-        //var localBroadcastManager : LocalBroadcastManager = LocalBroadcastManager.getInstance(appContext)
-        connectThread?.write((jsonObject.toString() + lineEnding).toByteArray())
-        //Log.i("DARTS", "OUT: "+jsonObject.toString())
+    // ------ Sending
+    var messageReceivers : MutableList<BTMessageReceiver> = mutableListOf()
+
+    fun subscribeToMessages(messageReceiver: BTMessageReceiver) {
+        if (!messageReceivers.contains(messageReceiver)) {
+            messageReceivers.add(messageReceiver)
+        }
     }
 
-    fun sendState(state : Boolean) {
-        var thread = Thread(Runnable {
-            var intent = Intent("BTCONNECTION")
-            intent.putExtra("conState", state)
+    fun unsubscribeToMessages(messageReceiver: BTMessageReceiver) {
+        if (messageReceivers.contains(messageReceiver)) {
+            messageReceivers.remove(messageReceiver)
+        }
+    }
 
-            LocalBroadcastManager.getInstance(appContext).sendBroadcast(intent)
-        })
+    private fun notifyNewMessagesReceived(messageObject : JSONObject) {
+        for (messageReceiver in messageReceivers) {
+            messageReceiver.onBTReceive(messageObject)
+        }
+    }
 
-        thread.start()
+    var stateReceivers : MutableList<BTStateReceiver> = mutableListOf()
+
+    fun subscribeTpState(stateReceiver : BTStateReceiver) {
+        if (!stateReceivers.contains(stateReceiver)) {
+            stateReceivers.add(stateReceiver)
+        }
+    }
+
+    fun unsubscribeToState(stateReceiver : BTStateReceiver) {
+        if (stateReceivers.contains(stateReceiver)) {
+            stateReceivers.remove(stateReceiver)
+        }
+    }
+
+    private fun notifyNewState(state : Boolean) {
+        for (stateReceiver in stateReceivers) {
+            stateReceiver.notifyState(state)
+        }
     }
 }

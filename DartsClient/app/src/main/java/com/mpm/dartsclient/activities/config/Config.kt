@@ -25,34 +25,12 @@ class Config : FragmentActivity(), BTMessageReceiver {
     var viewPager2: ViewPager2? = null
     var previousTabIndex = 0
 
-    private var broadcastReceiver : BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            var message = intent?.getStringExtra("message")
-
-            try {
-                var jsonObject = JSONObject(message)
-                onBTReceive(jsonObject)
-            }
-            catch(e : JSONException) {
-                onParseFail()
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_config)
         //setSupportActionBar(findViewById(R.id.toolbar))
         //(this as AppCompatActivity).setSupportActionBar(findViewById(R.id.toolbar))
         //actionBar!!.customView.findViewById<>()
-
-        //setup the receiver for the board messages
-        if (DartsClientApplication.bluetoothMode) {
-            LocalBroadcastManager.getInstance(this).registerReceiver(
-                broadcastReceiver,
-                IntentFilter("boardMessage")
-            );
-        }
 
         //deleteDatabase(DBHelper.DATABASE_NAME)
         //read the players from the sqlite database
@@ -75,13 +53,18 @@ class Config : FragmentActivity(), BTMessageReceiver {
         setupTabs()
     }
 
-    override fun onDestroy() {
-        //destroy the broadcastreceiver
-        if (DartsClientApplication.bluetoothMode) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
-        }
+    override fun onResume() {
+        super.onResume()
 
-        super.onDestroy()
+        //setup the receiver for the board messages
+        if (DartsClientApplication.bluetoothMode) {
+            DartsClientApplication.getBluetoothCommunicator().subscribeToMessages(this)
+        }
+    }
+
+    override fun onPause() {
+        DartsClientApplication.getBluetoothCommunicator().unsubscribeToMessages(this)
+        super.onPause()
     }
 
     private fun setupTabs() {

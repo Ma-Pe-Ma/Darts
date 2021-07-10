@@ -38,29 +38,11 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
     private var dartID : Int = 0
     private var flashing : Runnable? = null
 
-    private var broadcastReceiver : BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            var message = intent?.getStringExtra("message")
-
-            try {
-                onBTReceive(message as JSONObject)
-            }
-            catch (e: JSONException) {
-                onParseFail()
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_play)
 
-        if (DartsClientApplication.bluetoothMode) {
-            LocalBroadcastManager.getInstance(this).registerReceiver(
-                broadcastReceiver,
-                IntentFilter("boardMessage")
-            )
-        }
+        DartsClientApplication.getBluetoothCommunicator().subscribeToMessages(this)
 
         mGLView = findViewById(R.id.customGLView)
         initializeLayout()
@@ -78,7 +60,7 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
 
     override fun onDestroy() {
         if (DartsClientApplication.bluetoothMode) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
+            DartsClientApplication.getBluetoothCommunicator().unsubscribeToMessages(this)
         }
         super.onDestroy()
     }
@@ -159,6 +141,7 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
     }
 
     //----------------------------RECEIVING MESSAGES FROM BOARD -------------------------------------------
+    // TODO: RUN ON UI THREAD?
     override fun onConfig(body: JSONObject) {
         val intent = Intent(this, Config::class.java)
         //intent.putExtra("body", body.toString())

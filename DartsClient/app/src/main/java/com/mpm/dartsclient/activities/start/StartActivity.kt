@@ -13,31 +13,24 @@ import android.widget.RadioButton
 import androidx.fragment.app.DialogFragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.mpm.dartsclient.BTStateReceiver
 import com.mpm.dartsclient.DartsClientApplication
 import com.mpm.dartsclient.R
 import com.mpm.dartsclient.activities.config.Config
 import com.mpm.dartsclient.activities.start.fragments.BTDeviceSelectorDialogFragment
 
-class StartActivity : AppCompatActivity() {
-    private var broadcastReceiver : BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            var state = intent?.getBooleanExtra("conState", false)
-            processState(state!!)
-        }
+class StartActivity : AppCompatActivity(), BTStateReceiver{
+    override fun notifyState(state: Boolean) {
+        processState(state)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-            broadcastReceiver,
-            IntentFilter("BTCONNECTION")
-        )
-
         setupButtons()
 
-        DartsClientApplication.getBluetoothCommunicator()
+        DartsClientApplication.getBluetoothCommunicator().subscribeTpState(this)
 
         findViewById<FloatingActionButton>(R.id.fabStart).setOnClickListener { view ->
 
@@ -59,6 +52,11 @@ class StartActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        DartsClientApplication.getBluetoothCommunicator().unsubscribeToState(this)
+        super.onDestroy()
+    }
+
     val REQUEST_ENABLE_BT : Int = 101
 
     var buttonState : ButtonState = ButtonState.offline
@@ -67,7 +65,7 @@ class StartActivity : AppCompatActivity() {
     var offlineButton : RadioButton? = null
     var btChooserButton : Button? = null
 
-    fun setupButtons() {
+    private fun setupButtons() {
         offlineButton = findViewById(R.id.offline)
         offlineButton?.setOnCheckedChangeListener {_, isChecked ->
             if (isChecked) {
@@ -138,7 +136,7 @@ class StartActivity : AppCompatActivity() {
         }
     }
 
-    fun setupBluetooth() {
+    private fun setupBluetooth() {
         var deviceList : MutableList<String> = mutableListOf()
 
         val pairedDevices: Set<BluetoothDevice>? = DartsClientApplication.getBluetoothCommunicator().bluetoothAdapter!!.bondedDevices
@@ -156,7 +154,7 @@ class StartActivity : AppCompatActivity() {
         supportFragmentManager.executePendingTransactions()
 
         btDeviceSelectorDialogFragment.dialog!!.setOnCancelListener {
-            if (DartsClientApplication.getBluetoothCommunicator().bluetoothDevice == null) {
+            if (DartsClientApplication.getBluetoothCommunicator().serverBluetoothDevice == null) {
                 offlineButton?.isChecked = true
             }
         }
@@ -200,7 +198,7 @@ class StartActivity : AppCompatActivity() {
         DartsClientApplication.getBluetoothCommunicator().joinBondedDevice()
     }
 
-    fun processState(state: Boolean) {
+    private fun processState(state: Boolean) {
         Log.i("DARTS", "state set to: "+state)
 
         if (state) {
