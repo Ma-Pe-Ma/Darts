@@ -5,7 +5,6 @@ import org.json.JSONObject
 interface BTMessageReceiver {
 
     fun onBTReceive(message: JSONObject) {
-
         var state = message["STATE"]
         var body = message["BODY"] as JSONObject
 
@@ -15,11 +14,7 @@ interface BTMessageReceiver {
             "CONFIG" -> {onConfig(body)}
 
             "GAMEPLAY" -> {onGamePlay(body)}
-
-            "GAMEPLAY" -> {onGamePlay(body)}
-
         }
-
     }
 
     fun onConfig(body : JSONObject)
