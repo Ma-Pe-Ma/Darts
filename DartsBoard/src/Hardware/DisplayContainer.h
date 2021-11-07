@@ -54,8 +54,7 @@ class DisplayContainer{
 	
 	int minPressure, maxPressure;
 	
-	public:
-	
+public:	
 	DisplayContainer() {};
 	void setTouchCornerValues(int[4][2]);
 	MCUFRIEND_kbv* getTFT() {return &tft;}
@@ -64,12 +63,16 @@ class DisplayContainer{
 	void setTouchScreenPins(uint8_t, uint8_t, uint8_t, uint8_t, uint16_t);
 	void setPressures(int, int);
 	void getCalibratedValue(int& calX, int& calY, int rawX, int rawY);
-	void Write(int x, int y, int color, int size, String szoveg);
+	
+	//printing to display
+	void Write(int x, int y, int color, int size, String text);
+	void WriteRight(int a, int b, int color, int size,  String text);
+
 	void WriteWithBackground(int x, int y, int color, int back, int size, String text);
 	void WriteCenterX(int y, int color, int backColor, int size, String text);
 	void WriteCenterY(int x, int color, int backColor, int size, String text);
 	void WriteCenter(String text, int size);
-	void WriteRight(String text, int size, int a, int b);
+	
 	
 	static DisplayContainer displayContainer;
 	static void Initialize();

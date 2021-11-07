@@ -10,19 +10,22 @@
 //#define NAMEMATCH "tiger"    // *tiger*.bmp
 #define PALETTEDEPTH   8     // support 256-colour Palette
 
-extern char namebuf[32];   //BMP files in root directory
-//char namebuf[32] = "/bitmaps/";  //BMP directory e.g. files in /bitmaps/*.bmp
+namespace ImageLoading {
 
-#define BMPIMAGEOFFSET 54
+    extern char namebuf[32];   //BMP files in root directory
+    //char namebuf[32] = "/bitmaps/";  //BMP directory e.g. files in /bitmaps/*.bmp
 
-#define BUFFPIXEL 20
+    #define BMPIMAGEOFFSET 54
 
-extern File root;
-extern int pathlen;
+    #define BUFFPIXEL 20
 
-uint16_t read16(File& f);
-uint32_t read32(File& f);
-void initializeImageLoading();
-uint8_t showBMP(char *nm, int x, int y);
+    extern File root;
+    extern int pathlen;
+
+    uint16_t read16(File& f);
+    uint32_t read32(File& f);
+    void initialize();
+    uint8_t showBMP(char *nm, int x, int y);
+}
 
 #endif

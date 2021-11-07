@@ -21,12 +21,6 @@ void Throwing::Update(Pair pair) {
 				switch (BoardContainer::boardContainer.dartsBoard->key[i].kstate) {  
 					case PRESSED:								
 						BoardContainer::darts[BoardContainer::currentDart] = BoardContainer::SectorMapping(BoardContainer::boardContainer.dartsBoard->key[i].kchar);
-						
-						//DEBUGGING!
-						if (gamePlayingScreen->roundCounter == 2) {
-							gamePlayingScreen->TransitionTo(&gamePlayingScreen->winning);
-							return;
-						}
 
 						//if by scoring the player wins change to winning screen!
 						if (Player::current->score->Score(BoardContainer::darts[BoardContainer::currentDart])) {
@@ -41,12 +35,12 @@ void Throwing::Update(Pair pair) {
 						// msg = " HOLD.";
 						gamePlayingScreen->stuckSector = BoardContainer::boardContainer.dartsBoard->key[i].kchar;
 						Sector stuck = BoardContainer::SectorMapping(BoardContainer::boardContainer.dartsBoard->key[i].kchar);
-						DisplayContainer::displayContainer.WriteWithBackground(200, 10, RED, CYAN, 2, "Stuck: " + DisplayContainer::SectorText(stuck));
+						DisplayContainer::displayContainer.WriteWithBackground(SCR_WIDTH / 2, int(SCR_HEIGHT *0.04f), RED, CYAN, 2, "Stuck: " + DisplayContainer::SectorText(stuck));
 						break;
 					}
 					case RELEASED:
 						if (BoardContainer::boardContainer.dartsBoard->key[i].kchar == gamePlayingScreen->stuckSector) {
-							DisplayContainer::displayContainer.WriteWithBackground(200, 10, RED, CYAN, 2, "          ");
+							DisplayContainer::displayContainer.WriteWithBackground(SCR_WIDTH / 2, int(SCR_HEIGHT *0.04f), RED, CYAN, 2, "          ");
 						}
 						// msg = " RELEASED.";
 						break;

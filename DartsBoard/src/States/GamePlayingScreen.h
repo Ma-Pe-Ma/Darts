@@ -21,6 +21,15 @@ class GamePlayingScreen : public AppState, public StateContext {
     void onCorrect(JsonObject&);
     void onDelete(JsonObject&);
 
+    //thrown dart status properties
+    int dartStatusStartX = 0;
+	int dartStatusOffsetX = int(SCR_WIDTH * 0.333f);
+
+	int dartStatusStartY = int(SCR_HEIGHT * 0.666f);
+
+	int dartStatusWidth = int(SCR_WIDTH * 0.333f);
+	int dartStatusHeight = SCR_HEIGHT - dartStatusStartY;
+
 public:
     void Start();
     void Update(Pair);

@@ -24,15 +24,11 @@
 #include <soft_uart.h>
 
 #include "src/Hardware/DisplayContainer.h"
-#include "src/Hardware/ImageLoading.h"
 #include "src/Hardware/BoardContainer.h"
 #include "src/Hardware/BluetoothCommunicator.h"
 
 #include "src/States/GameLogic.h"
 #include "src/Games/DartsGame.h"
-
-#include <ArduinoJson.h>
-#include <ArduinoQueue.h>
 
 #define RX_PIN 22 // software serial port's reception pin
 #define TX_PIN 24 // software serial port's transmision pin
@@ -46,20 +42,17 @@ auto& serial_obj = serial_tc4;
 BluetoothCommunicator bluetooth(&serial_obj);
 
 void setup() {
-	//initialize Serial;
-	Serial.begin(9600);
+	Serial.begin(115200);
 	
 	bluetooth.btSwitch = &GameLogic::gameLogic.androidMode;
-	//Initialize image Loader
-	initializeImageLoading();
 
 	DisplayContainer::Initialize();
 	Player::initializePlayers();
 	DartsGame::InitializeGames();
-	
+
 	//Setting piezo speaker output
 	pinMode(22, OUTPUT);
-	
+
 	//config bluetoothsettings
 	bluetooth.setMessageProcesser(GameLogic::gameLogic.StaticProcessMessage);
 	DartsGame::bluetoothCommunicator = &bluetooth;
@@ -74,7 +67,7 @@ void setup() {
 		soft_uart::stop_bit_codes::ONE_STOP_BIT
   	);
 
-  GameLogic::gameLogic.TransitionTo(&GameLogic::gameLogic.mainScreen);
+	GameLogic::gameLogic.TransitionTo(&GameLogic::gameLogic.mainScreen);
 }
 
 void loop() {

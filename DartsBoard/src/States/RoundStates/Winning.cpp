@@ -3,8 +3,7 @@
 #include "../GameLogic.h"
 
 void Winning::Start() {
-	Player::current->score->position = gamePlayingScreen->nextWinningPosition;
-	gamePlayingScreen->nextWinningPosition++;
+	Player::current->score->position = gamePlayingScreen->nextWinningPosition++;
 	
 	//check if game is finished
 	if (Player::number == 1) {
@@ -17,6 +16,7 @@ void Winning::Start() {
 		for (int i = 0; i < Player::number; i++) {
 			if (Player::players[i].score->position == -1) {
 				Player::players[i].score->position = Player::number;
+				break;
 			}
 		}
 	}
@@ -27,7 +27,7 @@ void Winning::Start() {
 
 	String nick = Player::current->nickname;
 	if (nick == "") {
-		nick = "P"+String(Player::current->ID + 1);
+		nick = "P" + String(Player::current->ID + 1);
 	}
 
 	if (Player::current->score->position == 1) {
@@ -37,7 +37,7 @@ void Winning::Start() {
 		winnerText = String(Player::current->score->position) + ". pos: " + nick;
 	}
 	
-	DisplayContainer::displayContainer.WriteCenterX(50, Player::current->color, Player::current->inverseColor, 4, winnerText);
+	DisplayContainer::displayContainer.WriteCenterX(SCR_HEIGHT / 5, Player::current->color, Player::current->inverseColor, 4, winnerText);
 
 	gamePlayingScreen->SendDump();
 
@@ -59,9 +59,14 @@ void Winning::Update(Pair pair) {
 			gameLogic->prevMenu.guiButton.drawButton(true);
 			gameLogic->nextMenu.guiButton.drawButton(true);
 
+			int dartStatusStartX = SCR_WIDTH / 10;
+			int dartStatusOffsetX = int(SCR_WIDTH * 0.333f);
+
+			int dartStatusStartY = SCR_HEIGHT / 2;
+
 			//redraw status
 			for (int i = 0; i < 3; i++) {
-				DisplayContainer::displayContainer.WriteWithBackground(40 + 130 * i, 120, BLACK, CYAN, 2, "" + String(i + 1) + ": " + DisplayContainer::SectorText(BoardContainer::darts[i]));
+				DisplayContainer::displayContainer.WriteWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, BLACK, CYAN, 2, String(i + 1) + ": " + DisplayContainer::SectorText(BoardContainer::darts[i]));
 			}
 			Player::current->score->DrawCompleteCustomStatus();
 

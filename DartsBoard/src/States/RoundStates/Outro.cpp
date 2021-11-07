@@ -8,10 +8,10 @@ void Outro::Start() {
 
 void Outro::Update(Pair pair) {
 	if ((millis() / 1000) % 2 == 0) {
-		DisplayContainer::displayContainer.WriteWithBackground(x, y, Player::current->inverseColor, Player::current->color, s, text);	
+		DisplayContainer::displayContainer.WriteWithBackground(x, y, Player::current->inverseColor, Player::current->color, textSize, text);	
 	}		
 	else {
-		DisplayContainer::displayContainer.WriteWithBackground(x, y, Player::current->color, Player::current->inverseColor, s, text);	
+		DisplayContainer::displayContainer.WriteWithBackground(x, y, Player::current->color, Player::current->inverseColor, textSize, text);	
 	}
 	
 	if (gamePlayingScreen->GetGameLogic()->nextMenu.simple()) {
