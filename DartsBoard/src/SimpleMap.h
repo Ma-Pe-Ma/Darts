@@ -12,7 +12,6 @@ class SimpleMap {
 	U* value;
 	
 public:
-	SimpleMap() {}
 	SimpleMap(int maxSize) {
 		this->maxSize = maxSize;
 	

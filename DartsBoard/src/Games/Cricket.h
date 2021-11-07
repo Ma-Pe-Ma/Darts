@@ -36,6 +36,16 @@ class Cricket : public DartsGame {
 		static SimpleMap<CricketType, String>* typeMap;
 		static SimpleMap<CricketNumberSet, String>* setMap;
 		static SimpleMap<CricketCustomSet, String>* customMap;
+
+		//used in custom game config
+		int textSize = 2;
+		int startButtonY = int(SCR_HEIGHT * 0.875f);
+		int buttonSize = int(SCR_WIDTH * 0.1f);
+
+		int textStartX = int(SCR_WIDTH * 0.6375f);
+		int textStartY = startButtonY - buttonSize - int(textSize * 6);
+
+		int rectSize = SCR_HEIGHT - textStartY;
 		
 	public:
 		void SerializeConfigCustom(JsonObject& configObject);

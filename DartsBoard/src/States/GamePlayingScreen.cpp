@@ -8,12 +8,15 @@ GamePlayingScreen::GamePlayingScreen(GameLogic* gameLogic) : AppState(gameLogic)
 
 void GamePlayingScreen::Start() {
     DisplayContainer::displayContainer.getTFT()->fillScreen(CYAN);
-		
-    gameLogic->nextMenu.setImage(DisplayContainer::displayContainer.getTFT(),  370, 30, 40, 40, RED, GREEN, MAGENTA, "P", 3);
+	
+	int buttonSize = SCR_WIDTH / 10;
+	int squareOffset = int(SCR_WIDTH * 0.08f);
 
-    gameLogic->delete1.setImage(DisplayContainer::displayContainer.getTFT(),  0, 160, 133, 80, WHITE, CYAN, BLACK, "del1", 2);
-    gameLogic->delete2.setImage(DisplayContainer::displayContainer.getTFT(),  133, 160, 133, 80, WHITE, CYAN, BLACK, "del2", 2);
-    gameLogic->delete3.setImage(DisplayContainer::displayContainer.getTFT(),  266, 160, 133, 80, WHITE, CYAN, BLACK, "del3", 2);
+    gameLogic->nextMenu.setImage(DisplayContainer::displayContainer.getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, RED, GREEN, MAGENTA, "P", 3);	
+
+    gameLogic->delete1.setImage(DisplayContainer::displayContainer.getTFT(), dartStatusStartX + 0 * dartStatusOffsetX, dartStatusStartY, dartStatusWidth, dartStatusHeight, WHITE, CYAN, BLACK, "del1", 2);
+    gameLogic->delete2.setImage(DisplayContainer::displayContainer.getTFT(), dartStatusStartX + 1 * dartStatusOffsetX, dartStatusStartY, dartStatusWidth, dartStatusHeight, WHITE, CYAN, BLACK, "del2", 2);
+    gameLogic->delete3.setImage(DisplayContainer::displayContainer.getTFT(), dartStatusStartX + 2 * dartStatusOffsetX, dartStatusStartY, dartStatusWidth, dartStatusHeight, WHITE, CYAN, BLACK, "del3", 2);
 
     gameLogic->prevMenu.guiButton.drawButton(true);
     gameLogic->nextMenu.guiButton.drawButton(true);
@@ -30,14 +33,14 @@ void GamePlayingScreen::Start() {
 
     //setting proper score objects to players!
     for (int i = 0; i < Player::number; i++) {
-        if (Player::players[i].score != nullptr)  {
+        if (Player::players[i].score != nullptr) {
 			delete Player::players[i].score;
         }
         
         Player::players[i].score = DartsGame::dartsGame->SetProperScoreContainer();
-		Player::players[i].score->position = 0;
+		Player::players[i].score->position = -1;
     }
-    
+
     DartsGame::dartsGame->InitializeGame();
 
 	intro.firstTime = true;
@@ -84,13 +87,13 @@ void GamePlayingScreen::InvertDart(int position) {
 
 		if (del[position]) {
 			Player::current->score->Delete(dart);
-			DisplayContainer::displayContainer.WriteWithBackground(40 + 130 * position, 120, BLACK, RED, 2, "      ");
+			DisplayContainer::displayContainer.WriteWithBackground(dartStatusStartX + dartStatusOffsetX * position, dartStatusStartY, BLACK, RED, 2, "      ");
 		}
 		else {
 			Player::current->score->Score(dart);
 			String text = String(position + 1) + ": " + DisplayContainer::SectorText(BoardContainer::darts[position]);
-			DisplayContainer::displayContainer.WriteWithBackground(40 + 130 * position, 120, BLACK, CYAN, 2, "      ");
-			DisplayContainer::displayContainer.WriteWithBackground(40 + 130 * position, 120, BLACK, CYAN, 2, text);
+			DisplayContainer::displayContainer.WriteWithBackground(dartStatusStartX + dartStatusOffsetX * position, dartStatusStartY, BLACK, CYAN, 2, "      ");
+			DisplayContainer::displayContainer.WriteWithBackground(dartStatusStartX + dartStatusOffsetX * position, dartStatusStartY, BLACK, CYAN, 2, text);
 		}
 		
 	}	
@@ -103,10 +106,9 @@ void GamePlayingScreen::Correct() {
 		BoardContainer::boardContainer.currentDart--;		
 		Player::current->score->Correct(BoardContainer::darts[BoardContainer::currentDart]);
 		String text = "" + String(BoardContainer::currentDart + 1) + ": " + DisplayContainer::SectorText(BoardContainer::darts[BoardContainer::currentDart]);
-		DisplayContainer::displayContainer.WriteWithBackground(40 + 130 * BoardContainer::currentDart, 120, BLACK, CYAN, 2, text);
+		DisplayContainer::displayContainer.WriteWithBackground(dartStatusStartX + dartStatusOffsetX * BoardContainer::currentDart, dartStatusStartY, BLACK, CYAN, 2, text);
 		
-		Sector empty = {.base = 0, .multiplier = 0};
-		BoardContainer::darts[BoardContainer::currentDart] = empty;
+		BoardContainer::darts[BoardContainer::currentDart] = {.base = 0, .multiplier = 0};
 
 		if (currentState != &throwing) {
 			TransitionTo(&throwing);

@@ -194,13 +194,13 @@ void CricketScore::DrawCompleteCustomStatus() {
 }
 
 void CricketScore::StatusAfterHit(Sector dart) {
-		int statusPosition = GetStatusPosition(dart);
-		int indicatorPosition = GetIndicatorPosition(dart.base);
-		
-		if (indicatorPosition != -1) {
-			int sectorCloseStatus = GetSectorCloseState(dart.base);
-			DrawSectorIndicator(indicatorPosition, statusPosition, cricketStatus[statusPosition], sectorCloseStatus);
-		}		
+	int statusPosition = GetStatusPosition(dart);
+	int indicatorPosition = GetIndicatorPosition(dart.base);
+	
+	if (indicatorPosition != -1) {
+		int sectorCloseStatus = GetSectorCloseState(dart.base);
+		DrawSectorIndicator(indicatorPosition, statusPosition, cricketStatus[statusPosition], sectorCloseStatus);
+	}		
 }
 
 void CricketScore::DrawSectorIndicator(int position, int number, int innerState, int outerState) {
@@ -211,9 +211,18 @@ void CricketScore::DrawSectorIndicator(int position, int number, int innerState,
 	int gridX = (position - 1) % 7;
 	int gridY = (position - 1) / 7;
 	
-	int x = 7 + 56 * gridX;
-	int y = 141 + 33 * gridY;
-	
+	int startX = int(SCR_WIDTH * 0.08f);
+	int startY = int(SCR_HEIGHT * 0.634f);
+
+	int offsetX = int(SCR_WIDTH * 0.14f);
+	int offsetY = int(SCR_HEIGHT * 0.1375f);
+
+	int centerX = startX + gridX * offsetX;
+	int centerY = startY + gridY * offsetY;
+
+	int halfRectWidth = int(SCR_WIDTH * 0.0625f);
+	int halfRectHeigth = int(SCR_HEIGHT * 0.04167f);
+
 	int outerStateLeft = CYAN;
 	int outerStateRight = CYAN;
 
@@ -226,19 +235,22 @@ void CricketScore::DrawSectorIndicator(int position, int number, int innerState,
 		outerStateRight = BLUE;
 	}
 
-	DisplayContainer::displayContainer.getTFT()->fillRect(x - 2, y - 2, 25 + 2, 24, outerStateLeft);
-	DisplayContainer::displayContainer.getTFT()->fillRect(x - 2 + 27, y - 2, 25 + 2, 24, outerStateRight);
+	int border = int(SCR_WIDTH * 0.005f);
+
+	DisplayContainer::displayContainer.getTFT()->fillRect(centerX - halfRectWidth - border, centerY - halfRectHeigth - border, halfRectWidth + border, 2 * (halfRectHeigth + border), outerStateLeft);
+	DisplayContainer::displayContainer.getTFT()->fillRect(centerX, centerY - halfRectHeigth - border, halfRectWidth + border, 2 * (halfRectHeigth + border), outerStateRight);
 	
 	//Drawing inner indicator	
 	int rightSide = innerState > 1 ? GREEN : CYAN;
 	int leftSide = (innerState == 1 || innerState > 2) ? GREEN : CYAN;
-	
-	DisplayContainer::displayContainer.getTFT()->fillRect(x, y, 25, 20, leftSide);
-	DisplayContainer::displayContainer.getTFT()->fillRect(x + 25, y, 25, 20, rightSide);
+
+	DisplayContainer::displayContainer.getTFT()->fillRect(centerX - halfRectWidth, centerY - halfRectHeigth, halfRectWidth, 2 * halfRectHeigth, leftSide);
+	DisplayContainer::displayContainer.getTFT()->fillRect(centerX, centerY - halfRectHeigth, halfRectWidth, 2 * halfRectHeigth, rightSide);
 	
 	//Writing number to the center
-	int pos = number < 10 ? (50 - 2 * 6) / 2 : (50 - 2 * 2 * 6) / 2;
-	DisplayContainer::displayContainer.Write(x + pos, y + 4, RED, 2, String(number));
+	int textSize = 2;
+	int pos = number < 10 ? (- textSize * 6) / 2 : (- 2 * textSize * 6) / 2;
+	DisplayContainer::displayContainer.Write(centerX + pos, centerY - textSize * 6 / 2, RED, textSize, String(number));
 }
 
 void CricketScore::CreateScoreMap(CricketNumberSet set, CricketCustomSet customSet, int cricketNr, int cricketStart) {	

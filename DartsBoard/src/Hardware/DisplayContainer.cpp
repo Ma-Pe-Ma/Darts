@@ -1,8 +1,18 @@
 #include "DisplayContainer.h"
+#include "ImageLoading.h"
 
 DisplayContainer DisplayContainer::displayContainer;
 
-void DisplayContainer::Initialize() {	
+void DisplayContainer::Initialize() {
+	uint16_t ID;
+    Serial.print("Show BMP files on DisplayContainer::displayContainer.getTFT() with ID:0x");
+    ID = DisplayContainer::displayContainer.getTFT()->readID();
+    Serial.println(ID, HEX);
+    if (ID == 0x0D3D3) ID = 0x9481;
+    displayContainer.getTFT()->begin(ID);
+    displayContainer.getTFT()->fillScreen(0x07FF);
+    displayContainer.getTFT()->setTextColor(0xFFFF, 0x0000);
+
 	displayContainer.getTFT()->setRotation(1);
 	displayContainer.setSizes(SCR_WIDTH, SCR_HEIGHT);
 	displayContainer.setPressures(MINPRESSURE, MAXPRESSURE);
@@ -15,7 +25,9 @@ void DisplayContainer::Initialize() {
 		{BR_X_V, BR_Y_V}
 	};	
 	
-	displayContainer.setTouchCornerValues(cornerValues);	
+	displayContainer.setTouchCornerValues(cornerValues);
+
+	ImageLoading::initialize();
 }
 
 void DisplayContainer::setSizes(int width, int height) {
@@ -66,7 +78,7 @@ Pair DisplayContainer::getTouchedPoint(){
 	
 	if (pressed) {
 		//Serial.println("Pressure: "+String(p.z));
-		Serial.println("RAW "+String(p.x)+", "+String(p.y));
+		//Serial.println("RAW "+String(p.x)+", "+String(p.y));
 		getCalibratedValue(calX, calY, p.y, p.x);
 		pair.pressed = true;
     }
@@ -78,7 +90,6 @@ Pair DisplayContainer::getTouchedPoint(){
 }
 
 void DisplayContainer::getCalibratedValue(int& calX, int& calY, int rawX, int rawY) {
-
 	/*Serial.println("A: "+String(A));
 	Serial.println("B: "+String(B));
 	Serial.println("C: "+String(C));
@@ -89,12 +100,12 @@ void DisplayContainer::getCalibratedValue(int& calX, int& calY, int rawX, int ra
 	Serial.println("G: "+String(G));
 	Serial.println("H: "+String(H));*/
 
-	int A_ = A - 4*rawX;
-	int E_ = E - 4*rawY;
+	int A_ = A - 4 * rawX;
+	int E_ = E - 4 * rawY;
 
-	long c2 = G*D - H*C;
-	long c1 = B*G - F*C + E_*D - H*A_;
-	long c0 = E_*B - F*A_;
+	long c2 = G * D - H * C;
+	long c1 = B * G - F * C + E_ * D - H * A_;
+	long c0 = E_ * B - F * A_;
 
 	float eta = -2;
 	float kszi = -2;
@@ -123,10 +134,10 @@ void DisplayContainer::getCalibratedValue(int& calX, int& calY, int rawX, int ra
 		}
 		else {
 			//TODO: find proper value, not by comparing!
-			eta = (- (c1) / (2*c2)) - (c2 / abs_c2 ) * sqrt(determinant)/2;
+			eta = (- (c1) / (2 * c2)) - (c2 / abs_c2 ) * sqrt(determinant)/2;
 			
 			if (abs(eta) > 1.1) {
-				eta = (- (c1) / (2*c2)) + (c2 / abs_c2 ) * sqrt(determinant)/2;
+				eta = (- (c1) / (2 * c2)) + (c2 / abs_c2 ) * sqrt(determinant)/2;
 			}
 		}
 	}
@@ -139,14 +150,14 @@ void DisplayContainer::getCalibratedValue(int& calX, int& calY, int rawX, int ra
 			Serial.println("Continuity error!");
 		}
 		else {
-			kszi = - (C*eta + A_) /(D*eta+B);
+			kszi = - (C * eta + A_) /(D * eta + B);
 		}
 
 	}
 
 	if (kszi != -2 && eta != -2) {
-		calX = (int) (width/2) * (kszi + 1);
-		calY = (int) (height/2) * (1 - eta);
+		calX = (int) (width / 2) * (kszi + 1);
+		calY = (int) (height / 2) * (1 - eta);
 		//Serial.println("eta: "+String(eta));
 		//Serial.println("kszi "+String(kszi));
 		
@@ -156,12 +167,21 @@ void DisplayContainer::getCalibratedValue(int& calX, int& calY, int rawX, int ra
 }
 
 
-void DisplayContainer::Write(int x, int y, int color, int size, String szoveg) {
+void DisplayContainer::Write(int x, int y, int color, int size, String text) {
+	tft.setCursor(x, y);
+	tft.setTextColor(color);
+	tft.setTextSize(size);
+	tft.print(text);
+}
+
+void DisplayContainer::WriteRight(int a, int b, int color, int size,  String text) {	
+	int x = (SCR_WIDTH - text.length() * 6 * size - a);
+	int y = b;
 	
 	tft.setCursor(x, y);
 	tft.setTextColor(color);
 	tft.setTextSize(size);
-	tft.print(szoveg);
+	tft.print(text);
 }
 
 void DisplayContainer::WriteWithBackground(int x, int y, int color, int back, int size, String text) {	
@@ -190,8 +210,8 @@ void DisplayContainer::WriteCenterY(int x, int color, int backColor, int size, S
 }
 
 void DisplayContainer::WriteCenter(String text, int size) {
-	int x = (400 - text.length() * 6 * size) / 2;
-	int y = (240 - 6 * size) / 2;
+	int x = (SCR_WIDTH - text.length() * 6 * size) / 2;
+	int y = (SCR_HEIGHT - 6 * size) / 2;
 	
 	tft.setCursor(x, y);
 	tft.setTextColor(RED, GREEN);
@@ -199,33 +219,28 @@ void DisplayContainer::WriteCenter(String text, int size) {
 	tft.print(text);
 }
 
-void DisplayContainer::WriteRight(String text, int size, int a, int b) {	
-	
-	int x = (400 - text.length() * 6 * size - a);
-	int y = b;
-	
-	tft.setCursor(x, y);
-	tft.setTextColor(RED, WHITE);
-	tft.setTextSize(size);
-	tft.print(text);
-}
-
 String DisplayContainer::SectorText(Sector sector) {	
 	String m;
-	if(sector.multiplier == 0)
+	if (sector.multiplier == 0) {
 		m = "-  ";
+	}		
 	else {
-		if (sector.multiplier == 1)
+		if (sector.multiplier == 1)  {
 			m = ' ';
-		if (sector.multiplier == 2)
+		}			
+		if (sector.multiplier == 2) {
 			m = 'D';
-		if (sector.multiplier == 3)
+		}			
+		if (sector.multiplier == 3) {
 			m = 'T';
+		}			
 		
-		if(sector.base < 10)
+		if (sector.base < 10) {
 			m = m + String(sector.base) + ' ';
-		else
+		}			
+		else {
 			m = m + String(sector.base);
+		}			
 	}
 	
 	return m;

@@ -3,11 +3,14 @@
 
 void PlayerScreen::Start() {
     DisplayContainer::displayContainer.getTFT()->fillScreen(MAGENTA);
-		
-    gameLogic->prevMenu.setImage(DisplayContainer::displayContainer.getTFT(),  30, 30, 40, 40, WHITE, CYAN, BLACK, "<<", 2);
-    gameLogic->nextMenu.setImage(DisplayContainer::displayContainer.getTFT(),  370, 30, 40, 40, WHITE, CYAN, BLACK, ">>", 2);
     
-    DisplayContainer::displayContainer.WriteCenterX(20, BLACK, MAGENTA, 3, "JATEKOSOK");
+    int squareOffset = int(SCR_WIDTH * 0.08f);
+    int buttonSize = int(SCR_WIDTH * 0.1f);
+
+    gameLogic->prevMenu.setImage(DisplayContainer::displayContainer.getTFT(), squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<<", 2);
+    gameLogic->nextMenu.setImage(DisplayContainer::displayContainer.getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">>", 2);
+    
+    DisplayContainer::displayContainer.WriteCenterX(buttonSize / 2, BLACK, MAGENTA, 3, "JATEKOSOK");
     
     if (gameLogic->androidMode) {
         if (Player::number == 0) {
@@ -17,14 +20,20 @@ void PlayerScreen::Start() {
             DisplayContainer::displayContainer.WriteCenterX(y, BLACK, MAGENTA, textSize, text);
             
             text = "az Android kliensen!";
-            y += 40;
+            y += SCR_HEIGHT / 6;
             DisplayContainer::displayContainer.WriteCenterX(y, BLACK, MAGENTA, textSize, text);
         }
         else {
+            int xOffset = int(SCR_WIDTH * 0.15f);
+            int xDiff = int(SCR_WIDTH * 0.45f);
+
+            int yOffset = int(SCR_HEIGHT * 0.25f);
+            int yDiff = int(SCR_HEIGHT * 0.2f);
+
             for(int i = 0; i < Player::number; i++) {
-                int x = 60 + (i / 4) * 180; 
-                int y = 60 + (i % 4) * 50;
-                String text = "P"+String(i+1)+":"+Player::players[i].nickname;
+                int x = xOffset + (i / 4) * xDiff; 
+                int y = yOffset + (i % 4) * yDiff;
+                String text = "P" + String(i + 1) + ":" + Player::players[i].nickname;
                 DisplayContainer::displayContainer.WriteWithBackground(x, y, Player::players[i].inverseColor, Player::players[i].color, 3, text);
             }
             
@@ -33,14 +42,21 @@ void PlayerScreen::Start() {
     }
     else {
         Player::number = 1;
+
+        //Writing explanation text
         String text = "Jatekosok szama: ";
-        int x = (400 - text.length() * 6 * 2) / 2 - 55;
-        int y = 100;
+        int x = (SCR_WIDTH - text.length() * 6 * 2) / 2 - int(SCR_WIDTH * 0.1375f);
+        int y = int(SCR_HEIGHT * 0.4f);
         DisplayContainer::displayContainer.WriteWithBackground(x, y, BLACK, MAGENTA, 2, text);
-        DisplayContainer::displayContainer.WriteCenterX(150, BLACK, MAGENTA, 3, String(Player::number));
-        
-        gameLogic->prevCursor.setImage(DisplayContainer::displayContainer.getTFT(), 155, 160, 40, 40, WHITE, CYAN, BLACK, "<", 2);
-        gameLogic->nextCursor.setImage(DisplayContainer::displayContainer.getTFT(), 245, 160, 40, 40, WHITE, CYAN, BLACK, ">", 2);
+
+
+        //drawing player count + buttons
+        int yPos = int(SCR_HEIGHT * 0.666f);
+        int textSize = 3;
+        DisplayContainer::displayContainer.WriteCenterX(yPos - textSize * 6 / 2, BLACK, MAGENTA, textSize, String(Player::number));
+
+        gameLogic->prevCursor.setImage(DisplayContainer::displayContainer.getTFT(), SCR_WIDTH / 2 - int(buttonSize * 1.1f), yPos, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<", 2);
+        gameLogic->nextCursor.setImage(DisplayContainer::displayContainer.getTFT(), SCR_WIDTH / 2 + int(buttonSize * 1.1f), yPos, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">", 2);
     
         gameLogic->prevCursor.guiButton.drawButton(true);
         gameLogic->nextCursor.guiButton.drawButton(true);
@@ -49,7 +65,6 @@ void PlayerScreen::Start() {
     }
     
     gameLogic->prevMenu.guiButton.drawButton(true);
-
     gameLogic->orderModify = unchanged;
 }
 
@@ -72,6 +87,7 @@ void PlayerScreen::Update(Pair touch) {
 	else {
 		gameLogic->nextMenu.detect(touch);
 	
+        //pushing nextmenu
 		if (gameLogic->nextMenu.simple()) {
 			gameLogic->TransitionTo(&gameLogic->gameSelectScreen);
 		}
@@ -79,24 +95,35 @@ void PlayerScreen::Update(Pair touch) {
 		gameLogic->prevCursor.detect(touch);
 		gameLogic->nextCursor.detect(touch);
 		
+        //pushing player decrement
 		if (gameLogic->prevCursor.simple()) {
 			gameLogic->prevCursor.guiButton.drawButton(false);
 			if (--Player::number == 0) {
 				Player::number = Player::maxNrOfPlayers;
 			}
 			
-			DisplayContainer::displayContainer.WriteCenterX(150, BLACK, MAGENTA, 3, String(Player::number));
+            int textSize = 3;
+            int yPos = int(SCR_HEIGHT * 0.666f);
+            yPos -= textSize * 6 / 2;
+
+			DisplayContainer::displayContainer.WriteCenterX(yPos, BLACK, MAGENTA, textSize, String(Player::number));
 		}
 		
+        //pushing player increment
 		if (gameLogic->nextCursor.simple()) {
 			gameLogic->nextCursor.guiButton.drawButton(false);
 			if (++Player::number == Player::maxNrOfPlayers + 1) {
 				Player::number = 1;
 			}
+
+            int textSize = 3;
+            int yPos = int(SCR_HEIGHT * 0.666f);
+            yPos -= textSize * 6 / 2;
 			
-			DisplayContainer::displayContainer.WriteCenterX(150, BLACK, MAGENTA, 3, String(Player::number));
+			DisplayContainer::displayContainer.WriteCenterX(yPos, BLACK, MAGENTA, 3, String(Player::number));
 		}
 		
+        //visualizaton 
 		if (gameLogic->prevCursor.released()) {
 			gameLogic->prevCursor.guiButton.drawButton(true);
 		}

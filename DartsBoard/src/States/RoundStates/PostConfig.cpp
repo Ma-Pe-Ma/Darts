@@ -6,18 +6,30 @@ void PostConfig::Start() {
     DisplayContainer::displayContainer.getTFT()->fillScreen(WHITE);
 		
     String text = "Visszavago?";
-    int y = 15;
+    int y = int(SCR_HEIGHT * 0.0625);
     DisplayContainer::displayContainer.WriteCenterX(y, BLACK, MAGENTA, 4, text);
+
+	int buttonSize = int(SCR_WIDTH * 0.1f);
+
+	int squareOffset = int(SCR_WIDTH * 0.08f);
     
-    gameLogic->prevMenu.setImage(DisplayContainer::displayContainer.getTFT(),  30, 30, 40, 40, WHITE, CYAN, BLACK, "<<", 2);
-    gameLogic->nextMenu.setImage(DisplayContainer::displayContainer.getTFT(),  370, 30, 40, 40, WHITE, CYAN, BLACK, ">>", 2);
+    gameLogic->prevMenu.setImage(DisplayContainer::displayContainer.getTFT(), squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<<", 2);
+    gameLogic->nextMenu.setImage(DisplayContainer::displayContainer.getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">>", 2);
     
     gameLogic->prevMenu.guiButton.drawButton(true);
     gameLogic->nextMenu.guiButton.drawButton(true);
     
-    gameLogic->prevCursor.setImage(DisplayContainer::displayContainer.getTFT(), 100, 120, 120, 40, GREEN, CYAN, BLACK, "Ciklikus", 2);
-    gameLogic->middleCursor.setImage(DisplayContainer::displayContainer.getTFT(), 100, 160, 120, 40, GREEN, CYAN, BLACK, "Ford.", 2);
-    gameLogic->nextCursor.setImage(DisplayContainer::displayContainer.getTFT(), 100, 200, 120, 40, GREEN, CYAN, BLACK, "UA.", 2);
+	int optionStartX = SCR_WIDTH / 4;
+	int optionStartY = SCR_HEIGHT / 2;
+
+	int optionOffsetY = SCR_HEIGHT / 6;
+
+	int optionWidth = SCR_WIDTH / 3;
+	int optionHeight = SCR_HEIGHT / 6;
+
+    gameLogic->prevCursor.setImage(DisplayContainer::displayContainer.getTFT(), optionStartX, optionStartY + 0 * optionOffsetY, optionWidth, optionHeight, GREEN, CYAN, BLACK, "Ciklikus", 2);
+    gameLogic->middleCursor.setImage(DisplayContainer::displayContainer.getTFT(), optionStartX, optionStartY + 1 * optionOffsetY, optionWidth, optionHeight, GREEN, CYAN, BLACK, "Ford.", 2);
+    gameLogic->nextCursor.setImage(DisplayContainer::displayContainer.getTFT(), optionStartX, optionStartY + 2 * optionOffsetY, optionWidth, optionHeight, GREEN, CYAN, BLACK, "UA.", 2);
     
     gameLogic->prevCursor.guiButton.drawButton(false);
     gameLogic->middleCursor.guiButton.drawButton(true);

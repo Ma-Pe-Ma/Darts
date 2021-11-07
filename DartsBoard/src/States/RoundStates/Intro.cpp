@@ -2,10 +2,6 @@
 #include "../GamePlayingScreen.h"
 
 void Intro::Start() {
-	int s = 7;
-	int x = 50;
-	int y = 50;
-
 	Player::FindNextPlayer();
 	Player::current->score->roundCounter = gamePlayingScreen->roundCounter;
 	Player::current->score->DrawCompleteCustomStatus();
@@ -15,7 +11,8 @@ void Intro::Start() {
 	if (gamePlayingScreen->roundCounter < 100) {
 		roundText += "";
 	}
-	DisplayContainer::displayContainer.WriteWithBackground(x,y, WHITE, BLACK, s, roundText);
+	int textSize = 7;
+	DisplayContainer::displayContainer.WriteWithBackground(SCR_WIDTH / 8, SCR_WIDTH / 8, WHITE, BLACK, textSize, roundText);
 
 	//initialize game specific settings
 	DartsGame::dartsGame->InitializeRound();
@@ -30,8 +27,13 @@ void Intro::Start() {
 	}
 
 	//delete the thrown dart texts
+	int dartStatusStartX = SCR_WIDTH / 10;
+	int dartStatusOffsetX = int(SCR_WIDTH * 0.333f);
+
+	int dartStatusStartY = SCR_HEIGHT / 2;
+
 	for (int i = 0; i < 3; i++) {
-		DisplayContainer::displayContainer.WriteWithBackground(40 + 130 * i, 120, BLACK, CYAN, 2, "" + String(i + 1) + ": " + DisplayContainer::SectorText(BoardContainer::darts[i]));
+		DisplayContainer::displayContainer.WriteWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, BLACK, CYAN, 2, String(i + 1) + ": " + DisplayContainer::SectorText(BoardContainer::darts[i]));
 	}		
 	
 	/*for (int i = 0; i < LIST_MAX; i++) {
@@ -44,14 +46,13 @@ void Intro::Start() {
 	else {
 		gamePlayingScreen->SendRoundDump();
 	}
-	
 
 	timer = millis();
 }
 
 void Intro::Update(Pair pair) {
-    if (1000 < millis() - timer) {
+    if (millis() - timer > 1000) {
 		gamePlayingScreen->TransitionTo(&gamePlayingScreen->throwing);
-		Serial.println("Transitioned to throwing");
+		//Serial.println("Transitioned to throwing");
 	}
 }
