@@ -1,27 +1,27 @@
 #include "PlayerScreen.h"
-#include "GameLogic.h"
+#include "../GameLogic.h"
 
 void PlayerScreen::start() {
-    DisplayContainer::displayContainer.getTFT()->fillScreen(MAGENTA);
+    getGameLogic()->displayContainer->getTFT()->fillScreen(MAGENTA);
     
     int squareOffset = int(SCR_WIDTH * 0.08f);
     int buttonSize = int(SCR_WIDTH * 0.1f);
 
-    gameLogic->prevMenu.setImage(DisplayContainer::displayContainer.getTFT(), squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<<", 2);
-    gameLogic->nextMenu.setImage(DisplayContainer::displayContainer.getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">>", 2);
+    gameLogic->prevMenu.setImage(getGameLogic()->displayContainer->getTFT(), squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<<", 2);
+    gameLogic->nextMenu.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">>", 2);
     
-    DisplayContainer::displayContainer.writeCenterX(buttonSize / 2, BLACK, MAGENTA, 3, "JATEKOSOK");
+    getGameLogic()->displayContainer->writeCenterX(buttonSize / 2, BLACK, MAGENTA, 3, "JATEKOSOK");
     
     if (gameLogic->androidMode) {
-        if (Player::getNumberOfPlayers() == 0) {
+        if (gameLogic->playerContainer->getNumberOfPlayers() == 0) {
             String text = "Kerem allitsa be a jatekosokat";
             int textSize = 2;
             int y = (SCR_HEIGHT - 6 * textSize) / 2;
-            DisplayContainer::displayContainer.writeCenterX(y, BLACK, MAGENTA, textSize, text);
+            getGameLogic()->displayContainer->writeCenterX(y, BLACK, MAGENTA, textSize, text);
             
             text = "az Android kliensen!";
             y += SCR_HEIGHT / 6;
-            DisplayContainer::displayContainer.writeCenterX(y, BLACK, MAGENTA, textSize, text);
+            getGameLogic()->displayContainer->writeCenterX(y, BLACK, MAGENTA, textSize, text);
         }
         else {
             int xOffset = int(SCR_WIDTH * 0.15f);
@@ -30,35 +30,35 @@ void PlayerScreen::start() {
             int yOffset = int(SCR_HEIGHT * 0.25f);
             int yDiff = int(SCR_HEIGHT * 0.2f);
 
-            for(int i = 0; i < Player::getNumberOfPlayers(); i++) {
-                Player* checkable = Player::getPlayerByNumber(i);
+            for(int i = 0; i < gameLogic->playerContainer->getNumberOfPlayers(); i++) {
+                Player* checkable = gameLogic->playerContainer->getPlayerByNumber(i);
 
                 int x = xOffset + (i / 4) * xDiff; 
                 int y = yOffset + (i % 4) * yDiff;
                 String text = "P" + String(i + 1) + ":" + checkable->getNick();
                 int textSize = 3;
-                DisplayContainer::displayContainer.writeWithBackground(x, y, checkable->getInverseColor(), checkable->getColor(), textSize, text);
+                getGameLogic()->displayContainer->writeWithBackground(x, y, checkable->getInverseColor(), checkable->getColor(), textSize, text);
             }
             
             gameLogic->nextMenu.guiButton.drawButton(true);
         }
     }
     else {
-        Player::setNumberOfPlayers(1);
+        gameLogic->playerContainer->setNumberOfPlayers(1);
 
         //Writing explanation text
         String text = "Jatekosok szama: ";
         int x = (SCR_WIDTH - text.length() * 6 * 2) / 2 - int(SCR_WIDTH * 0.1375f);
         int y = int(SCR_HEIGHT * 0.4f);
-        DisplayContainer::displayContainer.writeWithBackground(x, y, BLACK, MAGENTA, 2, text);
+        getGameLogic()->displayContainer->writeWithBackground(x, y, BLACK, MAGENTA, 2, text);
 
         //drawing player count + buttons
         int yPos = int(SCR_HEIGHT * 0.666f);
         int textSize = 3;
-        DisplayContainer::displayContainer.writeCenterX(yPos - textSize * 6 / 2, BLACK, MAGENTA, textSize, String(Player::getNumberOfPlayers()));
+        getGameLogic()->displayContainer->writeCenterX(yPos - textSize * 6 / 2, BLACK, MAGENTA, textSize, String(gameLogic->playerContainer->getNumberOfPlayers()));
 
-        gameLogic->prevCursor.setImage(DisplayContainer::displayContainer.getTFT(), SCR_WIDTH / 2 - int(buttonSize * 1.1f), yPos, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<", 2);
-        gameLogic->nextCursor.setImage(DisplayContainer::displayContainer.getTFT(), SCR_WIDTH / 2 + int(buttonSize * 1.1f), yPos, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">", 2);
+        gameLogic->prevCursor.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH / 2 - int(buttonSize * 1.1f), yPos, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<", 2);
+        gameLogic->nextCursor.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH / 2 + int(buttonSize * 1.1f), yPos, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">", 2);
     
         gameLogic->prevCursor.guiButton.drawButton(true);
         gameLogic->nextCursor.guiButton.drawButton(true);
@@ -78,7 +78,7 @@ void PlayerScreen::update(Pair touch) {
 	}
 	
 	if (gameLogic->androidMode) {
-		if (Player::getNumberOfPlayers() != 0) {
+		if (gameLogic->playerContainer->getNumberOfPlayers() != 0) {
 			gameLogic->nextMenu.detect(touch);
 			
 			if (gameLogic->nextMenu.simple()) {
@@ -100,32 +100,32 @@ void PlayerScreen::update(Pair touch) {
         //pushing player decrement
 		if (gameLogic->prevCursor.simple()) {
 			gameLogic->prevCursor.guiButton.drawButton(false);
-            Player::setNumberOfPlayers(Player::getNumberOfPlayers() - 1);
-			if (Player::getNumberOfPlayers() == 0) {
-                Player::setNumberOfPlayers(Player::maxNrOfPlayers);
+            gameLogic->playerContainer->setNumberOfPlayers(gameLogic->playerContainer->getNumberOfPlayers() - 1);
+			if (gameLogic->playerContainer->getNumberOfPlayers() == 0) {
+                gameLogic->playerContainer->setNumberOfPlayers(gameLogic->playerContainer->maxNrOfPlayers);
 			}
 			
             int textSize = 3;
             int yPos = int(SCR_HEIGHT * 0.666f);
             yPos -= textSize * 6 / 2;
 
-			DisplayContainer::displayContainer.writeCenterX(yPos, BLACK, MAGENTA, textSize, String(Player::getNumberOfPlayers()));
+			getGameLogic()->displayContainer->writeCenterX(yPos, BLACK, MAGENTA, textSize, String(gameLogic->playerContainer->getNumberOfPlayers()));
 		}
 		
         //pushing player increment
 		if (gameLogic->nextCursor.simple()) {
 			gameLogic->nextCursor.guiButton.drawButton(false);
-            Player::setNumberOfPlayers(Player::getNumberOfPlayers() + 1);
+            gameLogic->playerContainer->setNumberOfPlayers(gameLogic->playerContainer->getNumberOfPlayers() + 1);
 
-			if (Player::getNumberOfPlayers() == Player::maxNrOfPlayers + 1) {
-				Player::setNumberOfPlayers(1);
+			if (gameLogic->playerContainer->getNumberOfPlayers() == gameLogic->playerContainer->maxNrOfPlayers + 1) {
+				gameLogic->playerContainer->setNumberOfPlayers(1);
 			}
 
             int textSize = 3;
             int yPos = int(SCR_HEIGHT * 0.666f);
             yPos -= textSize * 6 / 2;
 			
-			DisplayContainer::displayContainer.writeCenterX(yPos, BLACK, MAGENTA, 3, String(Player::getNumberOfPlayers()));
+			getGameLogic()->displayContainer->writeCenterX(yPos, BLACK, MAGENTA, 3, String(gameLogic->playerContainer->getNumberOfPlayers()));
 		}
 		
         //visualizaton 

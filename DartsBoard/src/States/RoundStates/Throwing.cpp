@@ -1,11 +1,11 @@
 #include "Throwing.h"
-#include "../GamePlayingScreen.h"
+#include "../AppStates/GamePlayingScreen.h"
 #include "../GameLogic.h"
 
 #include "../../Scores/ThrowResult.h"
 
 void Throwing::start() {
-	Player::getCurrentPlayer()->getScore()->status();
+	gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer()->getScore()->status();
 }
 
 void Throwing::update(Pair pair) {
@@ -14,20 +14,22 @@ void Throwing::update(Pair pair) {
 		gamePlayingScreen->transitionTo(&gamePlayingScreen->intro);
 	}
 
-	if (BoardContainer::boardContainer.dartsBoard->getKeys()) {
+	Keypad* dartsBoard = gamePlayingScreen->boardContainer.getDartsBoard();
+
+	if (dartsBoard->getKeys()) {
 		// Scan the whole key list.
 		for (int i = 0; i < LIST_MAX; i++) {
 			//Only find keys that have changed state.
-			if (BoardContainer::boardContainer.dartsBoard->key[i].stateChanged) {		
+			if (dartsBoard->key[i].stateChanged) {		
 				// Report active key state : IDLE, PRESSED, HOLD, or RELEASED
 
 				ThrowResult throwResult;
+				int currentID = gamePlayingScreen->boardContainer.getCurrentDartID();
 
-				switch (BoardContainer::boardContainer.dartsBoard->key[i].kstate) {  
-					case PRESSED:								
-						BoardContainer::darts[BoardContainer::currentDart] = BoardContainer::sectorMapping(BoardContainer::boardContainer.dartsBoard->key[i].kchar);
-						
-						throwResult = Player::getCurrentPlayer()->getScore()->scoreThrow(BoardContainer::darts[BoardContainer::currentDart]);
+				switch (dartsBoard->key[i].kstate) {  
+					case PRESSED:
+						gamePlayingScreen->boardContainer.setThrownDartByNumber(currentID, gamePlayingScreen->boardContainer.sectorMapping(dartsBoard->key[i].kchar));
+						throwResult = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer()->getScore()->scoreThrow(gamePlayingScreen->boardContainer.getThrownDartByNumber(currentID));
 
 						switch (throwResult.throwType) {
 							case ThrowType::normal:
@@ -49,14 +51,14 @@ void Throwing::update(Pair pair) {
 						break;
 					case HOLD: {
 						// msg = " HOLD.";
-						gamePlayingScreen->stuckSector = BoardContainer::boardContainer.dartsBoard->key[i].kchar;
-						Sector stuck = BoardContainer::sectorMapping(BoardContainer::boardContainer.dartsBoard->key[i].kchar);
-						DisplayContainer::displayContainer.writeWithBackground(SCR_WIDTH / 2, int(SCR_HEIGHT * 0.04f), RED, CYAN, 2, "Stuck: " + DisplayContainer::sectorText(stuck));
+						gamePlayingScreen->stuckSector = dartsBoard->key[i].kchar;
+						Sector stuck = gamePlayingScreen->boardContainer.sectorMapping(dartsBoard->key[i].kchar);
+						gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(SCR_WIDTH / 2, int(SCR_HEIGHT * 0.04f), RED, CYAN, 2, "Stuck: " + DisplayContainer::sectorText(stuck));
 						break;
 					}
 					case RELEASED:
-						if (BoardContainer::boardContainer.dartsBoard->key[i].kchar == gamePlayingScreen->stuckSector) {
-							DisplayContainer::displayContainer.writeWithBackground(SCR_WIDTH / 2, int(SCR_HEIGHT * 0.04f), RED, CYAN, 2, "          ");
+						if (dartsBoard->key[i].kchar == gamePlayingScreen->stuckSector) {
+							gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(SCR_WIDTH / 2, int(SCR_HEIGHT * 0.04f), RED, CYAN, 2, "          ");
 						}
 						// msg = " RELEASED.";
 						break;

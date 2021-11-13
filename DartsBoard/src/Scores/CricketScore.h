@@ -6,7 +6,6 @@
 #include "../Games/CricketEnums.h"
 
 #include "../Hardware/Sector.h"
-#include "../Player.h"
 
 class CricketScore : public AbstractScore {
 	int cricketStatus[21] = {};
@@ -32,6 +31,7 @@ public:
 	CricketScore();
 	
 	void drawCompleteCustomStatus() override;
+	
 	ThrowResult scoreThrow(Sector) override;
 	void deleteThrow(Sector) override;
 

@@ -1,9 +1,9 @@
 #ifndef ROUNDSTATE2
 #define ROUNDSTATE2
 
-#include "../State.h"
-#include "../../Hardware/BoardContainer.h"
-#include "../../Hardware/DisplayContainer.h"
+#include "State.h"
+#include "../Hardware/BoardContainer.h"
+#include "../Hardware/DisplayContainer.h"
 
 class GamePlayingScreen;
 class GameLogic;

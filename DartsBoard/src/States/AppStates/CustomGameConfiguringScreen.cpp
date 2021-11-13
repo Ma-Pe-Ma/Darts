@@ -1,10 +1,10 @@
 #include "CustomGameConfiguringScreen.h"
-#include "GameLogic.h"
+#include "../GameLogic.h"
 
 void CustomGameConfiguringScreen::start() {
-    DisplayContainer::displayContainer.getTFT()->fillScreen(YELLOW);
+    getGameLogic()->displayContainer->getTFT()->fillScreen(YELLOW);
 	
-    DartsGame* currentGame = DartsGame::getCurrentGame();
+    DartsGame* currentGame = gameLogic->gameContainer->getCurrentGame();
 
     if (!currentGame->customStart()) {
         gameLogic->transitionTo(&gameLogic->gamePlayingScreen);
@@ -17,7 +17,7 @@ void CustomGameConfiguringScreen::start() {
 }
 
 void CustomGameConfiguringScreen::update(Pair touch) {
-    DartsGame* currentGame = DartsGame::getCurrentGame();
+    DartsGame* currentGame = gameLogic->gameContainer->getCurrentGame();
     currentGame->custom(touch);
 	
     gameLogic->prevMenu.detect(touch);
@@ -28,7 +28,7 @@ void CustomGameConfiguringScreen::update(Pair touch) {
     }
 
     if (gameLogic->nextMenu.simple()) {
-        if (Player::getNumberOfPlayers() == 0) {
+        if (gameLogic->playerContainer->getNumberOfPlayers() == 0) {
             gameLogic->transitionTo(&gameLogic->playerScreen);
         }
         else {

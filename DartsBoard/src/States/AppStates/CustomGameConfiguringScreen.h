@@ -1,7 +1,7 @@
 #ifndef CUSTOMGAMECONFIGURINGSCREEN_H
 #define CUSTOMGAMECONFIGURINGSCREEN_H
 
-#include "AppState.h"
+#include "../AppState.h"
 
 class CustomGameConfiguringScreen : public AppState {
 

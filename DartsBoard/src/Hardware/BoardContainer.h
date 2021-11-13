@@ -11,6 +11,7 @@ class BoardContainer{
 	//switches for correct pin ordering
 	bool boardSetup[3] = {1,1,1};
 
+	Keypad* dartsBoard;
 	const char dKeys[DROWS][DCOLS]  = {
 		{'%','6','J','0','j','a','1','A'},
 		{'Z','Y','O','\'','o','t',',','T'},
@@ -29,14 +30,32 @@ class BoardContainer{
 	byte setupDCP[DCOLS];
 
 	void setupCorrectPinOrder();
+
+	uint8_t currentDartID = 0;
+	Sector darts[3];
 public: 
 	BoardContainer();
-	Keypad* dartsBoard;
-	static uint8_t currentDart;
-	static Sector darts[3];
-	static Sector sectorMapping(char x);
-	static BoardContainer boardContainer;
-};
+	Sector sectorMapping(char x);
 
+	uint8_t getCurrentDartID() {
+		return this->currentDartID;
+	}
+
+	void setCurrentDartID(uint8_t currentDartID) {
+		this->currentDartID = currentDartID;
+	}
+
+	Sector getThrownDartByNumber(int i) {
+		return this->darts[i];
+	}
+
+	void setThrownDartByNumber(int i, Sector dart) {
+		this->darts[i] = dart;
+	}
+
+	Keypad* getDartsBoard() {
+		return this->dartsBoard;
+	}
+};
 
 #endif

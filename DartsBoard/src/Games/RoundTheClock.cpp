@@ -28,7 +28,3 @@ bool RoundTheClock::custom(Pair touch) {
 void RoundTheClock::initializeGame() {
 	
 }
-
-void RoundTheClock::initializeRound() {
-	
-}

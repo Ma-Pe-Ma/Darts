@@ -18,9 +18,12 @@ public:
 
 	virtual void drawCompleteCustomStatus() {}
 	virtual ThrowResult scoreThrow(Sector) = 0;
-	virtual void deleteThrow(Sector) = 0;
+	
+	virtual void correct(Sector);
+	virtual void deleteThrow(Sector) = 0;	
+
 	virtual void status();
-	virtual void correct(Sector&);
+	
 	virtual void statusAfterHit(Sector) {}
 
 	int getPosition() {

@@ -2,6 +2,10 @@
 
 BluetoothCommunicator::BluetoothCommunicator(Stream* serial) {
 	this->serial = serial;
+
+	for (int i = 0; i < MESSAGE_RECEIVER_NR; i++) {
+		messageReceivers[i] = nullptr;
+	}
 }
 
 void BluetoothCommunicator::process() {
@@ -16,10 +20,6 @@ void BluetoothCommunicator::send() {
 		String outgoingStr = outgoing.dequeue();
 		serial->print(outgoingStr);
 	}
-}
-
-void BluetoothCommunicator::setMessageProcesser(void(*processMessage)(String)) {
-	this->processMessage = processMessage;
 }
 
 void BluetoothCommunicator::receive() {
@@ -77,7 +77,12 @@ void BluetoothCommunicator::processString(String input) {
 void BluetoothCommunicator::processMessages() {	
 	while (incoming.itemCount() > 0) {
 		String incomingStr = incoming.dequeue();
-		processMessage(incomingStr);
+
+		for (int i = 0; i < MESSAGE_RECEIVER_NR; i++) {
+			if (messageReceivers[i] != nullptr) {
+				messageReceivers[i]->receiveMessage(incomingStr);
+			}
+		}
 	}
 }
 
@@ -87,4 +92,21 @@ void BluetoothCommunicator::setLineEnding(String lineEnding) {
 
 void BluetoothCommunicator::repeatLastMessage() {
 	serial->print(lastMessage);
+}
+
+void BluetoothCommunicator::subscribeToMessages(MessageReceiver* messageReciver) {
+	for (int i = 0; i < MESSAGE_RECEIVER_NR; i++) {
+		if (messageReceivers[i] == nullptr) {
+			messageReceivers[i] = messageReciver;
+			break;
+		}
+	}
+}
+
+void BluetoothCommunicator::unsubscribeToMessages(MessageReceiver* messageReceiver) {
+	for (int i = 0; i < MESSAGE_RECEIVER_NR; i++) {
+		if (messageReceivers[i] == messageReceiver) {
+			messageReceivers[i] = nullptr;
+		}
+	}
 }

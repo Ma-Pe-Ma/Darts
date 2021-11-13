@@ -1,7 +1,7 @@
 #ifndef POSTCONFIGSCREEN_H
 #define POSTCONFIGSCREEN_H
 
-#include "RoundState.h"
+#include "../RoundState.h"
 
 class PostConfig : public RoundState {
 public:

@@ -1,7 +1,7 @@
 #ifndef HIT_H
 #define HIT_H
 
-#include "RoundState.h"
+#include "../RoundState.h"
 
 class Hit : public RoundState {
     int dartStatusStartX = SCR_WIDTH / 10;

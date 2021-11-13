@@ -1,7 +1,7 @@
 #ifndef THROWING_H
 #define THROWING_H
 
-#include "RoundState.h"
+#include "../RoundState.h"
 
 class Throwing : public RoundState {
 public:
