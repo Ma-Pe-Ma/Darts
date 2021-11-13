@@ -34,7 +34,7 @@ public:
 	Keypad* dartsBoard;
 	static uint8_t currentDart;
 	static Sector darts[3];
-	static Sector SectorMapping(char x);
+	static Sector sectorMapping(char x);
 	static BoardContainer boardContainer;
 };
 

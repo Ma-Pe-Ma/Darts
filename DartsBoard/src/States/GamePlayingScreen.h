@@ -13,8 +13,8 @@
 #include "RoundStates/PostConfig.h"
 
 class GamePlayingScreen : public AppState, public StateContext {
-    void InvertDart(int);
-    void Correct();
+    void invertDart(int);
+    void correct();
 
     void onDump(JsonObject&);
     void onNext(JsonObject&);
@@ -31,25 +31,25 @@ class GamePlayingScreen : public AppState, public StateContext {
 	int dartStatusHeight = SCR_HEIGHT - dartStatusStartY;
 
 public:
-    void Start();
-    void Update(Pair);
-    void CreatePlayerDump(JsonObject& playerBody, Player* player);
+    void start() override;
+    void update(Pair) override;
+    void processMessage(JsonObject) override;
+
+    void createPlayerDump(JsonObject& playerBody, Player* player);
     GamePlayingScreen(GameLogic* gameLogic);
-    void ProcessMessage(JsonObject);
-    void SetGameNr(unsigned long gameNr) {
+    
+    void setGameNr(unsigned long gameNr) {
         this->gameNr = gameNr;
     }
 
     bool del[3];
     int roundCounter = 0;
 
-    void SendStart();
-    void SendHit(Sector);
-    void SendDump();
-	void SendRoundDump();
+    void sendStart();
+    void sendHit(Sector);
+    void sendDump();
+	void sendRoundDump();
 
-    int nextWinningPosition = 1;
-    bool gameFinished = false;
     unsigned long gameNr = 0;
     char stuckSector = '\0';
 

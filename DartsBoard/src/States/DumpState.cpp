@@ -1,31 +1,34 @@
 #include "DumpState.h"
 #include "GameLogic.h"
 
-void DumpState::Start() {
+void DumpState::start() {
 
 }
 
-void DumpState::Update(Pair pair) {
+void DumpState::update(Pair pair) {
     
 }
 
-void DumpState::ProcessMessage(JsonObject body) {
+void DumpState::processMessage(JsonObject body) {
     unsigned long gameNr = body["GAMENR"].as<unsigned long>();
-    gameLogic->gamePlayingScreen.SetGameNr(gameNr);
+    gameLogic->gamePlayingScreen.setGameNr(gameNr);
     
     JsonVariant players = body["PLAYERS"];
-    gameLogic->ParsePlayers(players);
+    gameLogic->parsePlayers(players);
 
     String currentGameID = body["GAME"];
-    DartsGame::dartsGame = DartsGame::findGameByID(currentGameID);
+    DartsGame* currentGame = DartsGame::findGameByID(currentGameID);
+    DartsGame::setCurrentGame(currentGame);
 
     JsonObject configObject = body["CONFIG"]; 
 
     for (int i = 0; i < DartsGame::nrOfGames; i++) {
-        String name = DartsGame::games[i]->gameID;
+        DartsGame* game = DartsGame::getGameByNr(i);
+
+        String name = game->getGameID();
         JsonObject gameConfigObject = configObject[name];
-        DartsGame::games[i]->ProcessConfig(gameConfigObject);
+        game->processConfig(gameConfigObject);
     }
 
-    gameLogic->TransitionTo(&(gameLogic->playerScreen));
+    gameLogic->transitionTo(&(gameLogic->playerScreen));
 }

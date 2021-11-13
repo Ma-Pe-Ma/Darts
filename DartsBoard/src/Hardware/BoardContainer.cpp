@@ -37,7 +37,7 @@ void BoardContainer::setupCorrectPinOrder() {
 	}
 }
 
-Sector BoardContainer::SectorMapping(char x) {
+Sector BoardContainer::sectorMapping(char x) {
 	Sector dart;
 	
 	//Simple numbers from 1-9

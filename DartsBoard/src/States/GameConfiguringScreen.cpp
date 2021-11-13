@@ -1,44 +1,55 @@
 #include "GameConfiguringScreen.h"
 #include "GameLogic.h"
 
-void GameConfiguringScreen::Start() {
+void GameConfiguringScreen::start() {
     DisplayContainer::displayContainer.getTFT()->fillScreen(CYAN);
-    gameLogic->prevMenu.setImage(DisplayContainer::displayContainer.getTFT(),  30, 30, 40, 40, WHITE, CYAN, BLACK, "<<", 2);
-    gameLogic->nextMenu.setImage(DisplayContainer::displayContainer.getTFT(),  370, 30, 40, 40, WHITE, CYAN, BLACK, ">>", 2);
+	
+	int buttonSize = SCR_WIDTH / 10;
+	int squareOffset = int(SCR_WIDTH * 0.08f);
+
+    gameLogic->prevMenu.setImage(DisplayContainer::displayContainer.getTFT(),  squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<<", 2);
+    gameLogic->nextMenu.setImage(DisplayContainer::displayContainer.getTFT(),  SCR_WIDTH-squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">>", 2);
     gameLogic->prevMenu.guiButton.drawButton(true);
     gameLogic->nextMenu.guiButton.drawButton(true);
 
-	String text = DartsGame::dartsGame->name + " settings";
-	int size = 2;
-	DisplayContainer::displayContainer.WriteCenterX(25, BLACK, CYAN, size, text);
+	DartsGame* currentGame = DartsGame::getCurrentGame();
+
+	String text = currentGame->getName() + " settings";
+	int textSize = 2;
+	int yHeight = int(SCR_HEIGHT * 0.1f);
+
+	DisplayContainer::displayContainer.writeCenterX(yHeight, BLACK, CYAN, textSize, text);
     
-    DartsGame::dartsGame->PreConfig();
+    currentGame->configStart();
 	gameLogic->orderModify = unchanged;
 }
 
-void GameConfiguringScreen::Update(Pair touch) {
+void GameConfiguringScreen::update(Pair touch) {
     gameLogic->prevMenu.detect(touch);
 	gameLogic->nextMenu.detect(touch);
 	
 	if (gameLogic->prevMenu.simple()) {
-		gameLogic->TransitionTo(&gameLogic->gameSelectScreen);
+		gameLogic->transitionTo(&gameLogic->gameSelectScreen);
 	}
 	
 	if (gameLogic->nextMenu.simple()) {
-		if (Player::number == 0) {
-			gameLogic->TransitionTo(&gameLogic->playerScreen);
+		if (Player::getNumberOfPlayers() == 0) {
+			gameLogic->transitionTo(&gameLogic->playerScreen);
 		}
 		else {
-			gameLogic->TransitionTo(&gameLogic->customGameConfiguringScreen);
+			gameLogic->transitionTo(&gameLogic->customGameConfiguringScreen);
 		}
 	}
 	
-	DartsGame::dartsGame->GameConfig(touch);
+	DartsGame* currentGame = DartsGame::getCurrentGame();
+	currentGame->config(touch);
 }
 
-void GameConfiguringScreen::ProcessMessage(JsonObject body) {
-    DartsGame::dartsGame = DartsGame::findGameByID(body["GAME"]);
+void GameConfiguringScreen::processMessage(JsonObject body) {
+	DartsGame* currentGame = DartsGame::findGameByID(body["GAME"]);
+	DartsGame::setCurrentGame(currentGame);
+	
 	JsonObject configObject = body["CONFIG"];
-	DartsGame::dartsGame->ProcessConfig(configObject);
-	gameLogic->TransitionTo(this);
+	currentGame->processConfig(configObject);
+	gameLogic->transitionTo(this);
 }

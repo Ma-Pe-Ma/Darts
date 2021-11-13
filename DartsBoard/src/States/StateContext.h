@@ -9,8 +9,8 @@ protected:
     State* currentState;
 
 public:
-    void TransitionTo(State* newState, bool start, bool end);
-    void TransitionTo(State* newState);
+    void transitionTo(State* newState, bool start, bool end);
+    void transitionTo(State* newState);
 
 };
 

@@ -5,9 +5,10 @@
 
 class Winning : public RoundState {
 public:
+    void start();
+    void update(Pair);
+
     Winning(GamePlayingScreen* gamePlayingScreen) : RoundState(gamePlayingScreen) {}
-    void Start();
-    void Update(Pair);
     
     int winningTime = 5;
 };

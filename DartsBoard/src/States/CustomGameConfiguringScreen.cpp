@@ -1,12 +1,14 @@
 #include "CustomGameConfiguringScreen.h"
 #include "GameLogic.h"
 
-void CustomGameConfiguringScreen::Start() {
+void CustomGameConfiguringScreen::start() {
     DisplayContainer::displayContainer.getTFT()->fillScreen(YELLOW);
 	
-    if (!DartsGame::dartsGame->PreCustom()) {
-        gameLogic->TransitionTo(&gameLogic->gamePlayingScreen);
-        gameLogic->NotifyAboutStart();
+    DartsGame* currentGame = DartsGame::getCurrentGame();
+
+    if (!currentGame->customStart()) {
+        gameLogic->transitionTo(&gameLogic->gamePlayingScreen);
+        gameLogic->notifyAboutStart();
         return;
     }
 
@@ -14,27 +16,28 @@ void CustomGameConfiguringScreen::Start() {
     gameLogic->nextMenu.guiButton.drawButton(true);    
 }
 
-void CustomGameConfiguringScreen::Update(Pair touch) {
-    DartsGame::dartsGame -> CustomConfig(touch);
+void CustomGameConfiguringScreen::update(Pair touch) {
+    DartsGame* currentGame = DartsGame::getCurrentGame();
+    currentGame->custom(touch);
 	
     gameLogic->prevMenu.detect(touch);
     gameLogic->nextMenu.detect(touch);
 
     if (gameLogic->prevMenu.simple()) {
-        gameLogic->TransitionTo(&gameLogic->gameConfiguringScreen);
+        gameLogic->transitionTo(&gameLogic->gameConfiguringScreen);
     }
 
     if (gameLogic->nextMenu.simple()) {
-        if (Player::number == 0) {
-            gameLogic->TransitionTo(&gameLogic->playerScreen);
+        if (Player::getNumberOfPlayers() == 0) {
+            gameLogic->transitionTo(&gameLogic->playerScreen);
         }
         else {
-            gameLogic->TransitionTo(&gameLogic->gamePlayingScreen);
-            gameLogic->NotifyAboutStart();
+            gameLogic->transitionTo(&gameLogic->gamePlayingScreen);
+            gameLogic->notifyAboutStart();
         }
     }
 }
 
-void CustomGameConfiguringScreen::ProcessMessage(JsonObject message) {
+void CustomGameConfiguringScreen::processMessage(JsonObject message) {
     
 }

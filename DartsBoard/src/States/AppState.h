@@ -14,12 +14,12 @@ protected:
     String ID = "";
     
 public:
-    //virtual void Update(Pair); 
-    void setGameLogic(GameLogic* gameLogic) {this->gameLogic = gameLogic;}
     AppState(GameLogic* gameLogic) {this->gameLogic = gameLogic;}
-    virtual void ProcessMessage(JsonObject) = 0;
-    String GetID() {return ID;}
-    GameLogic* GetGameLogic() {return gameLogic;}
+
+    void setGameLogic(GameLogic* gameLogic) {this->gameLogic = gameLogic;}
+    virtual void processMessage(JsonObject) = 0;
+    String getID() {return ID;}
+    GameLogic* getGameLogic() {return gameLogic;}
 };
 
 #endif

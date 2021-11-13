@@ -13,7 +13,7 @@ CricketScore::CricketScore() {
 	}
 }
 
-int CricketScore::GetIndicatorPosition(int base) {
+int CricketScore::getIndicatorPosition(int base) {
 	if (base == 25 || base == 0) {
 		return 21;
 	}
@@ -21,7 +21,7 @@ int CricketScore::GetIndicatorPosition(int base) {
 	return indicatorPositionMap[base];
 }
 
-int CricketScore::GetMappedScore(Sector sector) {
+int CricketScore::getMappedScore(Sector sector) {
 	if (sector.base == 25) {
 		return 25;
 	}
@@ -29,7 +29,7 @@ int CricketScore::GetMappedScore(Sector sector) {
 	return scoreMap[sector.base];
 }
 
-int CricketScore::GetStatusPosition(Sector sector) {
+int CricketScore::getStatusPosition(Sector sector) {
 	if (sector.base == 25) {
 		return 0;
 	}
@@ -37,17 +37,16 @@ int CricketScore::GetStatusPosition(Sector sector) {
 	return sector.base;
 }
 
-int CricketScore::GetSectorCloseState(int base) {
+int CricketScore::getSectorCloseState(int base) {
 	if (base == 25) {
 		base = 0;
 	}
 	
 	int highestState = 0;
 	
-	for(int k = 0; k < Player::number; k++) {
-		if(k != Player::cursor) {				
-			
-			int temp = ((CricketScore*) Player::players[k].score)->cricketStatus[base];
+	for(int k = 0; k < Player::getNumberOfPlayers(); k++) {
+		if(Player::getCurrentPlayer() != Player::getPlayerByNumber(k)) {			
+			int temp = ((CricketScore*) Player::getPlayerByNumber(k)->getScore())->cricketStatus[base];
 			
 			if (temp > highestState) {
 				highestState = temp;
@@ -58,18 +57,17 @@ int CricketScore::GetSectorCloseState(int base) {
 	return highestState;
 }
 
-bool CricketScore::Score(Sector sector) {
-	int initStatus = cricketStatus[GetStatusPosition(sector)];
+ThrowResult CricketScore::scoreThrow(Sector sector) {
+	int initStatus = cricketStatus[getStatusPosition(sector)];
 	
-	cricketStatus[GetStatusPosition(sector)] += sector.multiplier;
-	int newStatus = cricketStatus[GetStatusPosition(sector)];
+	cricketStatus[getStatusPosition(sector)] += sector.multiplier;
+	int newStatus = cricketStatus[getStatusPosition(sector)];
 	
 	int sectorCloseStatus;
 	
 	switch (cricketType) {
-		case score:
-			
-			sectorCloseStatus = GetSectorCloseState(sector.base);
+		case score:			
+			sectorCloseStatus = getSectorCloseState(sector.base);
 			
 			if (sectorCloseStatus < 3) {
 				int diff = newStatus - initStatus;
@@ -81,7 +79,7 @@ bool CricketScore::Score(Sector sector) {
 					diff = newStatus - 3;
 				}
 				
-				playerScore += diff * GetMappedScore(sector);
+				playerScore += diff * getMappedScore(sector);
 			}			
 			break;
 		case noscore:
@@ -93,27 +91,26 @@ bool CricketScore::Score(Sector sector) {
 	}
 	
 	int indicatorPosition;
-	indicatorPosition = GetIndicatorPosition(sector.base);
+	indicatorPosition = getIndicatorPosition(sector.base);
 			
 	if (indicatorPosition != -1) {
-		DrawSectorIndicator(GetIndicatorPosition(sector.base), sector.base, newStatus, sectorCloseStatus);
+		drawSectorIndicator(getIndicatorPosition(sector.base), sector.base, newStatus, sectorCloseStatus);
 	}
 	
-	return CheckWinningCondition();
+	return checkWinningCondition();
 }
 
-void CricketScore::Delete(Sector sector) {
-	int initStatus = cricketStatus[GetStatusPosition(sector)];
+void CricketScore::deleteThrow(Sector sector) {
+	int initStatus = cricketStatus[getStatusPosition(sector)];
 	
-	cricketStatus[GetStatusPosition(sector)] -= sector.multiplier;
-	int newStatus = cricketStatus[GetStatusPosition(sector)];
+	cricketStatus[getStatusPosition(sector)] -= sector.multiplier;
+	int newStatus = cricketStatus[getStatusPosition(sector)];
 	
 	int sectorCloseStatus;
 	
 	switch (cricketType) {
-		case score:
-			
-			sectorCloseStatus = GetSectorCloseState(sector.base);
+		case score:			
+			sectorCloseStatus = getSectorCloseState(sector.base);
 			
 			if (sectorCloseStatus < 3) {
 				int diff = newStatus - initStatus;
@@ -125,7 +122,7 @@ void CricketScore::Delete(Sector sector) {
 					diff = initStatus - 3;
 				}
 				
-				playerScore -= diff * GetMappedScore(sector);
+				playerScore -= diff * getMappedScore(sector);
 			}			
 			break;
 		case noscore:
@@ -137,14 +134,14 @@ void CricketScore::Delete(Sector sector) {
 	}
 	
 	int indicatorPosition;
-	indicatorPosition = GetIndicatorPosition(sector.base);
+	indicatorPosition = getIndicatorPosition(sector.base);
 			
 	if (indicatorPosition != -1) {
-		DrawSectorIndicator(GetIndicatorPosition(sector.base), sector.base, newStatus, sectorCloseStatus);
+		drawSectorIndicator(getIndicatorPosition(sector.base), sector.base, newStatus, sectorCloseStatus);
 	}
 }
 
-bool CricketScore::CheckWinningCondition() {	
+ThrowResult CricketScore::checkWinningCondition() {	
 	//all sectors are closed
 	bool condition1 = true;
 	for (int i = 0; i < 21; i++) {
@@ -160,11 +157,11 @@ bool CricketScore::CheckWinningCondition() {
 	bool condition2 = true;
 	switch (cricketType) {
 		case score:	
-			for(int k = 0; k < Player::number; k++) {
-				Player* checkable = &Player::players[k];
+			for(int k = 0; k < Player::getNumberOfPlayers(); k++) {
+				Player* checkable = Player::getPlayerByNumber(k);
 
-				if(k != Player::cursor && checkable->score->position == -1) {				
-					if(playerScore < ((CricketScore*) checkable->score)->playerScore) {
+				if(checkable != Player::getCurrentPlayer() && checkable->getScore()->getPosition() == -1) {				
+					if(playerScore < ((CricketScore*) checkable->getScore())->playerScore) {
 						condition2 = false;
 						break;
 					}
@@ -179,31 +176,40 @@ bool CricketScore::CheckWinningCondition() {
 			break;	
 	}
 
-	return (condition1 && condition2);
+	ThrowResult throwResult;
+
+	if (condition1 && condition2) {
+		throwResult.throwType = ThrowType::winning;
+	}
+	else {
+		throwResult.throwType = ThrowType::normal;
+	}
+
+	return throwResult;
 }
 
-void CricketScore::DrawCompleteCustomStatus() {
+void CricketScore::drawCompleteCustomStatus() {
 	for (int i = 0; i < 21; i++) {
-		int indicatorPosition = GetIndicatorPosition(i);
+		int indicatorPosition = getIndicatorPosition(i);
 		
 		if (indicatorPosition != -1) {
-			int sectorCloseStatus = GetSectorCloseState(i);
-			DrawSectorIndicator(indicatorPosition, i, cricketStatus[i], sectorCloseStatus);
+			int sectorCloseStatus = getSectorCloseState(i);
+			drawSectorIndicator(indicatorPosition, i, cricketStatus[i], sectorCloseStatus);
 		}		
 	}
 }
 
-void CricketScore::StatusAfterHit(Sector dart) {
-	int statusPosition = GetStatusPosition(dart);
-	int indicatorPosition = GetIndicatorPosition(dart.base);
+void CricketScore::statusAfterHit(Sector dart) {
+	int statusPosition = getStatusPosition(dart);
+	int indicatorPosition = getIndicatorPosition(dart.base);
 	
 	if (indicatorPosition != -1) {
-		int sectorCloseStatus = GetSectorCloseState(dart.base);
-		DrawSectorIndicator(indicatorPosition, statusPosition, cricketStatus[statusPosition], sectorCloseStatus);
+		int sectorCloseStatus = getSectorCloseState(dart.base);
+		drawSectorIndicator(indicatorPosition, statusPosition, cricketStatus[statusPosition], sectorCloseStatus);
 	}		
 }
 
-void CricketScore::DrawSectorIndicator(int position, int number, int innerState, int outerState) {
+void CricketScore::drawSectorIndicator(int position, int number, int innerState, int outerState) {
 	if (number == 0) {
 		number = 25;
 	}
@@ -250,10 +256,10 @@ void CricketScore::DrawSectorIndicator(int position, int number, int innerState,
 	//Writing number to the center
 	int textSize = 2;
 	int pos = number < 10 ? (- textSize * 6) / 2 : (- 2 * textSize * 6) / 2;
-	DisplayContainer::displayContainer.Write(centerX + pos, centerY - textSize * 6 / 2, RED, textSize, String(number));
+	DisplayContainer::displayContainer.write(centerX + pos, centerY - textSize * 6 / 2, RED, textSize, String(number));
 }
 
-void CricketScore::CreateScoreMap(CricketNumberSet set, CricketCustomSet customSet, int cricketNr, int cricketStart) {	
+void CricketScore::createScoreMap(CricketNumberSet set, CricketCustomSet customSet, int cricketNr, int cricketStart) {	
 	for (int i = 1; i < 21; i++) {
 		scoreMap[i] = 0;
 		indicatorPositionMap[i] = -1;
@@ -322,11 +328,11 @@ void CricketScore::CreateScoreMap(CricketNumberSet set, CricketCustomSet customS
 	}
 }
 
-float CricketScore::GetAverageScore() {
+float CricketScore::getAverageScore() {
 	return 0;
 }
 
-void CricketScore::SerializePlayerStatus(JsonObject& body) {
+void CricketScore::serializePlayerStatus(JsonObject& body) {
 	JsonObject states = body.createNestedObject("STATES");
 
 	states["25"] = cricketStatus[0];
@@ -336,6 +342,6 @@ void CricketScore::SerializePlayerStatus(JsonObject& body) {
 	}
 }
 
-void CricketScore::SerializeDartStatus(JsonObject body, Sector sector) {
+void CricketScore::serializeDartStatus(JsonObject body, Sector sector) {
 	body[String(sector.base)] = cricketStatus[sector.base];
 }

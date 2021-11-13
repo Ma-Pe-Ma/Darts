@@ -18,26 +18,26 @@ class CricketScore : public AbstractScore {
 public:
 	static int scoreMap[21];
 
-	static void CreateScoreMap(CricketNumberSet set, CricketCustomSet customSet, int cricketNr, int cricketStart);
-	static int GetIndicatorPosition(int);
-	static int GetMappedScore(Sector);
-	static int GetStatusPosition(Sector);
-	static int GetSectorCloseState(int);
-	void SerializeDartStatus(JsonObject body, Sector sector);
+	static void createScoreMap(CricketNumberSet set, CricketCustomSet customSet, int cricketNr, int cricketStart);
+	static int getIndicatorPosition(int);
+	static int getMappedScore(Sector);
+	static int getStatusPosition(Sector);
+	static int getSectorCloseState(int);
+	void serializeDartStatus(JsonObject body, Sector sector);
 	
-	void SerializePlayerStatus(JsonObject&);
+	void serializePlayerStatus(JsonObject&);
 
-	void DrawSectorIndicator(int, int, int, int);
-	bool CheckWinningCondition();
+	void drawSectorIndicator(int, int, int, int);
+	ThrowResult checkWinningCondition();
 	CricketScore();
 	
-	void DrawCompleteCustomStatus();
-	bool Score(Sector);
-	void Delete(Sector);
+	void drawCompleteCustomStatus() override;
+	ThrowResult scoreThrow(Sector) override;
+	void deleteThrow(Sector) override;
 
-	void StatusAfterHit(Sector);
+	void statusAfterHit(Sector);
 
-	float GetAverageScore();
+	float getAverageScore();
 };
 
 #endif

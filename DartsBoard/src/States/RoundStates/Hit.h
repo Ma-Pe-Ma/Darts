@@ -10,9 +10,10 @@ class Hit : public RoundState {
     int dartStatusStartY = SCR_HEIGHT / 2;
 
 public:
+    void start() override;
+    void update(Pair) override;
+
     Hit(GamePlayingScreen* gamePlayingScreen) : RoundState(gamePlayingScreen) {}
-    void Start();
-    void Update(Pair);
 };
 
 #endif

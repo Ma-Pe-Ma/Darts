@@ -2,39 +2,36 @@
 #define X01_H
 
 #include "DartsGame.h"
+#include "../Scores/X01Score.h"
 
 class X01 : public DartsGame {
-	
-	private:
-		int startingValue;
-		int busted;
-		uint8_t out = 0, in = 0;
-		void Delete(Sector);
-		void inOutString(int inValue, String& in, int outValue, String& out);
-	
-	public:
-		void InitializeGame() {}
-	
-		void SerializeConfigCustom(JsonObject&);
-		void ProcessConfig(JsonObject&);
-	
-		void PreConfig();
-		void GameConfig(Pair);
-		
-		bool PreCustom();
-		bool CustomConfig(Pair);
-		
-		void CalculateScore(Sector);
-		void Status();
-		void Correct();
-		
-		X01() {
-			gameID = "X01";
-			name = "X01";
-		}
+private:
+	int startingValue;
+	int busted;
+	uint8_t out = 0, in = 0;
+	void inOutString(int inValue, String& in, int outValue, String& out);
 
-		float GetAverageScore();
-		void SerializeGameConfig(JsonObject&);
+public:
+	void configStart() override;
+	void config(Pair) override;
+	
+	bool customStart() override;
+	bool custom(Pair) override;
+	
+	void initializeGame() override;
+	void initializeRound() override;
+
+	void serializeConfigCustom(JsonObject&) override;
+	void processConfig(JsonObject&) override;
+
+	X01() {
+		gameID = "X01";
+		name = "X01";
+	}
+
+	AbstractScore* setProperScoreContainer() override {
+		return new X01Score();
+	}
 };
 
 #endif

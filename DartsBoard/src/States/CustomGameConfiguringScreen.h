@@ -6,10 +6,11 @@
 class CustomGameConfiguringScreen : public AppState {
 
 public:
-    void Start();
-    void Update(Pair);
-    CustomGameConfiguringScreen(GameLogic* gameLogic) : AppState(gameLogic) {ID = "CUSTOM";}
-    void ProcessMessage(JsonObject);
+    void start() override;
+    void update(Pair) override;
+    void processMessage(JsonObject) override;
+    
+    CustomGameConfiguringScreen(GameLogic* gameLogic) : AppState(gameLogic) {ID = "CUSTOM";}    
 };
 
 #endif

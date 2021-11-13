@@ -2,12 +2,12 @@
 #include "../GamePlayingScreen.h"
 #include "../GameLogic.h"
 
-void PostConfig::Start() {
+void PostConfig::start() {
     DisplayContainer::displayContainer.getTFT()->fillScreen(WHITE);
 		
     String text = "Visszavago?";
     int y = int(SCR_HEIGHT * 0.0625);
-    DisplayContainer::displayContainer.WriteCenterX(y, BLACK, MAGENTA, 4, text);
+    DisplayContainer::displayContainer.writeCenterX(y, BLACK, MAGENTA, 4, text);
 
 	int buttonSize = int(SCR_WIDTH * 0.1f);
 
@@ -39,16 +39,16 @@ void PostConfig::Start() {
 	gameLogic->orderModify = cyclical;
 }
 
-void PostConfig::Update(Pair touch) {
+void PostConfig::update(Pair touch) {
     gameLogic->prevMenu.detect(touch);
 	gameLogic->nextMenu.detect(touch);
 	
 	if (gameLogic->prevMenu.simple()) {
-		gameLogic->TransitionTo(&gameLogic->gameConfiguringScreen);	
+		gameLogic->transitionTo(&gameLogic->gameConfiguringScreen);	
 	}
 	
 	if (gameLogic->nextMenu.simple()) {
-		gameLogic->TransitionTo(&gameLogic->gamePlayingScreen);	
+		gameLogic->transitionTo(&gameLogic->gamePlayingScreen);	
 	}
 	
 	gameLogic->prevCursor.detect(touch);

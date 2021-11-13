@@ -32,7 +32,7 @@ enum OrderModify {
 };
 
 class GameLogic : public StateContext {
-	AppState* FindStateByID(String);
+	AppState* findStateByID(String);
 	
 public:
 	static GameLogic gameLogic;
@@ -58,20 +58,18 @@ public:
 	Button offline, android;
 	Button delete1, delete2, delete3;
 
-	void GetConfigDump();
-	void Run(Pair);
+	void getConfigDump();
+	void run(Pair);
 
-	void ParsePlayers(JsonVariant);
+	void parsePlayers(JsonVariant);
 	
-	static void StaticProcessMessage(String);
-	void ProcessMessage(String);
+	static void staticProcessMessage(String);
+	void processMessage(String);
 
-	void NotifyAboutStart();
+	void notifyAboutStart();
 	
 	BluetoothCommunicator* bluetoothCommunicator;
 	OrderModify orderModify = unchanged;
-
-	void SetCorrectPlayerOrder();
 };
 
 #endif 
