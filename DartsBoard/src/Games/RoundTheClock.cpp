@@ -1,56 +1,34 @@
 #include "RoundTheClock.h"
 
-void RoundTheClock::SerializeConfigCustom(JsonObject& configObject) {
+void RoundTheClock::serializeConfigCustom(JsonObject& configObject) {
 	
 }
 
-void RoundTheClock::ProcessConfig(JsonObject& configObject) {
+void RoundTheClock::processConfig(JsonObject& configObject) {
 
 }
 
-void RoundTheClock::PreConfig() {
+void RoundTheClock::configStart() {
 	
 }
 
-void RoundTheClock :: GameConfig(Pair touch) {
+void RoundTheClock::config(Pair touch) {
 
 }
 
-bool RoundTheClock::PreCustom() {
+bool RoundTheClock::customStart() {
 	
 }
 
-bool RoundTheClock :: CustomConfig(Pair touch) {
-	
+bool RoundTheClock::custom(Pair touch) {
 
 	return true;
 }
 
-void RoundTheClock :: CalculateScore(Sector dart) {
+void RoundTheClock::initializeGame() {
 	
 }
 
-void RoundTheClock :: Status() {
+void RoundTheClock::initializeRound() {
 	
-}
-
-void RoundTheClock :: Correct() {
-	
-}
-
-void RoundTheClock :: Delete(Sector dart) {
-	
-}
-
-void RoundTheClock :: InitializeRound() {
-	
-}
-
-float RoundTheClock::GetAverageScore() {
-	return 0;
-}
-
-
-void RoundTheClock::SerializeGameConfig(JsonObject& body) {
-
 }

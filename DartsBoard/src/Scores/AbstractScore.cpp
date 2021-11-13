@@ -1,30 +1,32 @@
 #include "AbstractScore.h"
 #include "../Player.h"
 
-void AbstractScore::Correct(Sector& correctable) {
-	Delete(correctable);
-	Status();
+void AbstractScore::correct(Sector& correctable) {
+	deleteThrow(correctable);
+	status();
 
-	StatusAfterHit(correctable);
+	statusAfterHit(correctable);
 
 	correctable.multiplier = 0;
 	correctable.base = 0;
 }
 
-void AbstractScore::Status() {
-	int s = 7;
+void AbstractScore::status() {
+	int textSize = 7;
 
-	int score = Player::current->score->playerScore;
-	String point = "P" + String(Player::current->ID + 1) + "-" + String(score);
+	Player* currentPlayer = Player::getCurrentPlayer();
+
+	int score = currentPlayer->getScore()->playerScore;
+	String point = "P" + String(currentPlayer->getID() + 1) + "-" + String(score);
 	
-	int x = 50;
-	int y = 50;
+	int x = SCR_WIDTH / 8;
+	int y = SCR_WIDTH / 8;
 
-	DisplayContainer::displayContainer.WriteWithBackground(x,y, BLACK, CYAN, s, "       ");	
-	DisplayContainer::displayContainer.WriteWithBackground(x,y, Player::current->inverseColor, Player::current->color, s, point);	
+	DisplayContainer::displayContainer.writeWithBackground(x,y, BLACK, CYAN, textSize, "       ");	
+	DisplayContainer::displayContainer.writeWithBackground(x,y, currentPlayer->getInverseColor(), currentPlayer->getColor(), textSize, point);	
 
 	/*if(Player::number > 1) {
-			int s2 = 2;
+		int s2 = 2;
 		DisplayContainer::displayContainer.getTFT()->drawFastHLine(320, 115, 2 * s2 * 6 * 3, BLACK);
 		Player* nextPlayer;
 		if (Player::cursor + 1 == Player::number) {
@@ -47,6 +49,6 @@ void AbstractScore::Status() {
 			//ponti = "P" + String(nextPlayer + 1) + ":" + String(score[nextPlayer]);
 		//}
 		
-		DisplayContainer::displayContainer.WriteWithBackground(320, 120, BLACK, CYAN, s2, point);
+		DisplayContainer::displayContainer.writeWithBackground(320, 120, BLACK, CYAN, s2, point);
 	}*/
 }

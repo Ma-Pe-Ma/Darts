@@ -4,11 +4,12 @@
 #include "AppState.h"
 
 class LastState : public AppState {
-    public:
-    void Start();
-    void Update(Pair);
+public:
+    void start();
+    void update(Pair);
+    void processMessage(JsonObject);
+
     LastState(GameLogic* gameLogic) : AppState(gameLogic) {ID = "LAST";}
-    void ProcessMessage(JsonObject);
 };
 
 #endif

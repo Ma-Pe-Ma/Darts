@@ -1,21 +1,23 @@
 #include "Intro.h"
 #include "../GamePlayingScreen.h"
 
-void Intro::Start() {
-	Player::FindNextPlayer();
-	Player::current->score->roundCounter = gamePlayingScreen->roundCounter;
-	Player::current->score->DrawCompleteCustomStatus();
+void Intro::start() {
+	Player::findNextPlayer();
+	Player* currentPlayer = Player::getCurrentPlayer();
+
+	currentPlayer->getScore()->setRoundCounter(gamePlayingScreen->roundCounter);
+	currentPlayer->getScore()->drawCompleteCustomStatus();
 
 	//Write out player changing!
-	String roundText = "R" + String(gamePlayingScreen->roundCounter) + "-P" + String(Player::cursor + 1);
+	String roundText = "R" + String(gamePlayingScreen->roundCounter) + "-P" + String(Player::getPlayerCursor() + 1);
 	if (gamePlayingScreen->roundCounter < 100) {
 		roundText += "";
 	}
 	int textSize = 7;
-	DisplayContainer::displayContainer.WriteWithBackground(SCR_WIDTH / 8, SCR_WIDTH / 8, WHITE, BLACK, textSize, roundText);
+	DisplayContainer::displayContainer.writeWithBackground(SCR_WIDTH / 8, SCR_WIDTH / 8, WHITE, BLACK, textSize, roundText);
 
 	//initialize game specific settings
-	DartsGame::dartsGame->InitializeRound();
+	DartsGame::getCurrentGame()->initializeRound();
 	
 	//delete thrown dart data
 	BoardContainer::boardContainer.currentDart = 0;
@@ -33,26 +35,20 @@ void Intro::Start() {
 	int dartStatusStartY = SCR_HEIGHT / 2;
 
 	for (int i = 0; i < 3; i++) {
-		DisplayContainer::displayContainer.WriteWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, BLACK, CYAN, 2, String(i + 1) + ": " + DisplayContainer::SectorText(BoardContainer::darts[i]));
+		DisplayContainer::displayContainer.writeWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, BLACK, CYAN, 2, String(i + 1) + ": " + DisplayContainer::sectorText(BoardContainer::darts[i]));
 	}		
 	
 	/*for (int i = 0; i < LIST_MAX; i++) {
 		dartsBoard->key[i].kstate = IDLE;
 	}*/
 
-	if (firstTime == true) {
-		firstTime = false;
-	}
-	else {
-		gamePlayingScreen->SendRoundDump();
-	}
-
+	gamePlayingScreen->sendRoundDump();
 	timer = millis();
 }
 
-void Intro::Update(Pair pair) {
+void Intro::update(Pair pair) {
     if (millis() - timer > 1000) {
-		gamePlayingScreen->TransitionTo(&gamePlayingScreen->throwing);
+		gamePlayingScreen->transitionTo(&gamePlayingScreen->throwing);
 		//Serial.println("Transitioned to throwing");
 	}
 }

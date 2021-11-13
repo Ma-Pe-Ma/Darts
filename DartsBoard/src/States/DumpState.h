@@ -4,11 +4,12 @@
 #include "AppState.h"
 
 class DumpState : public AppState {
-    public:
-    void Start();
-    void Update(Pair);
+public:
+    void start() override;
+    void update(Pair) override;
+    void processMessage(JsonObject) override;
+    
     DumpState(GameLogic* gameLogic) : AppState(gameLogic) {ID = "DUMP";}
-    void ProcessMessage(JsonObject);
 };
 
 #endif

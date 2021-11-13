@@ -10,11 +10,11 @@ protected:
     StateContext* stateContext;
 
 public:
-    virtual void Start() {}
-    virtual void Update(Pair) = 0;
-    virtual void End() {}
+    virtual void start() = 0;
+    virtual void update(Pair) = 0;
+    virtual void end() {}
 
-    void SetContext(StateContext*);
+    void setContext(StateContext*);
 };
 
 #endif

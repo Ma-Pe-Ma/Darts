@@ -3,10 +3,9 @@
 
 DisplayContainer DisplayContainer::displayContainer;
 
-void DisplayContainer::Initialize() {
-	uint16_t ID;
+void DisplayContainer::initialize() {
     Serial.print("Show BMP files on DisplayContainer::displayContainer.getTFT() with ID:0x");
-    ID = DisplayContainer::displayContainer.getTFT()->readID();
+    uint16_t ID = DisplayContainer::displayContainer.getTFT()->readID();
     Serial.println(ID, HEX);
     if (ID == 0x0D3D3) ID = 0x9481;
     displayContainer.getTFT()->begin(ID);
@@ -167,14 +166,14 @@ void DisplayContainer::getCalibratedValue(int& calX, int& calY, int rawX, int ra
 }
 
 
-void DisplayContainer::Write(int x, int y, int color, int size, String text) {
+void DisplayContainer::write(int x, int y, int color, int size, String text) {
 	tft.setCursor(x, y);
 	tft.setTextColor(color);
 	tft.setTextSize(size);
 	tft.print(text);
 }
 
-void DisplayContainer::WriteRight(int a, int b, int color, int size,  String text) {	
+void DisplayContainer::writeRight(int a, int b, int color, int size,  String text) {	
 	int x = (SCR_WIDTH - text.length() * 6 * size - a);
 	int y = b;
 	
@@ -184,14 +183,14 @@ void DisplayContainer::WriteRight(int a, int b, int color, int size,  String tex
 	tft.print(text);
 }
 
-void DisplayContainer::WriteWithBackground(int x, int y, int color, int back, int size, String text) {	
+void DisplayContainer::writeWithBackground(int x, int y, int color, int back, int size, String text) {	
 	tft.setCursor(x, y);
 	tft.setTextColor(color, back);
 	tft.setTextSize(size);
 	tft.print(text);
 }
 
-void DisplayContainer::WriteCenterX(int y, int color, int backColor, int size, String text) {
+void DisplayContainer::writeCenterX(int y, int color, int backColor, int size, String text) {
 	int x = (SCR_WIDTH - text.length() * size * 6) / 2;
 
 	tft.setCursor(x, y);
@@ -200,7 +199,7 @@ void DisplayContainer::WriteCenterX(int y, int color, int backColor, int size, S
 	tft.print(text);
 }
 
-void DisplayContainer::WriteCenterY(int x, int color, int backColor, int size, String text) {
+void DisplayContainer::writeCenterY(int x, int color, int backColor, int size, String text) {
 	int y = (SCR_HEIGHT - size * 6) / 2;
 
 	tft.setCursor(x, y);
@@ -209,7 +208,7 @@ void DisplayContainer::WriteCenterY(int x, int color, int backColor, int size, S
 	tft.print(text);
 }
 
-void DisplayContainer::WriteCenter(String text, int size) {
+void DisplayContainer::writeCenter(String text, int size) {
 	int x = (SCR_WIDTH - text.length() * 6 * size) / 2;
 	int y = (SCR_HEIGHT - 6 * size) / 2;
 	
@@ -219,7 +218,7 @@ void DisplayContainer::WriteCenter(String text, int size) {
 	tft.print(text);
 }
 
-String DisplayContainer::SectorText(Sector sector) {	
+String DisplayContainer::sectorText(Sector sector) {	
 	String m;
 	if (sector.multiplier == 0) {
 		m = "-  ";

@@ -2,8 +2,8 @@
 
 GameLogic GameLogic::gameLogic;
 
-void GameLogic::StaticProcessMessage(String message) {
-	gameLogic.ProcessMessage(message);
+void GameLogic::staticProcessMessage(String message) {
+	gameLogic.processMessage(message);
 }
 
 GameLogic::GameLogic() {
@@ -21,9 +21,9 @@ GameLogic::GameLogic() {
 	currentState = states[0];
 }
 
-AppState* GameLogic::FindStateByID(String ID) {
+AppState* GameLogic::findStateByID(String ID) {
 	for (int i = 0; i < NR_OF_APPSTATES; i++) {
-		if (states[i]->GetID() == ID) {
+		if (states[i]->getID() == ID) {
 			return states[i];
 		}
 	}
@@ -31,17 +31,17 @@ AppState* GameLogic::FindStateByID(String ID) {
 	return nullptr;
 }
 
-void GameLogic::ProcessMessage(String message) {
+void GameLogic::processMessage(String message) {
 	StaticJsonDocument<2048> doc;
 	DeserializationError err = deserializeJson(doc, message);
 
 	if (err == DeserializationError::Ok) {
 		JsonObject jsonObject = doc.as<JsonObject>();
 		
-		AppState* newState = FindStateByID(jsonObject["STATE"].as<String>());
+		AppState* newState = findStateByID(jsonObject["STATE"].as<String>());
 		JsonObject body = jsonObject["BODY"].as<JsonObject>();
 
-		newState->ProcessMessage(body);
+		newState->processMessage(body);
 	}
 	else {
 		String error = err.c_str();
@@ -49,19 +49,26 @@ void GameLogic::ProcessMessage(String message) {
 	}	
 }
 
-void GameLogic::ParsePlayers(JsonVariant players) {
+void GameLogic::parsePlayers(JsonVariant players) {
 	for (int i = 0; i < players.size(); i++) {
-		JsonObject player = players["" + String(i + 1)];
-		Player::players[i].color = Player::convertColor(player["COLOR"].as<long>());
-		Player::players[i].inverseColor = 0xffff - Player::players[i].color;
-		Player::players[i].nickname = player["NICK"].as<String>();
-		Player::players[i].name = player["NAME"].as<String>();
+		JsonObject player = players[String(i + 1)];
+
+		Player* playerObject = Player::getPlayerByNumber(i);
+		
+		uint16_t color = Player::convertColor(player["COLOR"].as<long>());;
+		uint16_t inverseColor = Player::convertColor(player["ICOLOR"].as<long>());;
+		//uint16_t inverseColor = 0xffff - color;
+
+		playerObject->setColor(color);
+		playerObject->setInverseColor(inverseColor);
+		playerObject->setNick(player["NICK"].as<String>());
+		playerObject->setName(player["NAME"].as<String>());
 	}
-				
-	Player::number = players.size();	
+	
+	Player::setNumberOfPlayers(players.size());
 }
 
-void GameLogic::GetConfigDump() {
+void GameLogic::getConfigDump() {
 	StaticJsonDocument<1024> doc;
 	doc["STATE"] = "DUMP";
 	doc.createNestedObject("BODY");
@@ -72,11 +79,11 @@ void GameLogic::GetConfigDump() {
 	bluetoothCommunicator->send(message);
 }
 
-void GameLogic::Run(Pair touch) {
-	currentState->Update(touch);
+void GameLogic::run(Pair touch) {
+	currentState->update(touch);
 }
 
-void GameLogic::NotifyAboutStart() {
+void GameLogic::notifyAboutStart() {
 	StaticJsonDocument<1024> doc;
 	doc["STATE"] = "GAMEPLAY";
 	JsonObject body = doc.createNestedObject("BODY");

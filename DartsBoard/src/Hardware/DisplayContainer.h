@@ -65,19 +65,19 @@ public:
 	void getCalibratedValue(int& calX, int& calY, int rawX, int rawY);
 	
 	//printing to display
-	void Write(int x, int y, int color, int size, String text);
-	void WriteRight(int a, int b, int color, int size,  String text);
+	void write(int x, int y, int color, int size, String text);
+	void writeRight(int a, int b, int color, int size,  String text);
 
-	void WriteWithBackground(int x, int y, int color, int back, int size, String text);
-	void WriteCenterX(int y, int color, int backColor, int size, String text);
-	void WriteCenterY(int x, int color, int backColor, int size, String text);
-	void WriteCenter(String text, int size);
+	void writeWithBackground(int x, int y, int color, int back, int size, String text);
+	void writeCenterX(int y, int color, int backColor, int size, String text);
+	void writeCenterY(int x, int color, int backColor, int size, String text);
+	void writeCenter(String text, int size);
 	
 	
 	static DisplayContainer displayContainer;
-	static void Initialize();
+	static void initialize();
 
-	static String SectorText(Sector sector);
+	static String sectorText(Sector sector);
 };
 
 #endif

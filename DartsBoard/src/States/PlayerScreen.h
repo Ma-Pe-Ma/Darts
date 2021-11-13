@@ -5,10 +5,11 @@
 
 class PlayerScreen : public AppState {
 public:
-    void Start();
-    void Update(Pair);
+    void start() override;
+    void update(Pair) override;
+    void processMessage(JsonObject) override;
+
     PlayerScreen(GameLogic* gameLogic) : AppState(gameLogic) {ID = "PLAYERS";}
-    void ProcessMessage(JsonObject);
 };
 
 #endif

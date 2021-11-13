@@ -46,15 +46,15 @@ void setup() {
 	
 	bluetooth.btSwitch = &GameLogic::gameLogic.androidMode;
 
-	DisplayContainer::Initialize();
+	DisplayContainer::initialize();
 	Player::initializePlayers();
-	DartsGame::InitializeGames();
+	DartsGame::initializeGames();
 
 	//Setting piezo speaker output
 	pinMode(22, OUTPUT);
 
 	//config bluetoothsettings
-	bluetooth.setMessageProcesser(GameLogic::gameLogic.StaticProcessMessage);
+	bluetooth.setMessageProcesser(GameLogic::gameLogic.staticProcessMessage);
 	DartsGame::bluetoothCommunicator = &bluetooth;
 	GameLogic::gameLogic.bluetoothCommunicator = &bluetooth;
 
@@ -67,7 +67,7 @@ void setup() {
 		soft_uart::stop_bit_codes::ONE_STOP_BIT
   	);
 
-	GameLogic::gameLogic.TransitionTo(&GameLogic::gameLogic.mainScreen);
+	GameLogic::gameLogic.transitionTo(&GameLogic::gameLogic.mainScreen);
 }
 
 void loop() {
@@ -78,5 +78,5 @@ void loop() {
 	bluetooth.process();
 
 	//the main logic of the application
-	GameLogic::gameLogic.Run(pair);	
+	GameLogic::gameLogic.run(pair);	
 }

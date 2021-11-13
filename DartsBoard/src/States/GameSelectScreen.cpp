@@ -1,7 +1,7 @@
 #include "GameSelectScreen.h"
 #include "GameLogic.h"
 
-void GameSelectScreen::Start() {
+void GameSelectScreen::start() {
     DisplayContainer::displayContainer.getTFT()->fillScreen(GREEN);
 	
 	int textSize = 3;
@@ -11,9 +11,11 @@ void GameSelectScreen::Start() {
 	int yPos = int(SCR_HEIGHT * 0.666f);
 
 	//Write choosing + chosen game name
-    DisplayContainer::displayContainer.Write(int(SCR_WIDTH * 0.0625f), int(SCR_HEIGHT * 0.40f), RED, textSize, "Choose a gamescheme: ");
-    DisplayContainer::displayContainer.WriteCenterX(yPos - textSize * 6 / 2, RED, GREEN, textSize, "               ");
-    DisplayContainer::displayContainer.WriteCenterX(yPos - textSize * 6 / 2, RED, GREEN, textSize, DartsGame::dartsGame->name);
+	DartsGame* currentGame = DartsGame::getCurrentGame();
+
+    DisplayContainer::displayContainer.write(int(SCR_WIDTH * 0.0625f), int(SCR_HEIGHT * 0.40f), RED, textSize, "Choose a gamescheme: ");
+    DisplayContainer::displayContainer.writeCenterX(yPos - textSize * 6 / 2, RED, GREEN, textSize, "               ");
+    DisplayContainer::displayContainer.writeCenterX(yPos - textSize * 6 / 2, RED, GREEN, textSize, currentGame->getName());
     
 	//draw game chooser buttons
 	gameLogic->prevCursor.setImage(DisplayContainer::displayContainer.getTFT(), squareOffset, yPos, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<", 2);
@@ -29,10 +31,10 @@ void GameSelectScreen::Start() {
     gameLogic->prevMenu.guiButton.drawButton(true);
     gameLogic->nextMenu.guiButton.drawButton(true);
     
-    DartsGame::prevSelected = DartsGame::dartsGame;
+    //DartsGame::prevSelected = DartsGame::dartsGame;
 }
 
-void GameSelectScreen::Update(Pair touch) {
+void GameSelectScreen::update(Pair touch) {
     //touch detection
 	gameLogic->prevCursor.detect(touch);
 	gameLogic->nextCursor.detect(touch);
@@ -40,6 +42,8 @@ void GameSelectScreen::Update(Pair touch) {
 	gameLogic->prevMenu.detect(touch);
 	gameLogic->nextMenu.detect(touch);
 	
+	DartsGame* currentGame = DartsGame::getCurrentGame();
+
 	//decrementing gametype
     if (gameLogic->prevCursor.simple()) {
 		gameLogic->prevCursor.guiButton.drawButton(false);
@@ -48,9 +52,10 @@ void GameSelectScreen::Update(Pair touch) {
 		int yPos = int(SCR_HEIGHT * 0.666f);
 		yPos -= textSize * 6 / 2;
 
-		DartsGame::dartsGame = DartsGame::prevGame();
-		DisplayContainer::displayContainer.WriteCenterX(yPos, RED, GREEN, textSize, "               ");
-		DisplayContainer::displayContainer.WriteCenterX(yPos, RED, GREEN, textSize, DartsGame::dartsGame->name);
+		currentGame = DartsGame::prevGame();
+		DartsGame::setCurrentGame(currentGame);
+		DisplayContainer::displayContainer.writeCenterX(yPos, RED, GREEN, textSize, "               ");
+		DisplayContainer::displayContainer.writeCenterX(yPos, RED, GREEN, textSize, currentGame->getName());
 	}
 	
 	//incrementing gametype
@@ -61,9 +66,10 @@ void GameSelectScreen::Update(Pair touch) {
 		int yPos = int(SCR_HEIGHT * 0.666f);
 		yPos -= textSize * 6 / 2;
 		
-		DartsGame::dartsGame = DartsGame::nextGame();
-		DisplayContainer::displayContainer.WriteCenterX(yPos, RED, GREEN, textSize, "               ");
-		DisplayContainer::displayContainer.WriteCenterX(yPos, RED, GREEN, textSize, DartsGame::dartsGame->name);
+		currentGame = DartsGame::nextGame();
+		DartsGame::setCurrentGame(currentGame);
+		DisplayContainer::displayContainer.writeCenterX(yPos, RED, GREEN, textSize, "               ");
+		DisplayContainer::displayContainer.writeCenterX(yPos, RED, GREEN, textSize, currentGame->getName());
 	}
 
 	//visualization
@@ -77,20 +83,20 @@ void GameSelectScreen::Update(Pair touch) {
 
 	//back to player config
 	if (gameLogic->prevMenu.simple()) {
-		gameLogic->TransitionTo(&gameLogic->playerScreen);
+		gameLogic->transitionTo(&gameLogic->playerScreen);
 	}
 	
 	//next to game config
 	if (gameLogic->nextMenu.simple()) {		
-		if (Player::number == 0) {
-			gameLogic->TransitionTo(&gameLogic->playerScreen);
+		if (Player::getNumberOfPlayers() == 0) {
+			gameLogic->transitionTo(&gameLogic->playerScreen);
 		}
 		else {
-			gameLogic->TransitionTo(&gameLogic->gameConfiguringScreen);
+			gameLogic->transitionTo(&gameLogic->gameConfiguringScreen);
 		}
 	}
 }
 
-void GameSelectScreen::ProcessMessage(JsonObject message) {
+void GameSelectScreen::processMessage(JsonObject message) {
     
 }

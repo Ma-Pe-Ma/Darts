@@ -61,7 +61,7 @@ uint16_t Player::convertColor(uint8_t red, uint8_t green, uint8_t blue){
 	return (((red & 0b11111000)<<8) + ((green & 0b11111100)<<3)+(blue>>3));
 }
 
-Player* Player::FindNextPlayer() {
+Player* Player::findNextPlayer() {
 	//change to next non-winning player
 	while (true) {
 		if(++Player::cursor == Player::number) {
@@ -69,7 +69,7 @@ Player* Player::FindNextPlayer() {
 			GameLogic::gameLogic.gamePlayingScreen.roundCounter++;	
 		}
 		
-		if (Player::players[Player::cursor].score->position == -1) {
+		if (Player::players[Player::cursor].score->getPosition() == -1) {
 			Player::current = &Player::players[Player::cursor];
 			break;
 		}
@@ -78,7 +78,43 @@ Player* Player::FindNextPlayer() {
 	return Player::current;
 }
 
-void Player::SetCorrectPlayerOrder() {
+Player* Player::getCurrentPlayer() {
+	return Player::current;
+}
+
+int Player::getNumberOfPlayers() {
+	return Player::number;
+}
+
+void Player::setNumberOfPlayers(int number) {
+	Player::number = number;
+}
+
+Player* Player::getPlayerByNumber(int i) {
+	if (i < 0 || i >= maxNrOfPlayers) {
+		return nullptr;
+	}
+
+	return &Player::players[i];
+}
+
+int Player::getPlayerCursor() {
+	return Player::cursor;
+}
+
+int Player::getNumberOfFinishedPlayers() {
+	int finishedPlayers = 0;
+
+	for (int i = 0; i < Player::number; i++) {
+		if (Player::players[i].getScore()->getPosition() != -1) {
+			finishedPlayers++;
+		}
+	}
+
+	return finishedPlayers;
+}
+
+void Player::setCorrectPlayerOrder() {
 	Player *newPlayers = new Player[Player::number];
 
 	switch (GameLogic::gameLogic.orderModify) {				
@@ -114,4 +150,7 @@ void Player::SetCorrectPlayerOrder() {
 	}
 
 	delete[] newPlayers;
+
+	//set cursor to last person
+	Player::cursor = Player::number - 1;
 }

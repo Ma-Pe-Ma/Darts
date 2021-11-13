@@ -6,10 +6,11 @@
 class GameSelectScreen : public AppState {
 
 public:
-    void Start();
-    void Update(Pair);
+    void start() override;
+    void update(Pair) override;
+    void processMessage(JsonObject) override;
+
     GameSelectScreen(GameLogic* gameLogic) : AppState(gameLogic) {ID = "SELECT";}
-    void ProcessMessage(JsonObject);
 };
 
 #endif

@@ -2,20 +2,19 @@
 #include "../GamePlayingScreen.h"
 #include "../GameLogic.h"
 
-void Winning::Start() {
-	Player::current->score->position = gamePlayingScreen->nextWinningPosition++;
+void Winning::start() {
+	Player* currentPlayer = Player::getCurrentPlayer();
+	int alreadyFinishedPlayers = Player::getNumberOfFinishedPlayers();
+	currentPlayer->getScore()->setPosition(++alreadyFinishedPlayers);
 	
 	//check if game is finished
-	if (Player::number == 1) {
-		gamePlayingScreen->gameFinished = true;
-	}
-	else if (gamePlayingScreen->nextWinningPosition == Player::number) {
-		gamePlayingScreen->gameFinished = true;
-
+	if (Player::getNumberOfPlayers() > 1 && alreadyFinishedPlayers == Player::getNumberOfPlayers() - 1) {
 		//set the remaining player's position to last!
-		for (int i = 0; i < Player::number; i++) {
-			if (Player::players[i].score->position == -1) {
-				Player::players[i].score->position = Player::number;
+		for (int i = 0; i < Player::getNumberOfPlayers(); i++) {
+			Player* checkable = Player::getPlayerByNumber(i);
+
+			if (checkable->getScore()->getPosition() == -1) {
+				checkable->getScore()->setPosition(Player::getNumberOfPlayers());
 				break;
 			}
 		}
@@ -25,33 +24,32 @@ void Winning::Start() {
 
 	String winnerText;
 
-	String nick = Player::current->nickname;
+	String nick = currentPlayer->getNick();
 	if (nick == "") {
-		nick = "P" + String(Player::current->ID + 1);
+		nick = "P" + String(currentPlayer->getID() + 1);
 	}
 
-	if (Player::current->score->position == 1) {
+	if (currentPlayer->getScore()->getPosition() == 1) {
 		winnerText = "Winner: " + nick;
 	} 
 	else {
-		winnerText = String(Player::current->score->position) + ". pos: " + nick;
+		winnerText = String(currentPlayer->getScore()->getPosition()) + ". pos: " + nick;
 	}
 	
-	DisplayContainer::displayContainer.WriteCenterX(SCR_HEIGHT / 5, Player::current->color, Player::current->inverseColor, 4, winnerText);
+	DisplayContainer::displayContainer.writeCenterX(SCR_HEIGHT / 5, currentPlayer->getColor(), currentPlayer->getInverseColor(), 4, winnerText);
 
-	gamePlayingScreen->SendDump();
-
+	gamePlayingScreen->sendDump();
 	timer = millis();
 }
 
-void Winning::Update(Pair pair) {
+void Winning::update(Pair pair) {
     if(millis() - timer > winningTime * 1000) {
-		if (gamePlayingScreen->gameFinished) {
-			if (Player::number == 1) {
-				gameLogic->TransitionTo(&gameLogic->gameConfiguringScreen);
+		if (Player::getNumberOfPlayers() == Player::getNumberOfFinishedPlayers()) {
+			if (Player::getNumberOfPlayers() == 1) {
+				gameLogic->transitionTo(&gameLogic->gameConfiguringScreen);
 			}
 			else {
-				gamePlayingScreen->TransitionTo(&gamePlayingScreen->postConfig);
+				gamePlayingScreen->transitionTo(&gamePlayingScreen->postConfig);
 			}
 		}
 		else {
@@ -66,11 +64,11 @@ void Winning::Update(Pair pair) {
 
 			//redraw status
 			for (int i = 0; i < 3; i++) {
-				DisplayContainer::displayContainer.WriteWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, BLACK, CYAN, 2, String(i + 1) + ": " + DisplayContainer::SectorText(BoardContainer::darts[i]));
+				DisplayContainer::displayContainer.writeWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, BLACK, CYAN, 2, String(i + 1) + ": " + DisplayContainer::sectorText(BoardContainer::darts[i]));
 			}
-			Player::current->score->DrawCompleteCustomStatus();
+			Player::getCurrentPlayer()->getScore()->drawCompleteCustomStatus();
 
-			gamePlayingScreen->TransitionTo(&gamePlayingScreen->outro);
+			gamePlayingScreen->transitionTo(&gamePlayingScreen->outro);
 		}
 	}
 }

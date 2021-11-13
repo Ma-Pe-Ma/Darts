@@ -1,6 +1,6 @@
 #include "State.h"
 #include "StateContext.h"
 
-void State::SetContext(StateContext* stateContext) {
+void State::setContext(StateContext* stateContext) {
     this->stateContext = stateContext;
 }

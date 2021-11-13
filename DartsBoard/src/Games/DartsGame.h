@@ -13,38 +13,60 @@
 
 #define NUMBER_OF_GAMES 3
 
-class DartsGame {	
-	public:
-		static int chosenGameCursor;
-		static BluetoothCommunicator* bluetoothCommunicator;	
+class DartsGame {
+private:
+	static DartsGame** games;
+	static int chosenGameCursor;
+	static DartsGame* dartsGame;
+	static DartsGame* prevSelected;
+protected:
+	void serializeConfig();
 	
-		String gameID = "";
-		String name = "";
+	String gameID = "";
+	String name = "";
 	
-		void SerializeConfig();
-		virtual void SerializeConfigCustom(JsonObject&) = 0;
-		virtual void ProcessConfig(JsonObject&) = 0;
-	
-		virtual void GameConfig(Pair) = 0;
-		virtual void PreConfig() = 0;
-			
-		virtual bool PreCustom() = 0;
-		virtual bool CustomConfig(Pair) {}
-		
-		virtual void InitializeGame() = 0;
-		virtual void InitializeRound() {}
-		virtual AbstractScore* SetProperScoreContainer() { return nullptr;}
-		
-		static int nrOfGames;
-		static DartsGame** games;
-		static void InitializeGames();
-		
-		static DartsGame* dartsGame;
-		static DartsGame* prevSelected;
-		
-		static DartsGame* findGameByID(String);
+public:
+	virtual void serializeConfigCustom(JsonObject&) = 0;
+	virtual void processConfig(JsonObject&) = 0;
 
-		static DartsGame* prevGame();
-		static DartsGame* nextGame();
+	static BluetoothCommunicator* bluetoothCommunicator;	
+
+	virtual void configStart() = 0;
+	virtual void config(Pair) = 0;
+		
+	virtual bool customStart() = 0;
+	virtual bool custom(Pair) = 0;
+	
+	virtual void initializeGame() = 0;
+	virtual void initializeRound() = 0;
+	virtual AbstractScore* setProperScoreContainer() = 0;
+	
+	static const int nrOfGames;
+	static void initializeGames();
+	
+	static DartsGame* getGameByNr(int);
+	
+	static DartsGame* findGameByID(String);
+
+	static DartsGame* prevGame();
+	static DartsGame* nextGame();
+	static DartsGame* getCurrentGame();
+	static void setCurrentGame(DartsGame*);
+
+	String getGameID() {
+		return this->gameID;
+	}
+
+	void setGameID(String gameID) {
+		this->gameID = gameID;
+	}
+
+	String getName() {
+		return this->name;
+	}
+
+	void setName(String name) {
+		this->name = name;
+	}
 };
 #endif

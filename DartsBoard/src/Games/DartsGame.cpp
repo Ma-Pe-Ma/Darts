@@ -4,7 +4,7 @@
 #include "RoundTheClock.h"
 #include "X01.h"
 
-int DartsGame::nrOfGames;
+const int DartsGame::nrOfGames = NUMBER_OF_GAMES;
 DartsGame** DartsGame::games;
 
 BluetoothCommunicator* DartsGame::bluetoothCommunicator;
@@ -13,6 +13,18 @@ int DartsGame::chosenGameCursor = 0;
 
 DartsGame* DartsGame::dartsGame;
 DartsGame* DartsGame::prevSelected;
+
+DartsGame* DartsGame::getGameByNr(int number) {
+	return games[number];
+}
+
+DartsGame* DartsGame::getCurrentGame() {
+	return DartsGame::dartsGame;
+}
+
+void DartsGame::setCurrentGame(DartsGame* dartsGame) {
+	DartsGame::dartsGame = dartsGame;
+}
 
 DartsGame* DartsGame::findGameByID(String gameID) {	
 	for (int i = 0; i < NUMBER_OF_GAMES; i++) {
@@ -24,8 +36,7 @@ DartsGame* DartsGame::findGameByID(String gameID) {
 	return nullptr;
 }
 
-void DartsGame::InitializeGames() {
-	nrOfGames = NUMBER_OF_GAMES;
+void DartsGame::initializeGames() {
 	games = new DartsGame*[nrOfGames];
 
 	games[0] = new Cricket();
@@ -52,7 +63,7 @@ DartsGame* DartsGame::nextGame() {
 	return games[chosenGameCursor];
 }
 
-void DartsGame::SerializeConfig() {
+void DartsGame::serializeConfig() {
 	StaticJsonDocument<500> doc;
 	
 	doc["STATE"] = "CONFIG";
@@ -61,7 +72,7 @@ void DartsGame::SerializeConfig() {
 	
 	JsonObject configObject = body.createNestedObject("CONFIG");
 
-	SerializeConfigCustom(configObject);
+	this->serializeConfigCustom(configObject);
 	
 	String message;
 	serializeJson(doc, message);	

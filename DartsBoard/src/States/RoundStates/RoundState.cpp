@@ -3,5 +3,5 @@
 
 RoundState::RoundState(GamePlayingScreen* gamePlayingScreen) {
     this->gamePlayingScreen = gamePlayingScreen;
-    this->gameLogic = gamePlayingScreen->GetGameLogic();
+    this->gameLogic = gamePlayingScreen->getGameLogic();
 }

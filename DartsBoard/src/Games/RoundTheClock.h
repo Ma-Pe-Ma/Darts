@@ -2,39 +2,31 @@
 #define ROUNDTHECLOCK_H
 
 #include "DartsGame.h"
+#include "../Scores/RTCScore.h"
 
-class RoundTheClock : public DartsGame {
-	
-	Sector randomDart;
-	
-	private:
-		uint16_t roundRef[8];
-		void Delete(Sector);
-	
-	public:
-		void SerializeConfigCustom(JsonObject&);
-		void ProcessConfig(JsonObject&);
-	
-		void PreConfig();
-		void GameConfig(Pair);
-		
-		bool PreCustom();
-		bool CustomConfig(Pair);
-		
-		void CalculateScore(Sector);
-		void Status();
-		void Correct();
-		
-		void InitializeGame() {}
-		void InitializeRound();
-		
-		RoundTheClock() {
-			gameID = "RTC";
-			name = "Round The Clock";
-		}
+class RoundTheClock : public DartsGame {	
+private:
 
-		float GetAverageScore();
-		void SerializeGameConfig(JsonObject&);
+public:
+	void configStart() override;
+	void config(Pair) override;
+	
+	bool customStart() override;
+	bool custom(Pair) override;
+	
+	void initializeGame() override;
+	void initializeRound() override;
+	
+	RoundTheClock() {
+		gameID = "RTC";
+		name = "Round The Clock";
+	}
+
+	void serializeConfigCustom(JsonObject&) override;
+	void processConfig(JsonObject&) override;
+
+	AbstractScore* setProperScoreContainer() override {
+		return new RTCScore();
+	}
 };
-
 #endif

@@ -1,14 +1,14 @@
 #include "LastState.h"
 #include "GameLogic.h"
 
-void LastState::Start() {
+void LastState::start() {
 
 }
 
-void LastState::Update(Pair pair) {
+void LastState::update(Pair pair) {
     
 }
 
-void LastState::ProcessMessage(JsonObject message) {
+void LastState::processMessage(JsonObject message) {
     gameLogic->bluetoothCommunicator->repeatLastMessage();
 }

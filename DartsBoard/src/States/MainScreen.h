@@ -6,10 +6,11 @@
 
 class MainScreen : public AppState {
 public:
-    void Start();
-    void Update(Pair);
+    void start() override;
+    void update(Pair) override;
+    void processMessage(JsonObject) override;
+
     MainScreen(GameLogic* gameLogic) : AppState(gameLogic) {ID = "MAIN";}
-    void ProcessMessage(JsonObject);
 };
 
 #endif
