@@ -1,7 +1,7 @@
 #ifndef GAMESELECTSCREEN_H
 #define GAMESELECTSCREEN_H
 
-#include "AppState.h"
+#include "../AppState.h"
 
 class GameSelectScreen : public AppState {
 

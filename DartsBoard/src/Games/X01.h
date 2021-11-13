@@ -19,12 +19,11 @@ public:
 	bool custom(Pair) override;
 	
 	void initializeGame() override;
-	void initializeRound() override;
-
+	
 	void serializeConfigCustom(JsonObject&) override;
 	void processConfig(JsonObject&) override;
 
-	X01() {
+	X01(DisplayContainer* displayContainer) : DartsGame(displayContainer) {
 		gameID = "X01";
 		name = "X01";
 	}

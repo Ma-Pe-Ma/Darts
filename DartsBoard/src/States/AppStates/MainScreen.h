@@ -1,8 +1,7 @@
 #ifndef MAINSCREEN_H
 #define MAINSCREEN_H
 
-#include "../Hardware/ImageLoading.h"
-#include "AppState.h"
+#include "../AppState.h"
 
 class MainScreen : public AppState {
 public:

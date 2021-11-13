@@ -1,21 +1,25 @@
 #ifndef GAMEPLAYINGSCREEN_H
 #define GAMEPLAYINGSCREEN_H
 
-#include "AppState.h"
-#include "StateContext.h"
-#include "../Player.h"
+#include "../AppState.h"
+#include "../StateContext.h"
+#include "../../Player/Player.h"
+#include "../../Player/PlayerContainer.h"
 
-#include "RoundStates/Intro.h"
-#include "RoundStates/Throwing.h"
-#include "RoundStates/Hit.h"
-#include "RoundStates/Outro.h"
-#include "RoundStates/Winning.h"
-#include "RoundStates/PostConfig.h"
+#include "../../Hardware/BoardContainer.h"
+
+#include "../RoundStates/Intro.h"
+#include "../RoundStates/Throwing.h"
+#include "../RoundStates/Hit.h"
+#include "../RoundStates/Outro.h"
+#include "../RoundStates/Winning.h"
+#include "../RoundStates/PostConfig.h"
 
 class GamePlayingScreen : public AppState, public StateContext {
     void invertDart(int);
     void correct();
 
+    //client message processors
     void onDump(JsonObject&);
     void onNext(JsonObject&);
     void onCorrect(JsonObject&);
@@ -53,12 +57,15 @@ public:
     unsigned long gameNr = 0;
     char stuckSector = '\0';
 
+    //roundstates
     Intro intro = Intro(this);
     Throwing throwing = Throwing(this);
     Hit hit = Hit(this);
     Outro outro = Outro(this);
     Winning winning = Winning(this);
     PostConfig postConfig = PostConfig(this);
+
+    BoardContainer boardContainer;
 };
 
 #endif

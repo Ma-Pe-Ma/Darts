@@ -32,7 +32,3 @@ bool X01::custom(Pair touch) {
 void X01::initializeGame() {
 	
 }
-
-void X01::initializeRound() {
-	
-}

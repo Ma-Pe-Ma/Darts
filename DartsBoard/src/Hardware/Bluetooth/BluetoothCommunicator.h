@@ -5,6 +5,9 @@
 #include <ArduinoQueue.h>
 
 #define WAITING_LIST_SIZE 10
+#define MESSAGE_RECEIVER_NR 5
+
+#include "MessageReceiver.h"
 
 class BluetoothCommunicator {
 private:
@@ -18,9 +21,10 @@ private:
 
 	String partial = "";
 	void processString(String string);
-	void (*processMessage)(String);
 	void processMessages();
 	void send();
+
+	MessageReceiver** messageReceivers = new MessageReceiver*[MESSAGE_RECEIVER_NR];
 public:
 	bool* btSwitch;
 	void process();
@@ -28,9 +32,11 @@ public:
 	void receive();
 	void send(String);
 	BluetoothCommunicator(Stream*);
-	void setMessageProcesser(void(*)(String));
 	
 	void setLineEnding(String);
 	void repeatLastMessage();
+
+	void subscribeToMessages(MessageReceiver*);
+	void unsubscribeToMessages(MessageReceiver*);
 };
 #endif

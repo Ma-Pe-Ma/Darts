@@ -1,7 +1,7 @@
 #ifndef OUTRO_H
 #define OUTRO_H
 
-#include "RoundState.h"
+#include "../RoundState.h"
 
 class Outro : public RoundState {
     int textSize = 7;

@@ -6,6 +6,7 @@
 #include "Color.h"
 #include "Sector.h"
 #include "Pair.h"
+#include "SD.h"
 
 //corner values for touchscreen calibration
 #define TL_X_V 902
@@ -35,6 +36,12 @@
 #define MINPRESSURE 200
 #define MAXPRESSURE 1000
 
+//image loading
+#define BMPIMAGEOFFSET 54
+#define BUFFPIXEL 20
+#define SD_CS 5
+#define NAMEMATCH ""         // "" matches any name
+#define PALETTEDEPTH   8     // support 256-colour Palette
 
 class DisplayContainer{
 	//resolution of the display
@@ -53,9 +60,15 @@ class DisplayContainer{
 	TouchScreen touchScreen = TouchScreen(xp, yp, xm, ym, rx);
 	
 	int minPressure, maxPressure;
+
+	//image showing
+	char namebuf[32]; 
+    File root;
+    int pathlen;
 	
 public:	
-	DisplayContainer() {};
+	DisplayContainer();
+	void init();
 	void setTouchCornerValues(int[4][2]);
 	MCUFRIEND_kbv* getTFT() {return &tft;}
 	void setSizes(int, int);
@@ -72,12 +85,12 @@ public:
 	void writeCenterX(int y, int color, int backColor, int size, String text);
 	void writeCenterY(int x, int color, int backColor, int size, String text);
 	void writeCenter(String text, int size);
-	
-	
-	static DisplayContainer displayContainer;
-	static void initialize();
 
 	static String sectorText(Sector sector);
+
+	uint8_t showBMP(char *nm, int x, int y);
+	uint16_t read16(File& f);
+	uint32_t read32(File& f);
 };
 
 #endif

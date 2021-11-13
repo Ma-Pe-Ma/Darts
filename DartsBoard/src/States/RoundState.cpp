@@ -1,5 +1,5 @@
 #include "RoundState.h"
-#include "../GamePlayingScreen.h"
+#include "AppStates/GamePlayingScreen.h"
 
 RoundState::RoundState(GamePlayingScreen* gamePlayingScreen) {
     this->gamePlayingScreen = gamePlayingScreen;

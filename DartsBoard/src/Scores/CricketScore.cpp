@@ -1,5 +1,7 @@
 #include "CricketScore.h"
 
+//#include "../Player.h"
+
 int CricketScore::scoreMap[21];
 int CricketScore::indicatorPositionMap[21];
 
@@ -44,7 +46,7 @@ int CricketScore::getSectorCloseState(int base) {
 	
 	int highestState = 0;
 	
-	for(int k = 0; k < Player::getNumberOfPlayers(); k++) {
+	/*for(int k = 0; k < Player::getNumberOfPlayers(); k++) {
 		if(Player::getCurrentPlayer() != Player::getPlayerByNumber(k)) {			
 			int temp = ((CricketScore*) Player::getPlayerByNumber(k)->getScore())->cricketStatus[base];
 			
@@ -52,7 +54,7 @@ int CricketScore::getSectorCloseState(int base) {
 				highestState = temp;
 			}
 		}
-	}
+	}*/
 	
 	return highestState;
 }
@@ -157,7 +159,7 @@ ThrowResult CricketScore::checkWinningCondition() {
 	bool condition2 = true;
 	switch (cricketType) {
 		case score:	
-			for(int k = 0; k < Player::getNumberOfPlayers(); k++) {
+			/*for(int k = 0; k < Player::getNumberOfPlayers(); k++) {
 				Player* checkable = Player::getPlayerByNumber(k);
 
 				if(checkable != Player::getCurrentPlayer() && checkable->getScore()->getPosition() == -1) {				
@@ -166,7 +168,7 @@ ThrowResult CricketScore::checkWinningCondition() {
 						break;
 					}
 				}			
-			}	
+			}*/	
 			break;
 		case noscore:
 			condition2 = true;
@@ -243,7 +245,7 @@ void CricketScore::drawSectorIndicator(int position, int number, int innerState,
 
 	int border = int(SCR_WIDTH * 0.005f);
 
-	DisplayContainer::displayContainer.getTFT()->fillRect(centerX - halfRectWidth - border, centerY - halfRectHeigth - border, halfRectWidth + border, 2 * (halfRectHeigth + border), outerStateLeft);
+	/*DisplayContainer::displayContainer.getTFT()->fillRect(centerX - halfRectWidth - border, centerY - halfRectHeigth - border, halfRectWidth + border, 2 * (halfRectHeigth + border), outerStateLeft);
 	DisplayContainer::displayContainer.getTFT()->fillRect(centerX, centerY - halfRectHeigth - border, halfRectWidth + border, 2 * (halfRectHeigth + border), outerStateRight);
 	
 	//Drawing inner indicator	
@@ -256,7 +258,7 @@ void CricketScore::drawSectorIndicator(int position, int number, int innerState,
 	//Writing number to the center
 	int textSize = 2;
 	int pos = number < 10 ? (- textSize * 6) / 2 : (- 2 * textSize * 6) / 2;
-	DisplayContainer::displayContainer.write(centerX + pos, centerY - textSize * 6 / 2, RED, textSize, String(number));
+	DisplayContainer::displayContainer.write(centerX + pos, centerY - textSize * 6 / 2, RED, textSize, String(number));*/
 }
 
 void CricketScore::createScoreMap(CricketNumberSet set, CricketCustomSet customSet, int cricketNr, int cricketStart) {	

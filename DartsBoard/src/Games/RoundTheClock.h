@@ -15,9 +15,8 @@ public:
 	bool custom(Pair) override;
 	
 	void initializeGame() override;
-	void initializeRound() override;
 	
-	RoundTheClock() {
+	RoundTheClock(DisplayContainer* displayContainer) : DartsGame(displayContainer) {
 		gameID = "RTC";
 		name = "Round The Clock";
 	}

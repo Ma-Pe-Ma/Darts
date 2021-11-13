@@ -34,9 +34,10 @@ private:
 
 	int cricketMap[20] = {};
 
-	static SimpleMap<CricketType, String>* typeMap;
-	static SimpleMap<CricketNumberSet, String>* setMap;
-	static SimpleMap<CricketCustomSet, String>* customMap;
+	SimpleMap<CricketType, String>* typeMap;
+	SimpleMap<CricketNumberSet, String>* setMap;
+	SimpleMap<CricketCustomSet, String>* customMap;
+	void initializeMaps();
 
 	//used in custom game config
 	int textSize = 2;
@@ -55,8 +56,7 @@ public:
 	bool customStart() override;
 	bool custom(Pair) override;
 
-	void initializeGame();
-	void initializeRound();
+	void initializeGame() override;
 
 	void serializeConfigCustom(JsonObject& configObject);
 	void processConfig(JsonObject&);
@@ -65,8 +65,7 @@ public:
 		return new CricketScore();
 	}
 		
-	static void initializeMaps();
-	Cricket();
+	Cricket(DisplayContainer* DisplayContainer);
 };
 
 #endif

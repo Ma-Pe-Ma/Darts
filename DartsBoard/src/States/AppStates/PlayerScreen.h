@@ -1,7 +1,7 @@
 #ifndef PLAYERSCREEN_H
 #define PLAYERSCREEN_H
 
-#include "AppState.h"
+#include "../AppState.h"
 
 class PlayerScreen : public AppState {
 public:

@@ -1,19 +1,21 @@
 #include "Outro.h"
-#include "../GamePlayingScreen.h"
+#include "../AppStates/GamePlayingScreen.h"
 #include "../GameLogic.h"
 
 void Outro::start() {
-	text = "P" + String(Player::getPlayerCursor() + 1) + "-" + Player::getCurrentPlayer()->getScore()->getPlayerScore();
+	int cursor = gamePlayingScreen->getGameLogic()->playerContainer->getPlayerCursor();
+	Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
+	text = "P" + String(cursor + 1) + "-" + currentPlayer->getScore()->getPlayerScore();
 }
 
 void Outro::update(Pair pair) {
 	if ((millis() / 1000) % 2 == 0) {
-		Player* currentPlayer = Player::getCurrentPlayer();
-		DisplayContainer::displayContainer.writeWithBackground(x, y, currentPlayer->getInverseColor(), currentPlayer->getColor(), textSize, text);	
+		Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
+		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, currentPlayer->getInverseColor(), currentPlayer->getColor(), textSize, text);	
 	}		
 	else {
-		Player* currentPlayer = Player::getCurrentPlayer();
-		DisplayContainer::displayContainer.writeWithBackground(x, y, currentPlayer->getColor(), currentPlayer->getInverseColor(), textSize, text);	
+		Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
+		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, currentPlayer->getColor(), currentPlayer->getInverseColor(), textSize, text);	
 	}
 	
 	if (gamePlayingScreen->getGameLogic()->nextMenu.simple()) {

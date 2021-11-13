@@ -3,40 +3,36 @@
 
 #include "../Games/DartsGame.h"
 
-#include "../Hardware/ImageLoading.h"
 #include "../Hardware/BoardContainer.h"
 #include "../Hardware/Pair.h"
 #include "../Hardware/Button.h"
-#include "../Hardware/BluetoothCommunicator.h"
+#include "../Hardware/Bluetooth/BluetoothCommunicator.h"
+#include "../Hardware/Bluetooth/MessageReceiver.h"
 
 #include "../SimpleMap.h"
 
 #include "StateContext.h"
 
-#include "MainScreen.h"
-#include "PlayerScreen.h"
-#include "GameSelectScreen.h"
-#include "GameConfiguringScreen.h"
-#include "CustomGameConfiguringScreen.h"
-#include "GamePlayingScreen.h"
+#include "AppStates/MainScreen.h"
+#include "AppStates/PlayerScreen.h"
+#include "AppStates/GameSelectScreen.h"
+#include "AppStates/GameConfiguringScreen.h"
+#include "AppStates/CustomGameConfiguringScreen.h"
+#include "AppStates/GamePlayingScreen.h"
 
-#include "DumpState.h"
-#include "LastState.h"
+#include "../Games/GameContainer.h"
+#include "../Player/PlayerContainer.h"
+#include "../Hardware/DisplayContainer.h"
+#include "../Games/OrderModify.h"
 
-#define NR_OF_APPSTATES 8
+#define NR_OF_APPSTATES 6
 
-enum OrderModify {
-	unchanged = 0,
-	cyclical = 1,
-	reversed = 2
-};
-
-class GameLogic : public StateContext {
+class GameLogic : public StateContext, public MessageReceiver {
 	AppState* findStateByID(String);
-	
+	AppState** states;	
 public:
-	static GameLogic gameLogic;
-	GameLogic();
+	GameLogic(DisplayContainer* displayContainer, PlayerContainer* playerContainer, GameContainer* gameContainer);
+	void init();
 	bool androidMode = false;	
 
 	//Possible scenes
@@ -47,29 +43,32 @@ public:
 	CustomGameConfiguringScreen customGameConfiguringScreen = CustomGameConfiguringScreen(this);
 	GamePlayingScreen gamePlayingScreen = GamePlayingScreen(this);
 
-	//fake scenes
-	DumpState dumpState = DumpState(this);
-	LastState lastState = LastState(this);
-
-	AppState** states;
-
+	//gui buttons mainly for configuring
 	Button nextCursor, prevCursor, middleCursor;
 	Button nextMenu, prevMenu;
 	Button offline, android;
+
+	//buttons used to delete invalid throwing
 	Button delete1, delete2, delete3;
 
-	void getConfigDump();
-	void run(Pair);
+	//main logic receiving touch input
+	void run();
 
+	//receiving annd processing
+	void receiveMessage(String) override;
 	void parsePlayers(JsonVariant);
-	
-	static void staticProcessMessage(String);
-	void processMessage(String);
+	void processDump(JsonObject);
 
+	//sending messages
+	void askConfigDump();
 	void notifyAboutStart();
 	
 	BluetoothCommunicator* bluetoothCommunicator;
 	OrderModify orderModify = unchanged;
+
+	PlayerContainer* playerContainer;
+	DisplayContainer* displayContainer;
+	GameContainer* gameContainer;
 };
 
 #endif 

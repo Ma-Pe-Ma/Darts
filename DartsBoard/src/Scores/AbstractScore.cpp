@@ -1,20 +1,17 @@
 #include "AbstractScore.h"
-#include "../Player.h"
+#include "../Player/Player.h"
+#include "../Player/PlayerContainer.h"
 
-void AbstractScore::correct(Sector& correctable) {
+void AbstractScore::correct(Sector correctable) {
 	deleteThrow(correctable);
 	status();
-
 	statusAfterHit(correctable);
-
-	correctable.multiplier = 0;
-	correctable.base = 0;
 }
 
 void AbstractScore::status() {
 	int textSize = 7;
 
-	Player* currentPlayer = Player::getCurrentPlayer();
+	/*Player* currentPlayer = PlayerContainer::getCurrentPlayer();
 
 	int score = currentPlayer->getScore()->playerScore;
 	String point = "P" + String(currentPlayer->getID() + 1) + "-" + String(score);
@@ -22,8 +19,13 @@ void AbstractScore::status() {
 	int x = SCR_WIDTH / 8;
 	int y = SCR_WIDTH / 8;
 
-	DisplayContainer::displayContainer.writeWithBackground(x,y, BLACK, CYAN, textSize, "       ");	
-	DisplayContainer::displayContainer.writeWithBackground(x,y, currentPlayer->getInverseColor(), currentPlayer->getColor(), textSize, point);	
+	DisplayContainer::displayContainer.writeWithBackground(x, y, BLACK, CYAN, textSize, "       ");	
+	DisplayContainer::displayContainer.writeWithBackground(x, y, currentPlayer->getInverseColor(), currentPlayer->getColor(), textSize, point);*/
+
+
+
+
+
 
 	/*if(Player::number > 1) {
 		int s2 = 2;
