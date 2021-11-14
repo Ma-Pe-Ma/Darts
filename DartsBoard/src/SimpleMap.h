@@ -19,7 +19,7 @@ public:
 		value = new U[maxSize];
 	}
 	
-	bool Insert(T e1, U e2) {
+	bool insert(T e1, U e2) {
 		if (currentSize < maxSize) {
 			key[currentSize] = e1;	
 			value[currentSize] = e2;		
@@ -31,7 +31,7 @@ public:
 		return false;
 	}
 	
-	U GetValueByKey(T key) {
+	U getValueByKey(T key) {
 		for (int i = 0; i < currentSize; i++) {
 			if (key == this->key[i] ) {
 				return this->value[i];
@@ -39,7 +39,7 @@ public:
 		}
 	}
 
-	T GetKeyByValue(U value) {
+	T getKeyByValue(U value) {
 		for (int i = 0; i < currentSize; i++) {
 			if (value == this->value[i] ) {
 				return this->key[i];
