@@ -1,7 +1,19 @@
 #include "RTCScore.h"
 
+RTCScore::RTCScore(DisplayContainer* displayContainer, PlayerContainer* playerContainer) : AbstractScore(displayContainer, playerContainer) {
+    
+}
+
 float RTCScore::getAverageScore() {
     return 0;
+}
+
+ThrowResult RTCScore::scoreThrow(Sector) {
+
+}
+
+void RTCScore::deleteThrow(Sector) {
+    
 }
 
 void RTCScore::serializePlayerStatus(JsonObject&) {
@@ -15,10 +27,6 @@ void RTCScore::drawCompleteCustomStatus() {
 
 }
 
-ThrowResult RTCScore::scoreThrow(Sector) {
+void RTCScore::statusAfterHit(Sector) {
 
-}
-
-void RTCScore::deleteThrow(Sector) {
-    
 }

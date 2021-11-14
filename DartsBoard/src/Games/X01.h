@@ -23,13 +23,13 @@ public:
 	void serializeConfigCustom(JsonObject&) override;
 	void processConfig(JsonObject&) override;
 
-	X01(DisplayContainer* displayContainer) : DartsGame(displayContainer) {
+	X01(DisplayContainer* displayContainer, PlayerContainer* playerContainer) : DartsGame(displayContainer, playerContainer) {
 		gameID = "X01";
 		name = "X01";
 	}
 
 	AbstractScore* setProperScoreContainer() override {
-		return new X01Score();
+		return new X01Score(displayContainer, playerContainer);
 	}
 };
 

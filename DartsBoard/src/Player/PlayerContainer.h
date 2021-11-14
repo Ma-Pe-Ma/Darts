@@ -11,6 +11,7 @@ class PlayerContainer {
 	int number;
 	Player* current;
 	Player players[NR_OF_PLAYERS];
+	int* roundCounter;
 public:
     const int maxNrOfPlayers = NR_OF_PLAYERS;
 
@@ -27,6 +28,10 @@ public:
 	void setNumberOfPlayers(int);
 	int getPlayerCursor();
 	int getNumberOfFinishedPlayers();
+
+	void setRoundCounter(int* roundCounter) {
+		this->roundCounter = roundCounter;
+	}
 };
 
 #endif

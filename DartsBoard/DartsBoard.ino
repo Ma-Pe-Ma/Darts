@@ -37,13 +37,12 @@ BluetoothCommunicator bluetooth(&serial_obj);
 
 DisplayContainer displayContainer;
 PlayerContainer playerContainer;
-GameContainer gameContainer(&displayContainer);
+GameContainer gameContainer(&displayContainer, &playerContainer);
 
 GameLogic gameLogic(&displayContainer, &playerContainer, &gameContainer);
 
 void setup() {
 	Serial.begin(115200);
-	Serial.println("ST STARTED");
 	
 	//Setting piezo speaker output
 	pinMode(22, OUTPUT);
@@ -54,14 +53,10 @@ void setup() {
 	gameLogic.init();
 	
 	bluetooth.btSwitch = &gameLogic.androidMode;
-	Serial.println("ST Finished1");
 
 	//config bluetoothsettings
 	bluetooth.subscribeToMessages(&gameLogic);
-	Serial.println("ST Finished2");
 	gameLogic.bluetoothCommunicator = &bluetooth;
-
-	Serial.println("ST Finished3");
 
 	serial_obj.begin(
 		RX_PIN,
@@ -73,7 +68,6 @@ void setup() {
   	);
 	
 	gameLogic.transitionTo(&gameLogic.mainScreen);
-	Serial.println("ST Finished");
 }
 
 void loop() {	

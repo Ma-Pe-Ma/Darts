@@ -4,53 +4,20 @@ PlayerContainer::PlayerContainer() {
 
 }
 
-void PlayerContainer::init() {
-		Serial.println("PC0");
+void PlayerContainer::init() {			
+	players[0].setColor(YELLOW);			
+	players[1].setColor(MAGENTA);			
+	players[2].setColor(BLUE);			
+	players[3].setColor(WHITE);			
+	players[4].setColor(GREEN);
+	players[5].setColor(RED);			
+	players[6].setColor(YELLOW / 2);			
+	players[7].setColor(CYAN);
 
 	for (int i = 0; i < NR_OF_PLAYERS; i++) {
-		Serial.println("PCX0");
 		players[i].setID(i);
-		
-		Serial.println("PCX0");
-		/*switch(i) {
-			case 0:
-			players[i].setColor(YELLOW);
-			break;
-
-			case 1:
-			players[i].setColor(MAGENTA);
-			break;
-	
-			case 2:
-			players[i].setColor(BLUE);
-			break;
-
-			case 3:
-			players[i].setColor(WHITE);
-			break;	
-
-			case 4:
-			players[i].setColor(GREEN);
-			break;
-
-			case 5:
-			players[i].setColor(RED);
-			break;
-
-			case 6:
-			players[i].setColor(YELLOW / 2);
-			break;
-
-			case 7:
-			players[i].setColor(CYAN);
-			break;
-		}*/
-
-		Serial.println("PCX0");
 		players[i].setInverseColor(0xffff - players[i].getColor());
-	}	
-
-	Serial.println("PC1");
+	}
 }
 
 Player* PlayerContainer::findNextPlayer() {
@@ -58,7 +25,7 @@ Player* PlayerContainer::findNextPlayer() {
 	while (true) {
 		if(++this->cursor == this->number) {
 			this->cursor = 0;
-			//GameLogic::gameLogic.gamePlayingScreen.roundCounter++;	
+			*roundCounter++;
 		}
 		
 		if (this->players[this->cursor].getScore()->getPosition() == -1) {

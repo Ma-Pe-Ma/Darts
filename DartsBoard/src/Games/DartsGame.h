@@ -11,6 +11,8 @@
 
 #include "../Scores/AbstractScore.h"
 
+class PlayerContainer;
+
 class DartsGame {
 private:
 	
@@ -21,9 +23,13 @@ protected:
 	String name = "";
 
 	DisplayContainer* displayContainer;
+	PlayerContainer* playerContainer;
 	
 public:
-	DartsGame(DisplayContainer* displayContainer) { this->displayContainer = displayContainer;}
+	DartsGame(DisplayContainer* displayContainer, PlayerContainer* playerContainer) {
+		this->displayContainer = displayContainer;
+		this->playerContainer = playerContainer;
+	}
 
 	virtual void serializeConfigCustom(JsonObject&) = 0;
 	virtual void processConfig(JsonObject&) = 0;

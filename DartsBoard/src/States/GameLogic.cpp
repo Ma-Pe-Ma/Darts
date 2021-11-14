@@ -7,8 +7,6 @@ GameLogic::GameLogic(DisplayContainer* displayContainer, PlayerContainer* player
 }
 
 void GameLogic::init() {
-	Serial.println("GL0");
-
 	states = new AppState*[NR_OF_APPSTATES];
 	states[0] = &mainScreen;
 	states[1] = &playerScreen;
@@ -18,7 +16,6 @@ void GameLogic::init() {
 	states[5] = &gamePlayingScreen;
 
 	currentState = states[0];
-	Serial.println("GL1");
 }
 
 AppState* GameLogic::findStateByID(String ID) {

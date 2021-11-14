@@ -2,7 +2,7 @@
 
 
 
-Cricket::Cricket(DisplayContainer* displayContainer) : DartsGame(displayContainer) {
+Cricket::Cricket(DisplayContainer* displayContainer, PlayerContainer* playerContainer) : DartsGame(displayContainer, playerContainer) {
 	this->gameID = "CRICKET";
 	this->name = "Cricket";
 	this->initializeMaps();
@@ -365,7 +365,71 @@ void Cricket::drawCricketStart() {
 }
 
 void Cricket::initializeGame() {
-	CricketScore::createScoreMap(cricketNumberSet, cricketCustomSet, cricketNr, cricketStart);	
+	for (int i = 1; i < 21; i++) {
+		scoreMap[i] = -1;
+	}
+	
+	scoreMap[0] = 25;
+	
+	if (cricketNumberSet == classicNumbers) {
+		cricketNr = 6;
+		cricketStart = 15;	
+	}
+	else if (cricketNumberSet == allNumbers) {
+		cricketNr = 20;
+		cricketStart = 1;
+	}
+	else if (cricketNumberSet == customNumbers) {
+		if (cricketCustomSet == interval) {
+			//do not modify arguments
+		}
+		
+		if (cricketCustomSet == randomInterval) {
+			cricketStart = random(1, 21 + 1 - cricketNr);
+		}
+	}
+	
+	if (cricketNumberSet == customNumbers && cricketCustomSet == chaotic) {		
+		int* sector = new int[cricketNr];
+		
+		for (int i = 0; i < cricketNr; i++) {
+			int newRandom = random(1, 21);
+			
+			bool repeating = false;
+			
+			for (int j = 0; j < i; j++) {
+				if (newRandom == sector[j]) {
+					repeating = true;
+					break;
+				}
+			}
+			
+			if (repeating) {
+				i--;
+				continue;
+			}
+			
+			sector[i] = newRandom;
+		}
+		
+		int value = 20;
+		
+		for (int i = 0; i < cricketNr; i++) {
+			scoreMap[sector[i]] = value;
+			value--;
+		}
+		
+		delete[] sector;
+	}
+	else {
+		for (int i = cricketStart; i < cricketStart + cricketNr; i++) {
+			scoreMap[i] = (21 - cricketNr) + (i - cricketStart);
+		}
+	}
+
+	for (int i = 0; i < 21; i++) {
+			Serial.println(String(i) + ".th - " + String(scoreMap[i]));
+		}
 }
 
 void Cricket::serializeConfigCustom(JsonObject& configObject) {
@@ -380,6 +444,6 @@ void Cricket::serializeConfigCustom(JsonObject& configObject) {
 	mapObject["0"] = 25;
 
 	for (int i = 1; i < 21; i++) {
-		mapObject[String(i)] = CricketScore::scoreMap[i];
+		mapObject[String(i)] = scoreMap[i];
 	}
 }

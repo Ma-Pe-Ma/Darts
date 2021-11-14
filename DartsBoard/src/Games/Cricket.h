@@ -7,6 +7,8 @@
 
 #include "../SimpleMap.h"
 
+class PlayerContainer;
+
 class Cricket : public DartsGame {	
 private:
 	//buttons used by configuring
@@ -48,7 +50,8 @@ private:
 	int textStartY = startButtonY - buttonSize - int(textSize * 6);
 
 	int rectSize = SCR_HEIGHT - textStartY;
-	
+
+	int scoreMap[21];
 public:
 	void configStart() override;
 	void config(Pair) override;
@@ -62,10 +65,13 @@ public:
 	void processConfig(JsonObject&);
 
 	AbstractScore* setProperScoreContainer() override {
-		return new CricketScore();
+		CricketScore* cricketScore = new CricketScore(displayContainer, playerContainer);
+		cricketScore->setGameType(cricketType, cricketNumberSet, cricketCustomSet);
+		cricketScore->setCricketMap(scoreMap);
+		return cricketScore;
 	}
 		
-	Cricket(DisplayContainer* DisplayContainer);
+	Cricket(DisplayContainer*, PlayerContainer*);
 };
 
 #endif

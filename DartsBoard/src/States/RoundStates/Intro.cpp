@@ -45,10 +45,7 @@ void Intro::start() {
 }
 
 void Intro::update(Pair pair) {
-	Serial.println("Intro update!");
     if (millis() - timer > 1000) {
 		gamePlayingScreen->transitionTo(&gamePlayingScreen->throwing);
-		//Serial.println("Transitioned to throwing");
-		Serial.println("Transition to throw!!");
 	}
 }
