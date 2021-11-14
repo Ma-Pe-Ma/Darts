@@ -25,7 +25,7 @@ Player* PlayerContainer::findNextPlayer() {
 	while (true) {
 		if(++this->cursor == this->number) {
 			this->cursor = 0;
-			*roundCounter++;
+			(*roundCounter)++;
 		}
 		
 		if (this->players[this->cursor].getScore()->getPosition() == -1) {

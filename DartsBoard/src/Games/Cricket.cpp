@@ -10,26 +10,26 @@ Cricket::Cricket(DisplayContainer* displayContainer, PlayerContainer* playerCont
 
 void Cricket::initializeMaps() {
 	typeMap = new SimpleMap<CricketType, String>(3);
-	typeMap->Insert(score, String("SCORE"));
-	typeMap->Insert(noscore, String("NOSCORE"));
-	typeMap->Insert(cutthroat, String("CUTTHROAT"));
+	typeMap->insert(score, String("SCORE"));
+	typeMap->insert(noscore, String("NOSCORE"));
+	typeMap->insert(cutthroat, String("CUTTHROAT"));
 	
 	setMap = new SimpleMap<CricketNumberSet, String>(3);
-	setMap->Insert(classicNumbers, String("CLASSIC"));
-	setMap->Insert(allNumbers, String("ALL"));
-	setMap->Insert(customNumbers, String("CUSTOM"));
+	setMap->insert(classicNumbers, String("CLASSIC"));
+	setMap->insert(allNumbers, String("ALL"));
+	setMap->insert(customNumbers, String("CUSTOM"));
 	
 	customMap = new SimpleMap<CricketCustomSet, String>(3);
-	customMap->Insert(interval, String("INTERVAL"));
-	customMap->Insert(randomInterval, String("RANDOMINTERVAL"));
-	customMap->Insert(chaotic, String("CHAOTIC"));
+	customMap->insert(interval, String("INTERVAL"));
+	customMap->insert(randomInterval, String("RANDOMINTERVAL"));
+	customMap->insert(chaotic, String("CHAOTIC"));
 }
 
 void Cricket::processConfig(JsonObject& message) {
 	cricketNr = message["CricketNr"].as<int>();
-	cricketType = typeMap->GetKeyByValue(message["CricketType"]);
-	cricketNumberSet = setMap->GetKeyByValue(message["CricketNumberSet"]);
-	cricketCustomSet = customMap->GetKeyByValue(message["CricketCustomSet"]);
+	cricketType = typeMap->getKeyByValue(message["CricketType"]);
+	cricketNumberSet = setMap->getKeyByValue(message["CricketNumberSet"]);
+	cricketCustomSet = customMap->getKeyByValue(message["CricketCustomSet"]);
 	cricketStart = message["CricketStart"];
 }
 
@@ -434,9 +434,9 @@ void Cricket::initializeGame() {
 
 void Cricket::serializeConfigCustom(JsonObject& configObject) {
 	configObject["CricketNr"] = cricketNr;	
-	configObject["CricketType"] = typeMap->GetValueByKey(cricketType);
-	configObject["CricketNumberSet"] = setMap->GetValueByKey(cricketNumberSet);
-	configObject["CricketCustomSet"] = customMap->GetValueByKey(cricketCustomSet);
+	configObject["CricketType"] = typeMap->getValueByKey(cricketType);
+	configObject["CricketNumberSet"] = setMap->getValueByKey(cricketNumberSet);
+	configObject["CricketCustomSet"] = customMap->getValueByKey(cricketCustomSet);
 	configObject["CricketStart"] = cricketStart;
 
 	JsonObject mapObject = configObject.createNestedObject("MAP");

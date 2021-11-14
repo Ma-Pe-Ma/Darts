@@ -24,6 +24,8 @@
 #include "src/Player/PlayerContainer.h"
 #include "src/Games/GameContainer.h"
 
+#include "src/Resource/Resources.h"
+
 #define RX_PIN 22 // software serial port's reception pin
 #define TX_PIN 24 // software serial port's transmision pin
 #define SOFT_UART_BIT_RATE 9600 // 57600 38400 1200 19200 9600 115200 300
@@ -51,6 +53,11 @@ void setup() {
 	playerContainer.init();
 	gameContainer.init();
 	gameLogic.init();
+	
+	Resources::textSet = Resources::en;
+	Resources::audioSet = Resources::mk;
+
+	Resources::initialize();
 	
 	bluetooth.btSwitch = &gameLogic.androidMode;
 
