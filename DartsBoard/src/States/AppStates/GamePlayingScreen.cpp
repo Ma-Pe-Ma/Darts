@@ -25,10 +25,13 @@ void GamePlayingScreen::start() {
     gameLogic->playerContainer->setCorrectPlayerOrder(gameLogic->orderModify);
     
     roundCounter = 0;
+	gameLogic->playerContainer->setRoundCounter(&roundCounter);
 
 	gameNr++;
 
 	DartsGame* currentGame = gameLogic->gameContainer->getCurrentGame();
+
+	currentGame->initializeGame();
 
     //setting proper score objects to players!
     for (int i = 0; i < gameLogic->playerContainer->getNumberOfPlayers(); i++) {
@@ -41,8 +44,6 @@ void GamePlayingScreen::start() {
         checkable->setScore(currentGame->setProperScoreContainer());
 		checkable->getScore()->setPosition(-1);
     }
-
-    currentGame->initializeGame();
 
 	this->sendStart();
 	this->transitionTo(&intro);

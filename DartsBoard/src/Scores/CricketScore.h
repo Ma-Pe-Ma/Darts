@@ -9,35 +9,35 @@
 
 class CricketScore : public AbstractScore {
 	int cricketStatus[21] = {};
-	static int indicatorPositionMap[21];
-	static CricketType cricketType;
-	static CricketNumberSet cricketNumberSet;
-	static CricketCustomSet cricketCustomSet;
-	
-public:
-	static int scoreMap[21];
-
-	static void createScoreMap(CricketNumberSet set, CricketCustomSet customSet, int cricketNr, int cricketStart);
-	static int getIndicatorPosition(int);
-	static int getMappedScore(Sector);
-	static int getStatusPosition(Sector);
-	static int getSectorCloseState(int);
-	void serializeDartStatus(JsonObject body, Sector sector);
-	
-	void serializePlayerStatus(JsonObject&);
+	int scoreMap[21];
 
 	void drawSectorIndicator(int, int, int, int);
 	ThrowResult checkWinningCondition();
-	CricketScore();
+
+	CricketType cricketType;
+	CricketNumberSet cricketNumberSet;
+	CricketCustomSet cricketCustomSet;
 	
-	void drawCompleteCustomStatus() override;
+	int getIndicatorPosition(Sector);
+	int getMappedScore(Sector);
+	int getStatusPosition(Sector);
+	int getSectorCloseState(int);
+
+public:
+	CricketScore(DisplayContainer*, PlayerContainer*);
 	
+	float getAverageScore() override;
 	ThrowResult scoreThrow(Sector) override;
 	void deleteThrow(Sector) override;
 
-	void statusAfterHit(Sector);
+	void drawCompleteCustomStatus() override;
+	void statusAfterHit(Sector) override;
 
-	float getAverageScore();
+	void serializeDartStatus(JsonObject body, Sector sector) override;
+	void serializePlayerStatus(JsonObject&) override;
+
+	void setCricketMap(int*);
+	void setGameType(CricketType, CricketNumberSet, CricketCustomSet);
 };
 
 #endif

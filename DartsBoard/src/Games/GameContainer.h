@@ -8,14 +8,16 @@
 #include "X01.h"
 
 class DisplayContainer;
+class PlayerContainer;
 
 class GameContainer {
     DartsGame** games;
 	int chosenGameCursor;
 	DartsGame* dartsGame;
 	DisplayContainer* displayContainer;
+	PlayerContainer* playerContainer;
 public:
-    GameContainer(DisplayContainer*);
+    GameContainer(DisplayContainer*, PlayerContainer*);
 	void init();
 
     const int nrOfGames = NUMBER_OF_GAMES;

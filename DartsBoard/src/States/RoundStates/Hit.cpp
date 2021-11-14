@@ -36,14 +36,14 @@ void Hit::update(Pair pair) {
 		Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
 		currentPlayer->getScore()->status();
 
-		int newDartID = dartID++;
+		int newDartID = ++dartID;
 		gamePlayingScreen->boardContainer.setCurrentDartID(newDartID);
 
-		if (newDartID == 2) {
-			gamePlayingScreen->transitionTo(&gamePlayingScreen->outro);
+		if (newDartID < 3) {
+			gamePlayingScreen->transitionTo(&gamePlayingScreen->throwing);
 		}
 		else {
-			gamePlayingScreen->transitionTo(&gamePlayingScreen->throwing);
+			gamePlayingScreen->transitionTo(&gamePlayingScreen->outro);
 		}
 	}
 }

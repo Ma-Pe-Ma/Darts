@@ -1,19 +1,18 @@
 #include "GameContainer.h"
 
-GameContainer::GameContainer(DisplayContainer* displayContainer) {
+GameContainer::GameContainer(DisplayContainer* displayContainer, PlayerContainer* playerContainer) {
 	this->displayContainer = displayContainer;
+	this->playerContainer = playerContainer;
 }
 
 void GameContainer::init() {
-	Serial.println("GC0");
 	games = new DartsGame*[nrOfGames];
 
-	games[0] = new Cricket(displayContainer);
-	games[1] = new RoundTheClock(displayContainer);
-	games[2] = new X01(displayContainer);
+	games[0] = new Cricket(displayContainer, playerContainer);
+	games[1] = new RoundTheClock(displayContainer, playerContainer);
+	games[2] = new X01(displayContainer, playerContainer);
 
 	dartsGame = games[chosenGameCursor];
-	Serial.println("GC1");
 }
 
 DartsGame* GameContainer::getGameByNr(int number) {

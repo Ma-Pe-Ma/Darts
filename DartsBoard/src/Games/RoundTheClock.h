@@ -16,7 +16,7 @@ public:
 	
 	void initializeGame() override;
 	
-	RoundTheClock(DisplayContainer* displayContainer) : DartsGame(displayContainer) {
+	RoundTheClock(DisplayContainer* displayContainer, PlayerContainer* playerContainer) : DartsGame(displayContainer, playerContainer) {
 		gameID = "RTC";
 		name = "Round The Clock";
 	}
@@ -25,7 +25,7 @@ public:
 	void processConfig(JsonObject&) override;
 
 	AbstractScore* setProperScoreContainer() override {
-		return new RTCScore();
+		return new RTCScore(displayContainer, playerContainer);
 	}
 };
 #endif

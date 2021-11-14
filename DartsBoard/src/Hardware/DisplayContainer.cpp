@@ -35,7 +35,6 @@ void DisplayContainer::init() {
         
 	root = SD.open(namebuf);
 	pathlen = strlen(namebuf);
-	Serial.println("DSP F");
 }
 
 void DisplayContainer::setSizes(int width, int height) {
@@ -86,8 +85,8 @@ Pair DisplayContainer::getTouchedPoint(){
 	
 	if (pressed) {
 		//Serial.println("Pressure: "+String(p.z));
-		//Serial.println("RAW "+String(p.x)+", "+String(p.y));
 		getCalibratedValue(calX, calY, p.y, p.x);
+		//Serial.println("RAW "+String(p.x)+", "+String(p.y) + "  -  CAL "+String(calX)+", "+String(calY));
 		pair.pressed = true;
     }
 	
