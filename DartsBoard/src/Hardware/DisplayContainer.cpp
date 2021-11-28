@@ -227,7 +227,7 @@ void DisplayContainer::writeCenter(String text, int size) {
 }
 
 String DisplayContainer::sectorText(Sector sector) {	
-	String m;
+	String m = "-";
 	if (sector.multiplier == 0) {
 		m = "-  ";
 	}		
@@ -240,7 +240,7 @@ String DisplayContainer::sectorText(Sector sector) {
 		}			
 		if (sector.multiplier == 3) {
 			m = 'T';
-		}			
+		}
 		
 		if (sector.base < 10) {
 			m = m + String(sector.base) + ' ';

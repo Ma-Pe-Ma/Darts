@@ -45,19 +45,19 @@ GameLogic gameLogic(&displayContainer, &playerContainer, &gameContainer);
 
 void setup() {
 	Serial.begin(115200);
-	
-	//Setting piezo speaker output
-	pinMode(22, OUTPUT);
-
-	displayContainer.init();
-	playerContainer.init();
-	gameContainer.init();
-	gameLogic.init();
+	Serial.println("Setup started!");
 	
 	Resources::textSet = Resources::en;
 	Resources::audioSet = Resources::mk;
 
+	//Setting piezo speaker output
+	pinMode(22, OUTPUT);
+
+	displayContainer.init();
 	Resources::initialize();
+	playerContainer.init();
+	gameContainer.init();
+	gameLogic.init();	
 	
 	bluetooth.btSwitch = &gameLogic.androidMode;
 
@@ -75,6 +75,7 @@ void setup() {
   	);
 	
 	gameLogic.transitionTo(&gameLogic.mainScreen);
+	Serial.println("Setup finished!");
 }
 
 void loop() {	
@@ -82,5 +83,5 @@ void loop() {
 	bluetooth.process();
 
 	//the main logic of the application
-	gameLogic.run();	
+	gameLogic.run();
 }

@@ -5,7 +5,9 @@
 #include "../../Scores/ThrowResult.h"
 
 void Throwing::start() {
-	gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer()->getScore()->status();
+	Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
+	currentPlayer->getScore()->status();
+	currentPlayer->getScore()->initThrowing();
 }
 
 void Throwing::update(Pair pair) {

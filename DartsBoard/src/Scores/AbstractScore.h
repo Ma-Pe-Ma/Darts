@@ -30,7 +30,8 @@ public:
 
 	virtual void drawCompleteCustomStatus() {}
 	virtual ThrowResult scoreThrow(Sector) = 0;
-	
+	virtual void initThrowing() {}
+
 	virtual void correct(Sector);
 	virtual void deleteThrow(Sector) = 0;	
 

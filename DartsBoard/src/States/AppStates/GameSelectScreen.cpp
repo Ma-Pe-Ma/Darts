@@ -2,6 +2,8 @@
 #include "../GameLogic.h"
 
 void GameSelectScreen::start() {
+	gameSchemeString = Resources::getTextByID(Resources::Text::gameScheme);
+
     getGameLogic()->displayContainer->getTFT()->fillScreen(GREEN);
 	
 	int textSize = 3;
@@ -13,7 +15,7 @@ void GameSelectScreen::start() {
 	//Write choosing + chosen game name
 	DartsGame* currentGame = gameLogic->gameContainer->getCurrentGame();
 
-    getGameLogic()->displayContainer->write(int(SCR_WIDTH * 0.0625f), int(SCR_HEIGHT * 0.40f), RED, textSize, "Choose a gamescheme: ");
+    getGameLogic()->displayContainer->write(int(SCR_WIDTH * 0.0625f), int(SCR_HEIGHT * 0.40f), RED, textSize, gameSchemeString);
     getGameLogic()->displayContainer->writeCenterX(yPos - textSize * 6 / 2, RED, GREEN, textSize, "               ");
     getGameLogic()->displayContainer->writeCenterX(yPos - textSize * 6 / 2, RED, GREEN, textSize, currentGame->getName());
     

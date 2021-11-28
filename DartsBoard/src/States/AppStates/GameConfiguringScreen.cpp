@@ -2,6 +2,8 @@
 #include "../GameLogic.h"
 
 void GameConfiguringScreen::start() {
+	settingsString = Resources::getTextByID(Resources::Text::config);
+
     getGameLogic()->displayContainer->getTFT()->fillScreen(CYAN);
 	
 	int buttonSize = SCR_WIDTH / 10;
@@ -14,7 +16,7 @@ void GameConfiguringScreen::start() {
 
 	DartsGame* currentGame = gameLogic->gameContainer->getCurrentGame();
 
-	String text = currentGame->getName() + " settings";
+	String text = currentGame->getName() + settingsString;
 	int textSize = 2;
 	int yHeight = int(SCR_HEIGHT * 0.1f);
 
