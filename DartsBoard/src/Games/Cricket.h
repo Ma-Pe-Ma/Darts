@@ -7,6 +7,8 @@
 
 #include "../SimpleMap.h"
 
+#include "../Resource/Resources.h"
+
 class PlayerContainer;
 
 class Cricket : public DartsGame {	
@@ -15,6 +17,9 @@ private:
 	Button scoreButton, noscoreButton, cutthroatButton;
 	Button classicButton, allButton, customButton;
 	Button intervalButton, randomIntervalButton, chaoticButton;
+	
+	void drawProperButtons(int, int);
+	
 	Button prevStart, nextStart;
 	Button prevNr, nextNr;
 	
@@ -52,6 +57,22 @@ private:
 	int rectSize = SCR_HEIGHT - textStartY;
 
 	int scoreMap[21];
+
+	String scoreString;
+	String noscoreString;
+	String cutthroatString;
+
+	String classicString;
+	String allString;
+	String customString;
+
+	String intervalString;
+	String randintervalString;
+	String chaoticString;
+
+	String nrOfNrsString;
+	String startingNrString;
+
 public:
 	void configStart() override;
 	void config(Pair) override;

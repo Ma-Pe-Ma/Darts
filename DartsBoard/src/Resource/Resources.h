@@ -5,7 +5,7 @@
 #include "Arduino.h"
 
 #define NUMBER_OF_TEXT_SETS 2
-#define NUMBER_OF_TEXTS 10
+#define NUMBER_OF_TEXTS 35
 
 #define NUMBER_OF_AUDIO_SETS 2
 #define NUMBER_OF_AUDIO_FILES 6
@@ -19,16 +19,51 @@ namespace Resources {
     };
 
     extern TextSet textSet;
-    extern SimpleMap<TextSet, String> textSetNameMap;
     
     enum Text {
+        gameScheme,
+        players,
+        playersAndroid1,
+        playersAndroid2,
+        playerNr,
+        settings,
+
         cricket,
         rtc,
         x01,
-        config
+        config,
+
+        rtcClassic,
+        shootOut,
+
+        cricketScore,
+        cricketNoscore,
+        cricketCutthroat,
+
+        cricketClassic,
+        cricketAll,
+        cricketCustom,
+
+        cricketInterval,
+        cricketRandinterval,
+        cricketChaotic,
+
+        cricketNrOfNrs,
+        cricketStartingNr,
+
+        rtcSector,
+        rtcMultiplier,
+        rtcMultiplierWithPoints,
+
+        x01Simple,
+        x01Double,
+        x01Master,
+        
+        x01In,
+        x01Out,
+        x01Score
     };
 
-    extern SimpleMap<String, Text> textNameMap;
     extern SimpleMap<Text, String> textMap;
 
     void initialize();

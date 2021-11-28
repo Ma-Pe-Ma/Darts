@@ -2,6 +2,11 @@
 #include "../GameLogic.h"
 
 void PlayerScreen::start() {
+    playersString = Resources::getTextByID(Resources::Text::players);
+    android1String = Resources::getTextByID(Resources::Text::playersAndroid1);
+    android2String = Resources::getTextByID(Resources::Text::playersAndroid2);
+    playerNrString = Resources::getTextByID(Resources::Text::playerNr);
+
     getGameLogic()->displayContainer->getTFT()->fillScreen(MAGENTA);
     
     int squareOffset = int(SCR_WIDTH * 0.08f);
@@ -10,18 +15,16 @@ void PlayerScreen::start() {
     gameLogic->prevMenu.setImage(getGameLogic()->displayContainer->getTFT(), squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<<", 2);
     gameLogic->nextMenu.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">>", 2);
     
-    getGameLogic()->displayContainer->writeCenterX(buttonSize / 2, BLACK, MAGENTA, 3, "JATEKOSOK");
+    getGameLogic()->displayContainer->writeCenterX(buttonSize / 2, BLACK, MAGENTA, 3, playersString);
     
     if (gameLogic->androidMode) {
         if (gameLogic->playerContainer->getNumberOfPlayers() == 0) {
-            String text = "Kerem allitsa be a jatekosokat";
             int textSize = 2;
             int y = (SCR_HEIGHT - 6 * textSize) / 2;
-            getGameLogic()->displayContainer->writeCenterX(y, BLACK, MAGENTA, textSize, text);
+            getGameLogic()->displayContainer->writeCenterX(y, BLACK, MAGENTA, textSize, android1String);
             
-            text = "az Android kliensen!";
             y += SCR_HEIGHT / 6;
-            getGameLogic()->displayContainer->writeCenterX(y, BLACK, MAGENTA, textSize, text);
+            getGameLogic()->displayContainer->writeCenterX(y, BLACK, MAGENTA, textSize, android2String);
         }
         else {
             int xOffset = int(SCR_WIDTH * 0.15f);
@@ -47,10 +50,9 @@ void PlayerScreen::start() {
         gameLogic->playerContainer->setNumberOfPlayers(1);
 
         //Writing explanation text
-        String text = "Jatekosok szama: ";
-        int x = (SCR_WIDTH - text.length() * 6 * 2) / 2 - int(SCR_WIDTH * 0.1375f);
+        int x = (SCR_WIDTH - playerNrString.length() * 6 * 2) / 2 - int(SCR_WIDTH * 0.1375f);
         int y = int(SCR_HEIGHT * 0.4f);
-        getGameLogic()->displayContainer->writeWithBackground(x, y, BLACK, MAGENTA, 2, text);
+        getGameLogic()->displayContainer->writeWithBackground(x, y, BLACK, MAGENTA, 2, (char*) playerNrString.c_str());
 
         //drawing player count + buttons
         int yPos = int(SCR_HEIGHT * 0.666f);
