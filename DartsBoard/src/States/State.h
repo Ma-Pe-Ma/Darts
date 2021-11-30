@@ -15,6 +15,8 @@ public:
     virtual void end() {}
 
     void setContext(StateContext*);
+
+    virtual void initialize() {}
 };
 
 #endif

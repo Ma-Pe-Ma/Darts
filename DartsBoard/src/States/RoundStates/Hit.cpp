@@ -3,8 +3,6 @@
 #include "../GameLogic.h"
 
 void Hit::start() {
-	digitalWrite(22, HIGH);
-
 	int x = SCR_WIDTH / 8;
 	int y = SCR_WIDTH / 8;
 	int textSize = 7;
@@ -15,24 +13,28 @@ void Hit::start() {
 
 	Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
 
+	//Write current hit
 	gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, BLACK, CYAN, textSize, "       ");	
 	gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, BLACK, currentPlayer->getColor(), textSize, text);
 
 	gamePlayingScreen->sendHit(dart);
+	
 	currentPlayer->getScore()->statusAfterHit(dart);
 	timer = millis();
+
+	//playaudio
 }
 
 void Hit::update(Pair pair) {
     if (millis() - timer > 1000) {
-		digitalWrite(22, LOW);
-
 		int dartID = gamePlayingScreen->boardContainer.getCurrentDartID();
 		Sector dart = gamePlayingScreen->boardContainer.getThrownDartByNumber(dartID);
 
+		//Write to dart list
 		String text = String(dartID + 1) + ": " + DisplayContainer::sectorText(dart);
 		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * dartID, dartStatusStartY, BLACK, CYAN, 2, text);
 		
+		//Draw Status
 		Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
 		currentPlayer->getScore()->status();
 

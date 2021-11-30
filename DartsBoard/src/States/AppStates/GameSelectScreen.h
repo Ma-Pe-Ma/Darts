@@ -10,6 +10,7 @@ private:
     String gameSchemeString;
 
 public:
+    void initialize() override;
     void start() override;
     void update(Pair) override;
     void processMessage(JsonObject) override;

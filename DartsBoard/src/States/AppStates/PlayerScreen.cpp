@@ -1,12 +1,14 @@
 #include "PlayerScreen.h"
 #include "../GameLogic.h"
 
-void PlayerScreen::start() {
+void PlayerScreen::initialize() {
     playersString = Resources::getTextByID(Resources::Text::players);
     android1String = Resources::getTextByID(Resources::Text::playersAndroid1);
     android2String = Resources::getTextByID(Resources::Text::playersAndroid2);
     playerNrString = Resources::getTextByID(Resources::Text::playerNr);
+}
 
+void PlayerScreen::start() {
     getGameLogic()->displayContainer->getTFT()->fillScreen(MAGENTA);
     
     int squareOffset = int(SCR_WIDTH * 0.08f);

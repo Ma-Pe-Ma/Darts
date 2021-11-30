@@ -26,6 +26,9 @@ private:
 	String outLabel;
 	String scoreLabel;
 
+	String inString;
+	String outString;
+
 	String getInOutString(int cursor);
 
 	int buttonWidth = int(SCR_WIDTH * 0.35f);
@@ -70,6 +73,7 @@ public:
 
 	AbstractScore* setProperScoreContainer() override {
 		X01Score* x01Score = new X01Score(displayContainer, playerContainer);
+		x01Score->setGameProperties(inCursor, outCursor, scoreMap.getValueByKey(scoreCursor), &inString, &outString);
 		return x01Score;
 	}
 };

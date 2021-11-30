@@ -11,6 +11,8 @@
 #include "../RoundStates/Intro.h"
 #include "../RoundStates/Throwing.h"
 #include "../RoundStates/Hit.h"
+#include "../RoundStates/Missed.h"
+#include "../RoundStates/Busted.h"
 #include "../RoundStates/Outro.h"
 #include "../RoundStates/Winning.h"
 #include "../RoundStates/PostConfig.h"
@@ -35,6 +37,7 @@ class GamePlayingScreen : public AppState, public StateContext {
 	int dartStatusHeight = SCR_HEIGHT - dartStatusStartY;
 
 public:
+    void initialize() override;
     void start() override;
     void update(Pair) override;
     void processMessage(JsonObject) override;
@@ -61,6 +64,8 @@ public:
     Intro intro = Intro(this);
     Throwing throwing = Throwing(this);
     Hit hit = Hit(this);
+    Missed missed = Missed(this);
+    Busted busted = Busted(this);
     Outro outro = Outro(this);
     Winning winning = Winning(this);
     PostConfig postConfig = PostConfig(this);

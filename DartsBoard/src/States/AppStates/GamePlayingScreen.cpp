@@ -6,6 +6,12 @@ GamePlayingScreen::GamePlayingScreen(GameLogic* gameLogic) : AppState(gameLogic)
 	currentState = &intro;
 }
 
+void GamePlayingScreen::initialize() {
+	hit.initialize();
+	missed.initialize();
+	busted.initialize();
+}
+
 void GamePlayingScreen::start() {
     getGameLogic()->displayContainer->getTFT()->fillScreen(CYAN);
 	
