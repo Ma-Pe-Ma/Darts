@@ -11,6 +11,7 @@ private:
     String android2String;
     String playerNrString;
 public:
+    void initialize() override;
     void start() override;
     void update(Pair) override;
     void processMessage(JsonObject) override;

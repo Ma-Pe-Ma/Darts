@@ -4,6 +4,7 @@
 enum ThrowType {
     normal,
     busted,
+    missed,
     winning
 };
 

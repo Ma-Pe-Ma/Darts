@@ -8,6 +8,7 @@ class GameConfiguringScreen : public AppState {
 protected:
     String settingsString;
 public:
+    void initialize() override;
     void start() override;
     void update(Pair) override;
     void processMessage(JsonObject) override;

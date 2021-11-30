@@ -7,11 +7,13 @@
 #define MULTI_MAX_SCORE 40
 
 class RTCScore : public AbstractScore {
-int currentNumber = 1;
-Sector nextNumber = {.base = 1, .multiplier = 0};
+private:
+    int currentNumber = 1;
+    Sector nextNumber = {.base = 1, .multiplier = 0};
 
-RTCType rtcType;
-RTCSubType rtcSubType;
+    RTCType rtcType;
+    RTCSubType rtcSubType;
+    void setNextNumber();
 
 public:
     RTCScore(DisplayContainer*, PlayerContainer*);

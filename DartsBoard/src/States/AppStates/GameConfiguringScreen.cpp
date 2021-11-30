@@ -1,9 +1,11 @@
 #include "GameConfiguringScreen.h"
 #include "../GameLogic.h"
 
-void GameConfiguringScreen::start() {
+void GameConfiguringScreen::initialize() {
 	settingsString = Resources::getTextByID(Resources::Text::config);
+}
 
+void GameConfiguringScreen::start() {
     getGameLogic()->displayContainer->getTFT()->fillScreen(CYAN);
 	
 	int buttonSize = SCR_WIDTH / 10;

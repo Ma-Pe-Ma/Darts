@@ -4,6 +4,13 @@
 #include "AbstractScore.h"
 
 class X01Score : public AbstractScore {
+private:
+    uint8_t in = 0;
+    uint8_t out = 0;
+    int startingScore = 301;
+
+    String* inString;
+    String* outString;
 
 public:
     X01Score(DisplayContainer*, PlayerContainer*);
@@ -17,6 +24,8 @@ public:
 
     void serializePlayerStatus(JsonObject&) override;
     void serializeDartStatus(JsonObject body, Sector sector) override;
+
+    void setGameProperties(uint8_t, uint8_t, int, String*, String*);
 };
 
 #endif

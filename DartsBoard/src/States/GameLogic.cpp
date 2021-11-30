@@ -16,6 +16,10 @@ void GameLogic::init() {
 	states[5] = &gamePlayingScreen;
 
 	currentState = states[0];
+
+	for (int i = 0; i < NR_OF_APPSTATES; i++) {
+		states[i]->initialize();
+	}
 }
 
 AppState* GameLogic::findStateByID(String ID) {

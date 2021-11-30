@@ -1,9 +1,11 @@
 #include "GameSelectScreen.h"
 #include "../GameLogic.h"
 
-void GameSelectScreen::start() {
+void GameSelectScreen::initialize() {
 	gameSchemeString = Resources::getTextByID(Resources::Text::gameScheme);
+}
 
+void GameSelectScreen::start() {
     getGameLogic()->displayContainer->getTFT()->fillScreen(GREEN);
 	
 	int textSize = 3;

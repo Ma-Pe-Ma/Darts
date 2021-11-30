@@ -137,5 +137,6 @@ bool X01::custom(Pair touch) {
 }
 
 void X01::initializeGame() {
-	
+	inString = inLabel + " " + getInOutString(inCursor);
+	outString = outLabel + " " + getInOutString(outCursor);
 }

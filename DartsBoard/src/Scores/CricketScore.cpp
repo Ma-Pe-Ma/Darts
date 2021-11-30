@@ -58,6 +58,7 @@ ThrowResult CricketScore::scoreThrow(Sector sector) {
 	int mappedScore = getMappedScore(sector);
 	if (mappedScore == -1) {
 		ThrowResult throwResult;
+		throwResult.throwType = ThrowType::missed;
 		return throwResult;
 	}
 
@@ -69,7 +70,6 @@ ThrowResult CricketScore::scoreThrow(Sector sector) {
 	int sectorCloseStatus;
 	
 	switch (cricketType) {
-
 		case score:			
 			sectorCloseStatus = getSectorCloseState(sector.base);
 

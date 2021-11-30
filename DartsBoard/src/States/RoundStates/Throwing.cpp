@@ -38,8 +38,12 @@ void Throwing::update(Pair pair) {
 								gamePlayingScreen->transitionTo(&gamePlayingScreen->hit);
 								break;
 
-							case ThrowType::busted:
+							case ThrowType::missed:
+								gamePlayingScreen->transitionTo(&gamePlayingScreen->missed);
+								break;							
 
+							case ThrowType::busted:
+								gamePlayingScreen->transitionTo(&gamePlayingScreen->busted);
 								break;
 
 							case ThrowType::winning:

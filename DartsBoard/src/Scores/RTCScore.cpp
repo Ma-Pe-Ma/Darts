@@ -30,7 +30,7 @@ void RTCScore::initThrowing() {
             nextNumber.multiplier = random(1,4);
             break;
         case multiplierWithPoint:
-            nextNumber.multiplier = random(1,4);
+            nextNumber.multiplier = 4;
             break;
     }
 
@@ -49,9 +49,7 @@ void RTCScore::initThrowing() {
     }
 }
 
-ThrowResult RTCScore::scoreThrow(Sector sector) {
-    ThrowResult throwResult;
-
+void RTCScore::setNextNumber() {
     //if rtc determine next dart
     switch (rtcType) {
         case roundTheClock:
@@ -64,25 +62,41 @@ ThrowResult RTCScore::scoreThrow(Sector sector) {
             
             break;
     }  
+}
+
+ThrowResult RTCScore::scoreThrow(Sector sector) {
+    ThrowResult throwResult;
+    throwResult.throwType = ThrowType::normal;
 
     //calculate score
     switch (rtcSubType) {
         case sectorOnly:
             if (sector.base == nextNumber.base) {
                 playerScore++;
+                setNextNumber();
+            }
+            else {
+                throwResult.throwType = ThrowType::missed;
             }
             break;
         case multiplier:
             if (sector.base == nextNumber.base && sector.multiplier == nextNumber.multiplier) {
                 playerScore++;
+                setNextNumber();
+            }
+            else {
+                throwResult.throwType = ThrowType::missed;
             }
             break;
 
         case multiplierWithPoint:
             if (sector.base == nextNumber.base) {
                 playerScore += nextNumber.multiplier;
+                setNextNumber();
             }
-
+            else {
+                throwResult.throwType = ThrowType::missed;
+            }
         default:
             break;
     }
@@ -91,21 +105,19 @@ ThrowResult RTCScore::scoreThrow(Sector sector) {
     switch (rtcSubType) {
         case sectorOnly:
             if (playerScore == 22) {
-                //winning
+                throwResult.throwType = ThrowType::winning;
             }
             break;
         case multiplier:
             if (playerScore == 22) {
-                //winning
+                throwResult.throwType = ThrowType::winning;
             }
-
             break;
-
         case multiplierWithPoint:
             if (playerScore >= MULTI_MAX_SCORE) {
-                //winning
+                throwResult.throwType = ThrowType::winning;
             }
-
+            break;
         default:
             break;
     }
