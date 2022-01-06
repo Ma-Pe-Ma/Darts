@@ -8,7 +8,7 @@ void MainScreen::start() {
     getGameLogic()->displayContainer->getTFT()->fillScreen(WHITE);
 
     //draw the main logo, supposing its height and width equals screen size
-    getGameLogic()->displayContainer->showBMP("darts.bmp", (SCR_WIDTH - SCR_HEIGHT) / 2, 0);
+    getGameLogic()->displayContainer->showBMP("/res/img/darts.bmp", (SCR_WIDTH - SCR_HEIGHT) / 2, 0);
 
     //show top texts
     int squareOffset = int(SCR_WIDTH * 0.04f);
@@ -16,8 +16,8 @@ void MainScreen::start() {
     getGameLogic()->displayContainer->writeRight(squareOffset, squareOffset, RED, 3, "Dartsi");
 
     //show icons at the bottom
-    getGameLogic()->displayContainer->showBMP("offline.bmp", 0, SCR_HEIGHT - ICON_SIZE);
-    getGameLogic()->displayContainer->showBMP("android.bmp", SCR_WIDTH - ICON_SIZE, SCR_HEIGHT - ICON_SIZE);
+    getGameLogic()->displayContainer->showBMP("/res/img/offline.bmp", 0, SCR_HEIGHT - ICON_SIZE);
+    getGameLogic()->displayContainer->showBMP("/res/img/android.bmp", SCR_WIDTH - ICON_SIZE, SCR_HEIGHT - ICON_SIZE);
     
     //set up buttons for icons
     gameLogic->offline.setImage(getGameLogic()->displayContainer->getTFT(),  0, SCR_HEIGHT - ICON_SIZE, ICON_SIZE, ICON_SIZE, WHITE, CYAN, BLACK, "offline", 2);

@@ -1,0 +1,32 @@
+gameScheme Jatekmod valasztasa:
+players Jatekosok
+playersAndroid1 Kerem allitsa be a jatekosokat 
+playersAndroid2 az Android kliensen!
+playerNr Jatekosok szama:
+settings beallitasok
+cricket Cricket
+rtc Round the Clock
+x01 X01
+config Beallitas
+cricketScore Score
+cricketNoscore No-Score
+cricketCutthroat Cut-Throat
+cricketClassic Classic
+cricketAll Osszes
+cricketCustom Egyeni
+cricketInterval Interval
+cricketRandinterval Rand. Int.
+cricketChaotic Kaotikus
+cricketNrOfNrs Szamok szama:
+cricketStartingNr Kezdo szam:
+rtcClassic RTC
+shootOut Shoot Out
+rtcSector Sector
+rtcMultiplier Multiplier
+rtcMultiplierWithPoints MultiwP
+x01Simple Szimpla
+x01Double Dupla
+x01Master Mester
+x01In Ki:
+x01Out Be:
+x01Score Pont:
