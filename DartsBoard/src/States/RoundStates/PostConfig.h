@@ -1,13 +1,13 @@
 #ifndef POSTCONFIGSCREEN_H
 #define POSTCONFIGSCREEN_H
 
-#include "RoundState.h"
+#include "../RoundState.h"
 
 class PostConfig : public RoundState {
-
 public:
-    void Start();
-    void Update(Pair);
+    void start() override;
+    void update(Pair) override;  
+
     PostConfig(GamePlayingScreen* gamePlayingScreen) : RoundState(gamePlayingScreen) {}
 
     void SendPostConfig(int);

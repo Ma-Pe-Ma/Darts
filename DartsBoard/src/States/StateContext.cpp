@@ -1,19 +1,19 @@
 #include "StateContext.h"
 #include "State.h"
 
-void StateContext::TransitionTo(State* newState, bool start, bool end) {
+void StateContext::transitionTo(State* newState, bool start, bool end) {
     if (end) {
-        currentState->End();
+        currentState->end();
     }
 
     currentState = newState;
-    currentState->SetContext(this);
+    currentState->setContext(this);
 
     if (start) {
-        currentState->Start();
+        currentState->start();
     }
 }
 
-void StateContext::TransitionTo(State* newState) {
-    TransitionTo(newState, true, true);
+void StateContext::transitionTo(State* newState) {
+    transitionTo(newState, true, true);
 }

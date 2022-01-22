@@ -1,28 +1,27 @@
 #include "Intro.h"
-#include "../GamePlayingScreen.h"
+#include "../AppStates/GamePlayingScreen.h"
+#include "../GameLogic.h"
 
-void Intro::Start() {
-	Player::FindNextPlayer();
-	Player::current->score->roundCounter = gamePlayingScreen->roundCounter;
-	Player::current->score->DrawCompleteCustomStatus();
+void Intro::start() {
+	gamePlayingScreen->getGameLogic()->playerContainer->findNextPlayer();
+	Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
+
+	currentPlayer->getScore()->setRoundCounter(gamePlayingScreen->roundCounter);
+	currentPlayer->getScore()->drawCompleteCustomStatus();
 
 	//Write out player changing!
-	String roundText = "R" + String(gamePlayingScreen->roundCounter) + "-P" + String(Player::cursor + 1);
+	String roundText = "R" + String(gamePlayingScreen->roundCounter) + "-P" + String(gamePlayingScreen->getGameLogic()->playerContainer->getPlayerCursor() + 1);
 	if (gamePlayingScreen->roundCounter < 100) {
 		roundText += "";
 	}
 	int textSize = 7;
-	DisplayContainer::displayContainer.WriteWithBackground(SCR_WIDTH / 8, SCR_WIDTH / 8, WHITE, BLACK, textSize, roundText);
-
-	//initialize game specific settings
-	DartsGame::dartsGame->InitializeRound();
+	gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(SCR_WIDTH / 8, SCR_WIDTH / 8, WHITE, BLACK, textSize, roundText);
 	
 	//delete thrown dart data
-	BoardContainer::boardContainer.currentDart = 0;
+	gamePlayingScreen->boardContainer.setCurrentDartID(0);
 
 	for(int i = 0; i < 3; i++) {
-		BoardContainer::darts[i].multiplier = 0;
-		BoardContainer::darts[i].base = 0;
+		gamePlayingScreen->boardContainer.setThrownDartByNumber(i, {.base = 0, .multiplier = 0});
 		gamePlayingScreen->del[i] = false;
 	}
 
@@ -33,26 +32,20 @@ void Intro::Start() {
 	int dartStatusStartY = SCR_HEIGHT / 2;
 
 	for (int i = 0; i < 3; i++) {
-		DisplayContainer::displayContainer.WriteWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, BLACK, CYAN, 2, String(i + 1) + ": " + DisplayContainer::SectorText(BoardContainer::darts[i]));
+		Sector dart = gamePlayingScreen->boardContainer.getThrownDartByNumber(i);
+		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, BLACK, CYAN, 2, String(i + 1) + ": " + DisplayContainer::sectorText(dart));
 	}		
 	
 	/*for (int i = 0; i < LIST_MAX; i++) {
 		dartsBoard->key[i].kstate = IDLE;
 	}*/
 
-	if (firstTime == true) {
-		firstTime = false;
-	}
-	else {
-		gamePlayingScreen->SendRoundDump();
-	}
-
+	gamePlayingScreen->sendRoundDump();
 	timer = millis();
 }
 
-void Intro::Update(Pair pair) {
+void Intro::update(Pair pair) {
     if (millis() - timer > 1000) {
-		gamePlayingScreen->TransitionTo(&gamePlayingScreen->throwing);
-		//Serial.println("Transitioned to throwing");
+		gamePlayingScreen->transitionTo(&gamePlayingScreen->throwing);
 	}
 }

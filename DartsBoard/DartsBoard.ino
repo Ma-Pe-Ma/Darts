@@ -12,23 +12,19 @@
 // copy all your BMP files to the root directory on the microSD with your PC
 // (or another directory)
 
-#include <SPI.h>             // f.k. for Arduino-1.5.2
-//#define USE_SDFAT
-//#include <SdFat.h>           // Use the SdFat library
-#include <SD.h>
-//SdFatSoftSpi<108, 109, 110> SD; //Bit-Bang on the Shield pins
-
 //#include <Adafruit_GFX.h>
 #include <MCUFRIEND_kbv.h>
-#include <Keypad.h>
 #include <soft_uart.h>
 
-#include "src/Hardware/DisplayContainer.h"
-#include "src/Hardware/BoardContainer.h"
-#include "src/Hardware/BluetoothCommunicator.h"
+#include "src/Hardware/Bluetooth/BluetoothCommunicator.h"
 
 #include "src/States/GameLogic.h"
-#include "src/Games/DartsGame.h"
+
+#include "src/Hardware/DisplayContainer.h"
+#include "src/Player/PlayerContainer.h"
+#include "src/Games/GameContainer.h"
+
+#include "src/Resource/Resources.h"
 
 #define RX_PIN 22 // software serial port's reception pin
 #define TX_PIN 24 // software serial port's transmision pin
@@ -41,22 +37,33 @@ auto& serial_obj = serial_tc4;
 
 BluetoothCommunicator bluetooth(&serial_obj);
 
+DisplayContainer displayContainer;
+PlayerContainer playerContainer;
+GameContainer gameContainer(&displayContainer, &playerContainer);
+
+GameLogic gameLogic(&displayContainer, &playerContainer, &gameContainer);
+
 void setup() {
 	Serial.begin(115200);
+	Serial.println("Setup started!");
 	
-	bluetooth.btSwitch = &GameLogic::gameLogic.androidMode;
-
-	DisplayContainer::Initialize();
-	Player::initializePlayers();
-	DartsGame::InitializeGames();
+	Resources::textSet = Resources::en;
+	Resources::audioSet = Resources::mk;
 
 	//Setting piezo speaker output
 	pinMode(22, OUTPUT);
 
+	displayContainer.init();
+	Resources::initialize();
+	playerContainer.init();
+	gameContainer.init();
+	gameLogic.init();	
+	
+	bluetooth.btSwitch = &gameLogic.androidMode;
+
 	//config bluetoothsettings
-	bluetooth.setMessageProcesser(GameLogic::gameLogic.StaticProcessMessage);
-	DartsGame::bluetoothCommunicator = &bluetooth;
-	GameLogic::gameLogic.bluetoothCommunicator = &bluetooth;
+	bluetooth.subscribeToMessages(&gameLogic);
+	gameLogic.bluetoothCommunicator = &bluetooth;
 
 	serial_obj.begin(
 		RX_PIN,
@@ -66,17 +73,15 @@ void setup() {
 		soft_uart::parity_codes::NO_PARITY,
 		soft_uart::stop_bit_codes::ONE_STOP_BIT
   	);
-
-	GameLogic::gameLogic.TransitionTo(&GameLogic::gameLogic.mainScreen);
+	
+	gameLogic.transitionTo(&gameLogic.mainScreen);
+	Serial.println("Setup finished!");
 }
 
-void loop() {
-	//detecting touch inputs
-	Pair pair = DisplayContainer::displayContainer.getTouchedPoint();
-
+void loop() {	
 	//bluetooth input
 	bluetooth.process();
 
 	//the main logic of the application
-	GameLogic::gameLogic.Run(pair);	
+	gameLogic.run();
 }

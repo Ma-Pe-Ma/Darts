@@ -1,12 +1,12 @@
 #include "GameLogic.h"
 
-GameLogic GameLogic::gameLogic;
-
-void GameLogic::StaticProcessMessage(String message) {
-	gameLogic.ProcessMessage(message);
+GameLogic::GameLogic(DisplayContainer* displayContainer, PlayerContainer* playerContainer, GameContainer* gameContainer) {
+	this->displayContainer = displayContainer;
+	this->playerContainer = playerContainer;
+	this->gameContainer = gameContainer;
 }
 
-GameLogic::GameLogic() {
+void GameLogic::init() {
 	states = new AppState*[NR_OF_APPSTATES];
 	states[0] = &mainScreen;
 	states[1] = &playerScreen;
@@ -15,15 +15,16 @@ GameLogic::GameLogic() {
 	states[4] = &customGameConfiguringScreen;
 	states[5] = &gamePlayingScreen;
 
-	states[6] = &dumpState;
-	states[7] = &lastState;
-
 	currentState = states[0];
+
+	for (int i = 0; i < NR_OF_APPSTATES; i++) {
+		states[i]->initialize();
+	}
 }
 
-AppState* GameLogic::FindStateByID(String ID) {
+AppState* GameLogic::findStateByID(String ID) {
 	for (int i = 0; i < NR_OF_APPSTATES; i++) {
-		if (states[i]->GetID() == ID) {
+		if (states[i]->getID() == ID) {
 			return states[i];
 		}
 	}
@@ -31,17 +32,39 @@ AppState* GameLogic::FindStateByID(String ID) {
 	return nullptr;
 }
 
-void GameLogic::ProcessMessage(String message) {
+void GameLogic::run() {
+	//detecting touch inputs
+	Pair touch = displayContainer->getTouchedPoint();
+	currentState->update(touch);
+}
+
+void GameLogic::receiveMessage(String message) {
 	StaticJsonDocument<2048> doc;
 	DeserializationError err = deserializeJson(doc, message);
 
 	if (err == DeserializationError::Ok) {
 		JsonObject jsonObject = doc.as<JsonObject>();
 		
-		AppState* newState = FindStateByID(jsonObject["STATE"].as<String>());
+		String stateHeader = jsonObject["STATE"].as<String>();
+
+		AppState* newState = findStateByID(stateHeader);
 		JsonObject body = jsonObject["BODY"].as<JsonObject>();
 
-		newState->ProcessMessage(body);
+		if (stateHeader == "DUMP") {
+			processDump(body);
+			return;
+		}
+
+		if(stateHeader == "LAST") {
+			bluetoothCommunicator->repeatLastMessage();
+			return;
+		}
+
+		newState->processMessage(body);
+
+		if (newState != currentState) {
+			this->transitionTo(newState);
+		}
 	}
 	else {
 		String error = err.c_str();
@@ -49,34 +72,62 @@ void GameLogic::ProcessMessage(String message) {
 	}	
 }
 
-void GameLogic::ParsePlayers(JsonVariant players) {
+void GameLogic::parsePlayers(JsonVariant players) {
 	for (int i = 0; i < players.size(); i++) {
-		JsonObject player = players["" + String(i + 1)];
-		Player::players[i].color = Player::convertColor(player["COLOR"].as<long>());
-		Player::players[i].inverseColor = 0xffff - Player::players[i].color;
-		Player::players[i].nickname = player["NICK"].as<String>();
-		Player::players[i].name = player["NAME"].as<String>();
+		JsonObject player = players[String(i + 1)];
+
+		Player* playerObject = playerContainer->getPlayerByNumber(i);
+		
+		uint16_t color = Player::convertColor(player["COLOR"].as<long>());;
+		uint16_t inverseColor = Player::convertColor(player["ICOLOR"].as<long>());;
+		//uint16_t inverseColor = 0xffff - color;
+
+		playerObject->setColor(color);
+		playerObject->setInverseColor(inverseColor);
+		playerObject->setNick(player["NICK"].as<String>());
+		playerObject->setName(player["NAME"].as<String>());
 	}
-				
-	Player::number = players.size();	
+	
+	playerContainer->setNumberOfPlayers(players.size());
 }
 
-void GameLogic::GetConfigDump() {
+void GameLogic::processDump(JsonObject body) {
+    unsigned long gameNr = body["GAMENR"].as<unsigned long>();
+    this->gamePlayingScreen.setGameNr(gameNr);
+    
+    JsonVariant players = body["PLAYERS"];
+    this->parsePlayers(players);
+
+    String currentGameID = body["GAME"];
+    DartsGame* currentGame = gameContainer->findGameByID(currentGameID);
+	gameContainer->setCurrentGame(currentGame);
+
+    JsonObject configObject = body["CONFIG"]; 
+
+    for (int i = 0; i < gameContainer->nrOfGames; i++) {
+        DartsGame* game = gameContainer->getGameByNr(i);
+
+        String name = game->getGameID();
+        JsonObject gameConfigObject = configObject[name];
+        game->processConfig(gameConfigObject);
+    }
+
+    this->transitionTo(&playerScreen);
+}
+
+//used to ask for dump from client, only used at startup
+void GameLogic::askConfigDump() {
 	StaticJsonDocument<1024> doc;
 	doc["STATE"] = "DUMP";
 	doc.createNestedObject("BODY");
 
 	String message;
 	serializeJson(doc, message);
-	
+
 	bluetoothCommunicator->send(message);
 }
 
-void GameLogic::Run(Pair touch) {
-	currentState->Update(touch);
-}
-
-void GameLogic::NotifyAboutStart() {
+void GameLogic::notifyAboutStart() {
 	StaticJsonDocument<1024> doc;
 	doc["STATE"] = "GAMEPLAY";
 	JsonObject body = doc.createNestedObject("BODY");

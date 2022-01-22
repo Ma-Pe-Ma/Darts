@@ -1,130 +1,136 @@
 #include "Cricket.h"
 
-SimpleMap<CricketType, String>* Cricket::typeMap;
-SimpleMap<CricketNumberSet, String>* Cricket::setMap;
-SimpleMap<CricketCustomSet, String>* Cricket::customMap;
+Cricket::Cricket(DisplayContainer* displayContainer, PlayerContainer* playerContainer) : DartsGame(displayContainer, playerContainer) {
+	this->gameID = "CRICKET";
+	this->name = "Cricket";
+	this->initializeMaps();
 
-Cricket::Cricket() {
-	gameID = "CRICKET";
-	name = "Cricket";
-	InitializeMaps();
+	scoreString = Resources::getTextByID(Resources::Text::cricketScore);
+	noscoreString = Resources::getTextByID(Resources::Text::cricketNoscore);
+	cutthroatString = Resources::getTextByID(Resources::Text::cricketCutthroat);
+
+	classicString = Resources::getTextByID(Resources::Text::cricketClassic);
+	allString = Resources::getTextByID(Resources::Text::cricketAll);
+	customString = Resources::getTextByID(Resources::Text::cricketCustom);
+
+	intervalString = Resources::getTextByID(Resources::Text::cricketInterval);
+	randintervalString = Resources::getTextByID(Resources::Text::cricketRandinterval);
+	chaoticString = Resources::getTextByID(Resources::Text::cricketChaotic);
+
+	nrOfNrsString = Resources::getTextByID(Resources::Text::cricketNrOfNrs);
+	startingNrString = Resources::getTextByID(Resources::Text::cricketStartingNr);
 }
 
-void Cricket::InitializeMaps() {
+void Cricket::initializeMaps() {
 	typeMap = new SimpleMap<CricketType, String>(3);
-	typeMap->Insert(score, String("SCORE"));
-	typeMap->Insert(noscore, String("NOSCORE"));
-	typeMap->Insert(cutthroat, String("CUTTHROAT"));
+	typeMap->insert(score, String("SCORE"));
+	typeMap->insert(noscore, String("NOSCORE"));
+	typeMap->insert(cutthroat, String("CUTTHROAT"));
 	
 	setMap = new SimpleMap<CricketNumberSet, String>(3);
-	setMap->Insert(classicNumbers, String("CLASSIC"));
-	setMap->Insert(allNumbers, String("ALL"));
-	setMap->Insert(customNumbers, String("CUSTOM"));
+	setMap->insert(classicNumbers, String("CLASSIC"));
+	setMap->insert(allNumbers, String("ALL"));
+	setMap->insert(customNumbers, String("CUSTOM"));
 	
 	customMap = new SimpleMap<CricketCustomSet, String>(3);
-	customMap->Insert(interval, String("INTERVAL"));
-	customMap->Insert(randomInterval, String("RANDOMINTERVAL"));
-	customMap->Insert(chaotic, String("CHAOTIC"));
+	customMap->insert(interval, String("INTERVAL"));
+	customMap->insert(randomInterval, String("RANDOMINTERVAL"));
+	customMap->insert(chaotic, String("CHAOTIC"));
 }
 
-void Cricket::ProcessConfig(JsonObject& message) {
+void Cricket::processConfig(JsonObject& message) {
 	cricketNr = message["CricketNr"].as<int>();
-	cricketType = typeMap->GetKeyByValue(message["CricketType"]);
-	cricketNumberSet = setMap->GetKeyByValue(message["CricketNumberSet"]);
-	cricketCustomSet = customMap->GetKeyByValue(message["CricketCustomSet"]);
+	cricketType = typeMap->getKeyByValue(message["CricketType"]);
+	cricketNumberSet = setMap->getKeyByValue(message["CricketNumberSet"]);
+	cricketCustomSet = customMap->getKeyByValue(message["CricketCustomSet"]);
 	cricketStart = message["CricketStart"];
 }
 
-void Cricket::ProcessGamePlay(JsonObject message) {
+void Cricket::processGamePlay(JsonObject message) {
 	
 }
 
-void Cricket::PreConfig() {
+void Cricket::drawProperButtons(int index, int id) {
+	if (index == 0) {
+		scoreButton.guiButton.drawButton(id != 1);
+		noscoreButton.guiButton.drawButton(id != 2);
+		cutthroatButton.guiButton.drawButton(id != 3);
+	}
+	else if (index == 1) {
+		classicButton.guiButton.drawButton(id != 1);
+		allButton.guiButton.drawButton(id != 2);
+		customButton.guiButton.drawButton(id != 3);
+	}
+}
+
+void Cricket::configStart() {
 	int buttonWidth = int(SCR_WIDTH * 0.35f);
 	int buttonHeight = int(SCR_HEIGHT * 0.166f);	
-
+	
 	int buttonStartX = int(SCR_WIDTH * 0.2f);
 	int buttonStartY = int(SCR_HEIGHT * 0.375f);
-	
+
 	int buttonOffsetX = int(SCR_WIDTH * 0.6f);
 	int buttonOffsetY = int(SCR_HEIGHT * 0.25f);
 
-	scoreButton.setImage(DisplayContainer::displayContainer.getTFT(), buttonStartX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, "Score", 2);
-	noscoreButton.setImage(DisplayContainer::displayContainer.getTFT(), buttonStartX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, "No-Score", 2);
-	cutthroatButton.setImage(DisplayContainer::displayContainer.getTFT(), buttonStartX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, "Cut-Thr.", 2);
-	
+	scoreButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) scoreString.c_str(), 2);
+	noscoreButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) noscoreString.c_str(), 2);
+	cutthroatButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) cutthroatString.c_str(), 2);
+
 	switch (cricketType) {
 		case score:
-			scoreButton.guiButton.drawButton(false);
-			noscoreButton.guiButton.drawButton(true);
-			cutthroatButton.guiButton.drawButton(true);
+			drawProperButtons(0, 1);
 			break;
 		
 		case noscore:
-			scoreButton.guiButton.drawButton(true);
-			noscoreButton.guiButton.drawButton(false);
-			cutthroatButton.guiButton.drawButton(true);
+			drawProperButtons(0, 2);
 			break;
 		
 		case cutthroat:
-			scoreButton.guiButton.drawButton(true);
-			noscoreButton.guiButton.drawButton(true);
-			cutthroatButton.guiButton.drawButton(false);
+			drawProperButtons(0, 3);
 			break;
 	}
 	
-	classicButton.setImage(DisplayContainer::displayContainer.getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, "Classic", 2);
-	allButton.setImage(DisplayContainer::displayContainer.getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, "Every", 2);
-	customButton.setImage(DisplayContainer::displayContainer.getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, "Custom", 2);
+	classicButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) classicString.c_str(), 2);
+	allButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) allString.c_str(), 2);
+	customButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) customString.c_str(), 2);
 	
 	switch (cricketNumberSet) {
 		case classicNumbers:
-			classicButton.guiButton.drawButton(false);
-			allButton.guiButton.drawButton(true);
-			customButton.guiButton.drawButton(true);
+			drawProperButtons(1, 1);
 			break;
 			
 		case allNumbers:
-			classicButton.guiButton.drawButton(true);
-			allButton.guiButton.drawButton(false);
-			customButton.guiButton.drawButton(true);
+			drawProperButtons(1, 2);
 			break;
 		
 		case customNumbers:
-			classicButton.guiButton.drawButton(true);
-			allButton.guiButton.drawButton(true);
-			customButton.guiButton.drawButton(false);
+			drawProperButtons(1, 3);
 			break;
 	}
 }
 
-void Cricket::GameConfig(Pair touch) {
+void Cricket::config(Pair touch) {
 	scoreButton.detect(touch);
 	noscoreButton.detect(touch);
 	cutthroatButton.detect(touch);
 	
 	if (scoreButton.simple()) {
 		cricketType = score;
-		scoreButton.guiButton.drawButton(false);
-		noscoreButton.guiButton.drawButton(true);
-		cutthroatButton.guiButton.drawButton(true);
-		SerializeConfig();
+		drawProperButtons(0, 1);
+		serializeConfig();
 	}
 	
 	if (noscoreButton.simple()) {
 		cricketType = noscore;
-		scoreButton.guiButton.drawButton(true);
-		noscoreButton.guiButton.drawButton(false);
-		cutthroatButton.guiButton.drawButton(true);
-		SerializeConfig();
+		drawProperButtons(0, 2);
+		serializeConfig();
 	}
 	
 	if (cutthroatButton.simple()) {
 		cricketType = cutthroat;
-		scoreButton.guiButton.drawButton(true);
-		noscoreButton.guiButton.drawButton(true);
-		cutthroatButton.guiButton.drawButton(false);
-		SerializeConfig();
+		drawProperButtons(0, 3);
+		serializeConfig();
 	}
 	
 	classicButton.detect(touch);
@@ -133,30 +139,24 @@ void Cricket::GameConfig(Pair touch) {
 	
 	if (classicButton.simple()) {
 		cricketNumberSet = classicNumbers;
-		classicButton.guiButton.drawButton(false);
-		allButton.guiButton.drawButton(true);
-		customButton.guiButton.drawButton(true);
-		SerializeConfig();
+		drawProperButtons(1, 1);
+		serializeConfig();
 	}
 	
 	if (allButton.simple()) {
 		cricketNumberSet = allNumbers;
-		classicButton.guiButton.drawButton(true);
-		allButton.guiButton.drawButton(false);
-		customButton.guiButton.drawButton(true);
-		SerializeConfig();
+		drawProperButtons(1, 2);
+		serializeConfig();
 	}
 	
 	if (customButton.simple()) {
 		cricketNumberSet = customNumbers;
-		classicButton.guiButton.drawButton(true);
-		allButton.guiButton.drawButton(true);
-		customButton.guiButton.drawButton(false);
-		SerializeConfig();
+		drawProperButtons(1, 3);
+		serializeConfig();
 	}
 }
 
-bool Cricket::PreCustom() {
+bool Cricket::customStart() {
 	if (cricketNumberSet != customNumbers) {
 		return false;
 	}
@@ -171,9 +171,9 @@ bool Cricket::PreCustom() {
 	int buttonOffsetY = int(SCR_HEIGHT * 0.25f);
 	
 	//setting up 
-	intervalButton.setImage(DisplayContainer::displayContainer.getTFT(), buttonStartX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, "Interval", 2);
-	randomIntervalButton.setImage(DisplayContainer::displayContainer.getTFT(), buttonStartX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, "RandInt.", 2);
-	chaoticButton.setImage(DisplayContainer::displayContainer.getTFT(), buttonStartX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, "Chaotic", 2);
+	intervalButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) intervalString.c_str(), 2);
+	randomIntervalButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) randintervalString.c_str(), 2);
+	chaoticButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) chaoticString.c_str(), 2);
 	
 	switch (cricketCustomSet) {
 		case interval:
@@ -203,14 +203,14 @@ bool Cricket::PreCustom() {
 	int textStartY = nrButtonY - buttonSize - int(textSize * 6);
 
 	//Draw number of numbers selector + buttons
-	DisplayContainer::displayContainer.Write(textStartX, textStartY, RED, textSize, "Nr. of Nrs.:");
-	DrawCricketNr();
+	displayContainer->write(textStartX, textStartY, RED, textSize, nrOfNrsString.c_str());
+	drawCricketNr();
 
 	int nrButtonX = int(SCR_WIDTH * 0.7f);
 	int nrButtonOffsetX = int(SCR_WIDTH * 0.2f);
 	
-	prevNr.setImage(DisplayContainer::displayContainer.getTFT(), nrButtonX, nrButtonY, buttonSize, buttonSize, WHITE, GREEN, BLACK, "<", 2);
-	nextNr.setImage(DisplayContainer::displayContainer.getTFT(), nrButtonX + nrButtonOffsetX, nrButtonY, buttonSize, buttonSize, WHITE, GREEN, BLACK, ">", 2);
+	prevNr.setImage(displayContainer->getTFT(), nrButtonX, nrButtonY, buttonSize, buttonSize, WHITE, GREEN, BLACK, "<", 2);
+	nextNr.setImage(displayContainer->getTFT(), nrButtonX + nrButtonOffsetX, nrButtonY, buttonSize, buttonSize, WHITE, GREEN, BLACK, ">", 2);
 	prevNr.guiButton.drawButton(true);
 	nextNr.guiButton.drawButton(true);
 	
@@ -219,11 +219,11 @@ bool Cricket::PreCustom() {
 		int startButtonY = int(SCR_HEIGHT * 0.875f);
 		
 		textStartY = startButtonY - buttonSize - int(textSize * 6);
-		DisplayContainer::displayContainer.Write(textStartX, textStartY, RED, textSize, "Starting nr:");
-		DrawCricketStart();
+		displayContainer->write(textStartX, textStartY, RED, textSize, startingNrString.c_str());
+		this->drawCricketStart();
 		
-		prevStart.setImage(DisplayContainer::displayContainer.getTFT(), nrButtonX, startButtonY, buttonSize, buttonSize, WHITE, GREEN, BLACK, "<", 2);
-		nextStart.setImage(DisplayContainer::displayContainer.getTFT(), nrButtonX + nrButtonOffsetX, startButtonY, buttonSize, buttonSize, WHITE, GREEN, BLACK, ">", 2);
+		prevStart.setImage(displayContainer->getTFT(), nrButtonX, startButtonY, buttonSize, buttonSize, WHITE, GREEN, BLACK, "<", 2);
+		nextStart.setImage(displayContainer->getTFT(), nrButtonX + nrButtonOffsetX, startButtonY, buttonSize, buttonSize, WHITE, GREEN, BLACK, ">", 2);
 
 		prevStart.guiButton.drawButton(true);
 		nextStart.guiButton.drawButton(true);		
@@ -232,21 +232,7 @@ bool Cricket::PreCustom() {
 	return true;
 }
 
-void Cricket::DrawCricketNr() {
-	int startX = int(SCR_WIDTH * 0.775f);
-	int startY = int(SCR_HEIGHT * 0.48f);
-
-	DisplayContainer::displayContainer.WriteWithBackground(startX, startY, RED, YELLOW, 2, cricketNr > 9 ? String(cricketNr) : " " + String(cricketNr));
-}
-
-void Cricket::DrawCricketStart() {
-	int startX = int(SCR_WIDTH * 0.775f);
-	int startY = int(SCR_HEIGHT * 0.85f);
-
-	DisplayContainer::displayContainer.WriteWithBackground(startX, startY, RED, YELLOW, 2, cricketStart > 9 ? String(cricketStart) : " " +String(cricketStart));
-}
-
-bool Cricket::CustomConfig(Pair touch) {
+bool Cricket::custom(Pair touch) {
 	intervalButton.detect(touch);
 	randomIntervalButton.detect(touch);
 	chaoticButton.detect(touch);
@@ -259,10 +245,10 @@ bool Cricket::CustomConfig(Pair touch) {
 
 		prevStart.guiButton.drawButton(true);
 		nextStart.guiButton.drawButton(true);
-		DrawCricketStart();
+		drawCricketStart();
 
-		DisplayContainer::displayContainer.Write(textStartX, textStartY, RED, 2, "Starting nr:");
-		SerializeConfig();
+		displayContainer->write(textStartX, textStartY, RED, 2, (char*) startingNrString.c_str());
+		serializeConfig();
 	}
 	
 	if (randomIntervalButton.simple()) {
@@ -272,8 +258,8 @@ bool Cricket::CustomConfig(Pair touch) {
 		chaoticButton.guiButton.drawButton(true);
 
 		int textLength = 12;
-		DisplayContainer::displayContainer.getTFT()->fillRect(textStartX, textStartY, textLength * textSize * 6 , rectSize, YELLOW);
-		SerializeConfig();
+		displayContainer->getTFT()->fillRect(textStartX, textStartY, textLength * textSize * 6 , rectSize, YELLOW);
+		serializeConfig();
 	}
 	
 	if (chaoticButton.simple()) {
@@ -283,8 +269,8 @@ bool Cricket::CustomConfig(Pair touch) {
 		chaoticButton.guiButton.drawButton(false);
 
 		int textLength = 12;
-		DisplayContainer::displayContainer.getTFT()->fillRect(textStartX, textStartY, textLength * textSize * 6 , rectSize, YELLOW);
-		SerializeConfig();
+		displayContainer->getTFT()->fillRect(textStartX, textStartY, textLength * textSize * 6 , rectSize, YELLOW);
+		serializeConfig();
 	}
 	
 	prevNr.detect(touch);
@@ -297,8 +283,8 @@ bool Cricket::CustomConfig(Pair touch) {
 			cricketNr = 6;
 		}
 		
-		DrawCricketNr();		
-		SerializeConfig();
+		drawCricketNr();		
+		serializeConfig();
 	}
 	
 	if (prevNr.released()) {
@@ -312,16 +298,16 @@ bool Cricket::CustomConfig(Pair touch) {
 			cricketNr = 20;
 		}
 		
-		DrawCricketNr();
+		drawCricketNr();
 	
 		if (cricketStart > 21 - cricketNr) {
 			cricketStart = 21 - cricketNr;
 			if (cricketCustomSet == interval) {
-				DrawCricketStart();
+				drawCricketStart();
 			}
 		}
 		
-		SerializeConfig();
+		serializeConfig();
 	}
 	
 	if (nextNr.released()) {
@@ -339,8 +325,8 @@ bool Cricket::CustomConfig(Pair touch) {
 				cricketStart = 1;
 			}
 			
-			DrawCricketStart();
-			SerializeConfig();
+			drawCricketStart();
+			serializeConfig();
 		}
 		
 		if (prevStart.released()) {
@@ -354,8 +340,8 @@ bool Cricket::CustomConfig(Pair touch) {
 				cricketStart = 21 - cricketNr;
 			}
 			
-			DrawCricketStart();
-			SerializeConfig();
+			drawCricketStart();
+			serializeConfig();
 		}
 		
 		if (nextStart.released()) {
@@ -366,19 +352,93 @@ bool Cricket::CustomConfig(Pair touch) {
 	return false;
 }
 
-void Cricket::InitializeGame() {
-	CricketScore::CreateScoreMap(cricketNumberSet, cricketCustomSet, cricketNr, cricketStart);	
+void Cricket::drawCricketNr() {
+	int startX = int(SCR_WIDTH * 0.775f);
+	int startY = int(SCR_HEIGHT * 0.48f);
+
+	displayContainer->writeWithBackground(startX, startY, RED, YELLOW, 2, cricketNr > 9 ? String(cricketNr) : " " + String(cricketNr));
 }
 
-void Cricket::InitializeRound() {
+void Cricket::drawCricketStart() {
+	int startX = int(SCR_WIDTH * 0.775f);
+	int startY = int(SCR_HEIGHT * 0.85f);
+
+	displayContainer->writeWithBackground(startX, startY, RED, YELLOW, 2, cricketStart > 9 ? String(cricketStart) : " " +String(cricketStart));
+}
+
+void Cricket::initializeGame() {
+	for (int i = 1; i < 21; i++) {
+		scoreMap[i] = -1;
+	}
 	
+	scoreMap[0] = 25;
+	
+	if (cricketNumberSet == classicNumbers) {
+		cricketNr = 6;
+		cricketStart = 15;	
+	}
+	else if (cricketNumberSet == allNumbers) {
+		cricketNr = 20;
+		cricketStart = 1;
+	}
+	else if (cricketNumberSet == customNumbers) {
+		if (cricketCustomSet == interval) {
+			//do not modify arguments
+		}
+		
+		if (cricketCustomSet == randomInterval) {
+			cricketStart = random(1, 21 + 1 - cricketNr);
+		}
+	}
+	
+	if (cricketNumberSet == customNumbers && cricketCustomSet == chaotic) {		
+		int* sector = new int[cricketNr];
+		
+		for (int i = 0; i < cricketNr; i++) {
+			int newRandom = random(1, 21);
+			
+			bool repeating = false;
+			
+			for (int j = 0; j < i; j++) {
+				if (newRandom == sector[j]) {
+					repeating = true;
+					break;
+				}
+			}
+			
+			if (repeating) {
+				i--;
+				continue;
+			}
+			
+			sector[i] = newRandom;
+		}
+		
+		int value = 20;
+		
+		for (int i = 0; i < cricketNr; i++) {
+			scoreMap[sector[i]] = value;
+			value--;
+		}
+		
+		delete[] sector;
+	}
+	else {
+		for (int i = cricketStart; i < cricketStart + cricketNr; i++) {
+			scoreMap[i] = (21 - cricketNr) + (i - cricketStart);
+		}
+	}
+
+	//for (int i = 0; i < 21; i++) {
+	//	Serial.println(String(i) + ".th - " + String(scoreMap[i]));
+	//}
 }
 
-void Cricket::SerializeConfigCustom(JsonObject& configObject) {
+void Cricket::serializeConfigCustom(JsonObject& configObject) {
 	configObject["CricketNr"] = cricketNr;	
-	configObject["CricketType"] = typeMap->GetValueByKey(cricketType);
-	configObject["CricketNumberSet"] = setMap->GetValueByKey(cricketNumberSet);
-	configObject["CricketCustomSet"] = customMap->GetValueByKey(cricketCustomSet);
+	configObject["CricketType"] = typeMap->getValueByKey(cricketType);
+	configObject["CricketNumberSet"] = setMap->getValueByKey(cricketNumberSet);
+	configObject["CricketCustomSet"] = customMap->getValueByKey(cricketCustomSet);
 	configObject["CricketStart"] = cricketStart;
 
 	JsonObject mapObject = configObject.createNestedObject("MAP");
@@ -386,6 +446,6 @@ void Cricket::SerializeConfigCustom(JsonObject& configObject) {
 	mapObject["0"] = 25;
 
 	for (int i = 1; i < 21; i++) {
-		mapObject[String(i)] = CricketScore::scoreMap[i];
+		mapObject[String(i)] = scoreMap[i];
 	}
 }

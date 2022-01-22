@@ -1,7 +1,7 @@
 #ifndef OUTRO_H
 #define OUTRO_H
 
-#include "RoundState.h"
+#include "../RoundState.h"
 
 class Outro : public RoundState {
     int textSize = 7;
@@ -11,9 +11,10 @@ class Outro : public RoundState {
 
 	String text;
 public:
+    void start() override;
+    void update(Pair) override;
+
     Outro(GamePlayingScreen* gamePlayingScreen) : RoundState(gamePlayingScreen) {}
-    void Start();
-    void Update(Pair);
 };
 
 #endif

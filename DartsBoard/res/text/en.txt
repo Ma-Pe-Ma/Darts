@@ -1,0 +1,32 @@
+gameScheme Choose a gameScheme:
+players Players
+playersAndroid1 Please set the players 
+playersAndroid2 on the Android Client!
+playerNr Number of players:
+settings settings
+cricket Cricket
+rtc Round the Clock
+x01 X01
+config Configuration
+cricketScore Score
+cricketNoscore No-Score
+cricketCutthroat Cut-Throat
+cricketClassic Classic
+cricketAll Every
+cricketCustom Custom
+cricketInterval Interval
+cricketRandinterval Rand. Int.
+cricketChaotic Chaotic
+cricketNrOfNrs Nr. of Nrs:
+cricketStartingNr Start. nr:
+rtcClassic RTC
+shootOut Shoot Out
+rtcSector Sector
+rtcMultiplier Multiplier
+rtcMultiplierWithPoints MultiwP
+x01Simple Simple
+x01Double Double
+x01Master Master
+x01In In:
+x01Out Out:
+x01Score Score:

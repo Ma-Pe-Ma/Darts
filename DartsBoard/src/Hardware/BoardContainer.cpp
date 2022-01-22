@@ -1,9 +1,5 @@
 #include "BoardContainer.h"
 
-BoardContainer BoardContainer::boardContainer;
-uint8_t BoardContainer::currentDart;
-Sector BoardContainer::darts[3];
-
 BoardContainer::BoardContainer() {
 	setupCorrectPinOrder();
 	dartsBoard = new Keypad(makeKeymap(dKeys), setupDRP, setupDCP, DROWS, DCOLS);	
@@ -37,7 +33,7 @@ void BoardContainer::setupCorrectPinOrder() {
 	}
 }
 
-Sector BoardContainer::SectorMapping(char x) {
+Sector BoardContainer::sectorMapping(char x) {
 	Sector dart;
 	
 	//Simple numbers from 1-9

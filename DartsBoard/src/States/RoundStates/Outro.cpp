@@ -1,21 +1,25 @@
 #include "Outro.h"
-#include "../GamePlayingScreen.h"
+#include "../AppStates/GamePlayingScreen.h"
 #include "../GameLogic.h"
 
-void Outro::Start() {
-	text = "P" + String(Player::cursor + 1) + "-" + Player::current->score->playerScore;
+void Outro::start() {
+	int cursor = gamePlayingScreen->getGameLogic()->playerContainer->getPlayerCursor();
+	Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
+	text = "P" + String(cursor + 1) + "-" + currentPlayer->getScore()->getPlayerScore();
 }
 
-void Outro::Update(Pair pair) {
+void Outro::update(Pair pair) {
 	if ((millis() / 1000) % 2 == 0) {
-		DisplayContainer::displayContainer.WriteWithBackground(x, y, Player::current->inverseColor, Player::current->color, textSize, text);	
+		Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
+		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, currentPlayer->getInverseColor(), currentPlayer->getColor(), textSize, text);	
 	}		
 	else {
-		DisplayContainer::displayContainer.WriteWithBackground(x, y, Player::current->color, Player::current->inverseColor, textSize, text);	
+		Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
+		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, currentPlayer->getColor(), currentPlayer->getInverseColor(), textSize, text);	
 	}
 	
-	if (gamePlayingScreen->GetGameLogic()->nextMenu.simple()) {
-		gamePlayingScreen->GetGameLogic()->nextMenu.guiButton.drawButton(false);
-		gamePlayingScreen->TransitionTo(&gamePlayingScreen->intro);
+	if (gamePlayingScreen->getGameLogic()->nextMenu.simple()) {
+		gamePlayingScreen->getGameLogic()->nextMenu.guiButton.drawButton(false);
+		gamePlayingScreen->transitionTo(&gamePlayingScreen->intro);
 	}
 }

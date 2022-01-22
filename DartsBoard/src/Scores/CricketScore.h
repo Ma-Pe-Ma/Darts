@@ -6,38 +6,38 @@
 #include "../Games/CricketEnums.h"
 
 #include "../Hardware/Sector.h"
-#include "../Player.h"
 
 class CricketScore : public AbstractScore {
 	int cricketStatus[21] = {};
-	static int indicatorPositionMap[21];
-	static CricketType cricketType;
-	static CricketNumberSet cricketNumberSet;
-	static CricketCustomSet cricketCustomSet;
+	int scoreMap[21];
+
+	void drawSectorIndicator(int, int, int, int);
+	ThrowResult checkWinningCondition();
+
+	CricketType cricketType;
+	CricketNumberSet cricketNumberSet;
+	CricketCustomSet cricketCustomSet;
 	
+	int getIndicatorPosition(Sector);
+	int getMappedScore(Sector);
+	int getStatusPosition(Sector);
+	int getSectorCloseState(int);
+
 public:
-	static int scoreMap[21];
-
-	static void CreateScoreMap(CricketNumberSet set, CricketCustomSet customSet, int cricketNr, int cricketStart);
-	static int GetIndicatorPosition(int);
-	static int GetMappedScore(Sector);
-	static int GetStatusPosition(Sector);
-	static int GetSectorCloseState(int);
-	void SerializeDartStatus(JsonObject body, Sector sector);
+	CricketScore(DisplayContainer*, PlayerContainer*);
 	
-	void SerializePlayerStatus(JsonObject&);
+	float getAverageScore() override;
+	ThrowResult scoreThrow(Sector) override;
+	void deleteThrow(Sector) override;
 
-	void DrawSectorIndicator(int, int, int, int);
-	bool CheckWinningCondition();
-	CricketScore();
-	
-	void DrawCompleteCustomStatus();
-	bool Score(Sector);
-	void Delete(Sector);
+	void drawCompleteCustomStatus() override;
+	void statusAfterHit(Sector) override;
 
-	void StatusAfterHit(Sector);
+	void serializeDartStatus(JsonObject body, Sector sector) override;
+	void serializePlayerStatus(JsonObject&) override;
 
-	float GetAverageScore();
+	void setCricketMap(int*);
+	void setGameType(CricketType, CricketNumberSet, CricketCustomSet);
 };
 
 #endif

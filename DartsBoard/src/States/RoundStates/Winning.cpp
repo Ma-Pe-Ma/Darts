@@ -1,61 +1,64 @@
 #include "Winning.h"
-#include "../GamePlayingScreen.h"
+#include "../AppStates/GamePlayingScreen.h"
 #include "../GameLogic.h"
 
-void Winning::Start() {
-	Player::current->score->position = gamePlayingScreen->nextWinningPosition++;
+void Winning::start() {	
+	Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
+	int alreadyFinishedPlayers = gamePlayingScreen->getGameLogic()->playerContainer->getNumberOfFinishedPlayers();
+	currentPlayer->getScore()->setPosition(++alreadyFinishedPlayers);
 	
-	//check if game is finished
-	if (Player::number == 1) {
-		gamePlayingScreen->gameFinished = true;
-	}
-	else if (gamePlayingScreen->nextWinningPosition == Player::number) {
-		gamePlayingScreen->gameFinished = true;
+	int numberOfPlayers = gamePlayingScreen->getGameLogic()->playerContainer->getNumberOfPlayers();
 
+	//check if game is finished
+	if (numberOfPlayers > 1 && alreadyFinishedPlayers == numberOfPlayers - 1) {
 		//set the remaining player's position to last!
-		for (int i = 0; i < Player::number; i++) {
-			if (Player::players[i].score->position == -1) {
-				Player::players[i].score->position = Player::number;
+		for (int i = 0; i < numberOfPlayers; i++) {
+			Player* checkable = gamePlayingScreen->getGameLogic()->playerContainer->getPlayerByNumber(i);
+
+			if (checkable->getScore()->getPosition() == -1) {
+				checkable->getScore()->setPosition(numberOfPlayers);
 				break;
 			}
 		}
 	}
 
-	DisplayContainer::displayContainer.getTFT()->fillScreen(WHITE);
+	gamePlayingScreen->getGameLogic()->displayContainer->getTFT()->fillScreen(WHITE);
 
 	String winnerText;
 
-	String nick = Player::current->nickname;
+	String nick = currentPlayer->getNick();
 	if (nick == "") {
-		nick = "P" + String(Player::current->ID + 1);
+		nick = "P" + String(currentPlayer->getID() + 1);
 	}
 
-	if (Player::current->score->position == 1) {
+	if (currentPlayer->getScore()->getPosition() == 1) {
 		winnerText = "Winner: " + nick;
 	} 
 	else {
-		winnerText = String(Player::current->score->position) + ". pos: " + nick;
+		winnerText = String(currentPlayer->getScore()->getPosition()) + ". pos: " + nick;
 	}
 	
-	DisplayContainer::displayContainer.WriteCenterX(SCR_HEIGHT / 5, Player::current->color, Player::current->inverseColor, 4, winnerText);
+	gamePlayingScreen->getGameLogic()->displayContainer->writeCenterX(SCR_HEIGHT / 5, currentPlayer->getColor(), currentPlayer->getInverseColor(), 4, winnerText);
 
-	gamePlayingScreen->SendDump();
-
+	gamePlayingScreen->sendDump();
 	timer = millis();
 }
 
-void Winning::Update(Pair pair) {
+void Winning::update(Pair pair) {
     if(millis() - timer > winningTime * 1000) {
-		if (gamePlayingScreen->gameFinished) {
-			if (Player::number == 1) {
-				gameLogic->TransitionTo(&gameLogic->gameConfiguringScreen);
+		int numberOfPlayers = gamePlayingScreen->getGameLogic()->playerContainer->getNumberOfPlayers();
+		int finishedPlayers = gamePlayingScreen->getGameLogic()->playerContainer->getNumberOfFinishedPlayers();
+
+		if (numberOfPlayers == finishedPlayers) {
+			if (numberOfPlayers == 1) {
+				gameLogic->transitionTo(&gameLogic->gameConfiguringScreen);
 			}
 			else {
-				gamePlayingScreen->TransitionTo(&gamePlayingScreen->postConfig);
+				gamePlayingScreen->transitionTo(&gamePlayingScreen->postConfig);
 			}
 		}
 		else {
-			DisplayContainer::displayContainer.getTFT()->fillScreen(CYAN);
+			gamePlayingScreen->getGameLogic()->displayContainer->getTFT()->fillScreen(CYAN);
 			gameLogic->prevMenu.guiButton.drawButton(true);
 			gameLogic->nextMenu.guiButton.drawButton(true);
 
@@ -66,11 +69,12 @@ void Winning::Update(Pair pair) {
 
 			//redraw status
 			for (int i = 0; i < 3; i++) {
-				DisplayContainer::displayContainer.WriteWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, BLACK, CYAN, 2, String(i + 1) + ": " + DisplayContainer::SectorText(BoardContainer::darts[i]));
+				Sector dart = gamePlayingScreen->boardContainer.getThrownDartByNumber(i);
+				gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, BLACK, CYAN, 2, String(i + 1) + ": " + DisplayContainer::sectorText(dart));
 			}
-			Player::current->score->DrawCompleteCustomStatus();
 
-			gamePlayingScreen->TransitionTo(&gamePlayingScreen->outro);
+			gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer()->getScore()->drawCompleteCustomStatus();
+			gamePlayingScreen->transitionTo(&gamePlayingScreen->outro);
 		}
 	}
 }
