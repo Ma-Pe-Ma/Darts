@@ -62,7 +62,7 @@ namespace Resources {
     }
 
     void addAudio(AudioFile key, String value) {
-        String fileLocation = path + "audio/" + audioSetNameMap.getValueByKey(audioSet) + "/" + value + "wav";
+        String fileLocation = path + "audio/" + audioSetNameMap.getValueByKey(audioSet) + "/" + value + ".wav";
         audioMap.insert(key, fileLocation);
     }
 
@@ -158,9 +158,10 @@ namespace Resources {
         printDirectory(root, 0);*/
 
         audioSetNameMap.insert(AudioSet::normal, String("normal"));
-        audioSetNameMap.insert(AudioSet::mk, String("mk"));
+        //audioSetNameMap.insert(AudioSet::mk, String("mk"));
 
-        addAudio(AudioFile::pathetic, "pathetic");
+        addAudio(AudioFile::start, "start");
+        addAudio(AudioFile::round, "round");
         
         textNameMap.~SimpleMap<String, Text>();        
     }

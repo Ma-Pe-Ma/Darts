@@ -26,7 +26,7 @@ void BluetoothCommunicator::receive() {
 	while(serial->available() > 0) {
 		String temp = serial->readString();
 
-		if (btSwitch) {
+		if (*btSwitch) {
 			processString(temp);
 		}
 	}
