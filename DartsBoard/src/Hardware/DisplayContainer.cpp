@@ -78,6 +78,7 @@ Pair DisplayContainer::getTouchedPoint(){
     digitalWrite(xm, HIGH);
     bool pressed = (p.z > minPressure && p.z < maxPressure);
     
+	//values which passed as reference
 	int calX = -2;
 	int calY = -2;
 	

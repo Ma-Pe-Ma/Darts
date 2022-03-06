@@ -36,46 +36,13 @@ void BoardContainer::setupCorrectPinOrder() {
 Sector BoardContainer::sectorMapping(char x) {
 	Sector dart;
 	
-	//Simple numbers from 1-9
-	if(x > 48 && x < 58) {
-		dart.multiplier = 1;
-		dart.base = x - 48;
+	if (x < 61) {
+		dart.base = (x - 1) % 20 + 1;
+		dart.multiplier = (x - 1) / 20 + 1;
 	}
-	
-	//Simple 10
-	if(x == 48) {
-		dart.multiplier = 1;
-		dart.base = 10;
-	}
-	
-	//Simple Numbers from 11-20
-	if(x > 34 && x < 45) {
-		dart.multiplier = 1;
-		dart.base = x - 24;	
-	}
-	
-	//Double numbers from 1-20
-	if(x > 64 && x < 85) {
-		dart.multiplier = 2;
-		dart.base = x - 64;	
-	}
-	
-	//Triple numbers from 1-20
-	if(x > 96 && x < 117) {
-		dart.multiplier = 3;
-		dart.base = x - 96;	
-	}		
-	
-	//Simple Bulls Eye
-	if(x == 89) {
-		dart.multiplier = 1;
-		dart.base = 25;	
-	}		
-	
-	//Double Bull's Eye
-	if(x == 90) {
-		dart.multiplier = 2;
-		dart.base = 25;	
+	else {
+		dart.base = 25;
+		dart.multiplier = x % 60 == 1 ? 1 : 2;
 	}
 	
 	return dart;
