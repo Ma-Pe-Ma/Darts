@@ -68,7 +68,7 @@ void GameLogic::receiveMessage(String message) {
 	}
 	else {
 		String error = err.c_str();
-		Serial.println("Error: "+error);
+		Serial.println("JSON error: " + error);
 	}	
 }
 

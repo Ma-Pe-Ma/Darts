@@ -6,7 +6,8 @@
 #include "Color.h"
 #include "Sector.h"
 #include "Pair.h"
-#include "SD.h"
+#include <SD.h>
+#include <SPI.h>
 
 /*//corner values for touchscreen calibration
 #define TL_X_V 902
