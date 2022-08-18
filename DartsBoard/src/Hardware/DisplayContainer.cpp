@@ -391,7 +391,7 @@ uint8_t DisplayContainer::showBMP(char *nm, int x, int y) {
 		ret = 0;        // good render
 	}
 	bmpFile.close();
-	Serial.println("width: " + String(tft.width()) +", "+String(tft.height()));
+	//Serial.println("width: " + String(tft.width()) +", "+String(tft.height()));
 	return (ret);
 }
 

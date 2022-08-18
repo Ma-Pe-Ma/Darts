@@ -11,11 +11,15 @@ class DisplayContainer;
 class PlayerContainer;
 
 class GameContainer {
-    DartsGame** games;
+    DartsGame* games[NUMBER_OF_GAMES];
 	int chosenGameCursor;
 	DartsGame* dartsGame;
 	DisplayContainer* displayContainer;
 	PlayerContainer* playerContainer;
+
+	Cricket cricket;
+	RoundTheClock roundTheClock;
+	X01 x01;
 public:
     GameContainer(DisplayContainer*, PlayerContainer*);
 	void init();

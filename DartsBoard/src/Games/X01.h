@@ -52,30 +52,15 @@ public:
 	void serializeConfigCustom(JsonObject&) override;
 	void processConfig(JsonObject&) override;
 
-	X01(DisplayContainer* displayContainer, PlayerContainer* playerContainer) : DartsGame(displayContainer, playerContainer) {
-		gameID = "X01";
-		name = "X01";
-
-		scoreMap.insert(0, 301);
-		scoreMap.insert(1, 501);
-		scoreMap.insert(2, 701);
-		scoreMap.insert(3, 901);
-		scoreMap.insert(4, 1001);
-
-		simpleString = Resources::getTextByID(Resources::Text::x01Simple);
-		doubleString = Resources::getTextByID(Resources::Text::x01Double);
-		masterString = Resources::getTextByID(Resources::Text::x01Master);
-		
-		inLabel = Resources::getTextByID(Resources::Text::x01In);
-		outLabel = Resources::getTextByID(Resources::Text::x01Out);
-		scoreLabel = Resources::getTextByID(Resources::Text::x01Score);
-	}
-
 	AbstractScore* setProperScoreContainer() override {
 		X01Score* x01Score = new X01Score(displayContainer, playerContainer);
 		x01Score->setGameProperties(inCursor, outCursor, scoreMap.getValueByKey(scoreCursor), &inString, &outString);
 		return x01Score;
 	}
+
+	void initialize(DisplayContainer*, PlayerContainer*);
+
+	X01() {}
 };
 
 #endif

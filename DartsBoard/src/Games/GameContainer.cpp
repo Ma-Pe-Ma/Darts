@@ -6,11 +6,14 @@ GameContainer::GameContainer(DisplayContainer* displayContainer, PlayerContainer
 }
 
 void GameContainer::init() {
-	games = new DartsGame*[nrOfGames];
+	cricket.initialize(displayContainer, playerContainer);
+	games[0] = &cricket;
 
-	games[0] = new Cricket(displayContainer, playerContainer);
-	games[1] = new RoundTheClock(displayContainer, playerContainer);
-	games[2] = new X01(displayContainer, playerContainer);
+	roundTheClock.initialize(displayContainer, playerContainer);
+	games[1] = &roundTheClock;
+	
+	x01.initialize(displayContainer, playerContainer);
+	games[2] = &x01;
 
 	dartsGame = games[chosenGameCursor];
 }

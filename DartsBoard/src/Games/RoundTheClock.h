@@ -38,18 +38,6 @@ public:
 	bool custom(Pair) override;
 	
 	void initializeGame() override;
-	
-	RoundTheClock(DisplayContainer* displayContainer, PlayerContainer* playerContainer) : DartsGame(displayContainer, playerContainer) {
-		gameID = "RTC";
-		name = "Round The Clock";
-
-		sectorOnlyString = Resources::getTextByID(Resources::Text::rtcSector);
-		multiplierString = Resources::getTextByID(Resources::Text::rtcMultiplier);
-		multiplierWithPointsString = Resources::getTextByID(Resources::Text::rtcMultiplierWithPoints);
-
-		rtcClassicString = Resources::getTextByID(Resources::Text::rtcClassic);
-		shootOutString = Resources::getTextByID(Resources::Text::shootOut);
-	}
 
 	void serializeConfigCustom(JsonObject&) override;
 	void processConfig(JsonObject&) override;
@@ -59,5 +47,9 @@ public:
 		rtcScore->setGameType(rtcType, rtcSubType);
 		return rtcScore;
 	}
+
+	void initialize(DisplayContainer*, PlayerContainer*);
+
+	RoundTheClock() {}
 };
 #endif

@@ -13,7 +13,7 @@ void MainScreen::start() {
     //show top texts
     int squareOffset = int(SCR_WIDTH * 0.04f);
     getGameLogic()->displayContainer->write(squareOffset, squareOffset, RED, 3, "MPM");
-    getGameLogic()->displayContainer->writeRight(squareOffset, squareOffset, RED, 3, "Dartsi");
+    getGameLogic()->displayContainer->writeRight(squareOffset, squareOffset, RED, 3, "Darts");
 
     //show icons at the bottom
     getGameLogic()->displayContainer->showBMP("/res/img/offline.bmp", 0, SCR_HEIGHT - ICON_SIZE);

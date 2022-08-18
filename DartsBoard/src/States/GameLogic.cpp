@@ -7,7 +7,6 @@ GameLogic::GameLogic(DisplayContainer* displayContainer, PlayerContainer* player
 }
 
 void GameLogic::init() {
-	states = new AppState*[NR_OF_APPSTATES];
 	states[0] = &mainScreen;
 	states[1] = &playerScreen;
 	states[2] = &gameSelectScreen;

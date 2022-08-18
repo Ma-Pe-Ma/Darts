@@ -41,9 +41,9 @@ private:
 
 	int cricketMap[20] = {};
 
-	SimpleMap<CricketType, String>* typeMap;
-	SimpleMap<CricketNumberSet, String>* setMap;
-	SimpleMap<CricketCustomSet, String>* customMap;
+	SimpleMap<CricketType, String> typeMap;
+	SimpleMap<CricketNumberSet, String> setMap;
+	SimpleMap<CricketCustomSet, String> customMap;
 	void initializeMaps();
 
 	//used in custom game config
@@ -91,8 +91,9 @@ public:
 		cricketScore->setCricketMap(scoreMap);
 		return cricketScore;
 	}
-		
-	Cricket(DisplayContainer*, PlayerContainer*);
+	void initialize(DisplayContainer*, PlayerContainer*);
+
+	Cricket() : typeMap(3), setMap(3), customMap(3) {}
 };
 
 #endif

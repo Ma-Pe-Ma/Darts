@@ -31,6 +31,8 @@ public:
 		this->playerContainer = playerContainer;
 	}
 
+	DartsGame() {}
+
 	virtual void serializeConfigCustom(JsonObject&) = 0;
 	virtual void processConfig(JsonObject&) = 0;
 
