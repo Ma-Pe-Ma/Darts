@@ -1,5 +1,9 @@
 # Darts with Arduino
 
+![status](https://badgen.net/badge/status/in%20development/orange) ![license](https://badgen.net/github/license/Ma-Pe-Ma/Darts)
+
+![Arduino](https://badgen.net/badge/Arduino/working/green) ![Android client](https://badgen.net/badge/Android%20client/failing/red) 
+
 This is a hobby project which transforms a generic electronic dartboard to a smart one with the help of an Arduino Due.
 
 The goal of the project is to create a simple Arduino-project which can replace the default software of any dartboard.
@@ -8,7 +12,7 @@ Moreover another important aspect of the project is the simple extendability of 
 
 ## Android companion app
 
-A companion Android client is also in development (however it's currently not prioritized) which can communicate with the board through Bluetooth with Json messages. The client is written in Kotlin.
+A companion Android client is also in development (however it's currently not prioritized) which can communicate with the board through Bluetooth with JSON messages. The client is written in Kotlin.
 
 The main features of the app:
 * create player profiles and save match outcomes and create statistics
@@ -114,20 +118,17 @@ The audio amplifier and Bluetooth module's connection to the Due is a bit tricky
 ### Powering
 Only the Due is needed to be powered: it can be powered with 7-12 volts on the power jack or with 5 volts on one of the micro usb ports.
 
-
 ## Software setup
 ### Dependencies/Libraries
 
-The following libraries can be installed directly from the Arduino IDE's library manager:
+The following libraries are needed, they can be installed directly from the Arduino IDE's library manager:
 * [Audio](https://www.arduino.cc/en/reference/audio) - used to prouduce sound effects
 * [ArduinoJSON](https://arduinojson.org/) - used for the communicatition between the Arduino and the Android client
 * [SD](https://www.arduino.cc/en/Reference/SD) - used to handle sd card read/write processes (configuration happens in [DisplayContainer](./DartsBoard/src/Hardware/DisplayContainer.cpp))
 * [Keypad](https://www.arduino.cc/reference/en/libraries/keypad/) - used to handle dart input (configuration happens in [BoardContainer](./DartsBoard/src/Hardware/BoardContainer.cpp))
 * [Adafruit TouchScreen Library](https://github.com/adafruit/Adafruit_TouchScreen) - used to handle touch inputs on the display
 * [Adafruit GFX Library](https://github.com/adafruit/Adafruit-GFX-Library) - used to create gui buttons
-
-The following library have to be added manully
-* [MCUFRIEND_kbv](https://github.com/prenticedavid/MCUFRIEND_kbv) - driver for the display (To configure it see project's ReadMe, additional configuration in [DisplayContainer](./DartsBoard/src/Hardware/DisplayContainer.cpp))
+* [MCUFRIEND_kbv](https://github.com/prenticedavid/MCUFRIEND_kbv) - driver for the display (To configure it see the project's ReadMe)
 
 ### Resources
 
@@ -137,8 +138,16 @@ The resources can be found [here](./DartsBoard/res). Just simply copy this folde
 
 However, the sound effects are not created yet it is a task for the future.
 
+## Gallery
+
+   --   |   Hardware   |  Android Client
+:-------------------------:|:-------------------------:|:-------------------------:
+Photos | <img src="./Images/Hardware.png" alt="drawing" width="80%"/> <img src="./Images/Holder.png" alt="drawing" width="80%"/>  |  <img src="./Images/AndroidClient.jpg" alt="drawing" width="80%"/>
+
 ## To-Do
 
+
+* Replace string resources to primitive char array
 * Make configuring the project easier
 * Add sound effects
 * Create an user-manual wiki
