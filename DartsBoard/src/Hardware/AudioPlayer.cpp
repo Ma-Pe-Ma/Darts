@@ -10,7 +10,7 @@ namespace AudioPlayer {
 
     void play(Resources::AudioFile audioFile) {
         //String fileName = "/res/audio/";
-        String fileName = Resources::getAudioFieByID(audioFile);
+        String fileName = Resources::getAudioFileByID(audioFile);
         Serial.println("Playing file: " + fileName);
         delay(200);
 

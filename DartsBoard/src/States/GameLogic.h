@@ -29,7 +29,7 @@
 
 class GameLogic : public StateContext, public MessageReceiver {
 	AppState* findStateByID(String);
-	AppState** states;	
+	AppState* states[NR_OF_APPSTATES];
 public:
 	GameLogic(DisplayContainer* displayContainer, PlayerContainer* playerContainer, GameContainer* gameContainer);
 	void init();

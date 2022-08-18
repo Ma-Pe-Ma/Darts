@@ -1,11 +1,15 @@
 #include "Cricket.h"
 
-Cricket::Cricket(DisplayContainer* displayContainer, PlayerContainer* playerContainer) : DartsGame(displayContainer, playerContainer) {
+void Cricket::initialize(DisplayContainer* displayContainer, PlayerContainer* playerContainer) {
+	this->displayContainer = displayContainer;
+	this->playerContainer = playerContainer;
+	
 	this->gameID = "CRICKET";
 	this->name = "Cricket";
+	
 	this->initializeMaps();
 
-	scoreString = Resources::getTextByID(Resources::Text::cricketScore);
+	/*scoreString = Resources::getTextByID(Resources::Text::cricketScore);
 	noscoreString = Resources::getTextByID(Resources::Text::cricketNoscore);
 	cutthroatString = Resources::getTextByID(Resources::Text::cricketCutthroat);
 
@@ -18,31 +22,28 @@ Cricket::Cricket(DisplayContainer* displayContainer, PlayerContainer* playerCont
 	chaoticString = Resources::getTextByID(Resources::Text::cricketChaotic);
 
 	nrOfNrsString = Resources::getTextByID(Resources::Text::cricketNrOfNrs);
-	startingNrString = Resources::getTextByID(Resources::Text::cricketStartingNr);
+	startingNrString = Resources::getTextByID(Resources::Text::cricketStartingNr);*/
 }
 
 void Cricket::initializeMaps() {
-	typeMap = new SimpleMap<CricketType, String>(3);
-	typeMap->insert(score, String("SCORE"));
-	typeMap->insert(noscore, String("NOSCORE"));
-	typeMap->insert(cutthroat, String("CUTTHROAT"));
-	
-	setMap = new SimpleMap<CricketNumberSet, String>(3);
-	setMap->insert(classicNumbers, String("CLASSIC"));
-	setMap->insert(allNumbers, String("ALL"));
-	setMap->insert(customNumbers, String("CUSTOM"));
-	
-	customMap = new SimpleMap<CricketCustomSet, String>(3);
-	customMap->insert(interval, String("INTERVAL"));
-	customMap->insert(randomInterval, String("RANDOMINTERVAL"));
-	customMap->insert(chaotic, String("CHAOTIC"));
+	typeMap.insert(CricketType::score, String("SCORE"));
+	typeMap.insert(CricketType::noscore, String("NOSCORE"));
+	typeMap.insert(CricketType::cutthroat, String("CUTTHROAT"));
+
+	setMap.insert(CricketNumberSet::classicNumbers, String("CLASSIC"));
+	setMap.insert(CricketNumberSet::allNumbers, String("ALL"));
+	setMap.insert(CricketNumberSet::customNumbers, String("CUSTOM"));
+
+	customMap.insert(CricketCustomSet::interval, String("INTERVAL"));
+	customMap.insert(CricketCustomSet::randomInterval, String("RINTERVAL"));
+	customMap.insert(CricketCustomSet::chaotic, String("CHAOTIC"));
 }
 
 void Cricket::processConfig(JsonObject& message) {
 	cricketNr = message["CricketNr"].as<int>();
-	cricketType = typeMap->getKeyByValue(message["CricketType"]);
-	cricketNumberSet = setMap->getKeyByValue(message["CricketNumberSet"]);
-	cricketCustomSet = customMap->getKeyByValue(message["CricketCustomSet"]);
+	cricketType = typeMap.getKeyByValue(message["CricketType"]);
+	cricketNumberSet = setMap.getKeyByValue(message["CricketNumberSet"]);
+	cricketCustomSet = customMap.getKeyByValue(message["CricketCustomSet"]);
 	cricketStart = message["CricketStart"];
 }
 
@@ -436,9 +437,9 @@ void Cricket::initializeGame() {
 
 void Cricket::serializeConfigCustom(JsonObject& configObject) {
 	configObject["CricketNr"] = cricketNr;	
-	configObject["CricketType"] = typeMap->getValueByKey(cricketType);
-	configObject["CricketNumberSet"] = setMap->getValueByKey(cricketNumberSet);
-	configObject["CricketCustomSet"] = customMap->getValueByKey(cricketCustomSet);
+	configObject["CricketType"] = typeMap.getValueByKey(cricketType);
+	configObject["CricketNumberSet"] = setMap.getValueByKey(cricketNumberSet);
+	configObject["CricketCustomSet"] = customMap.getValueByKey(cricketCustomSet);
 	configObject["CricketStart"] = cricketStart;
 
 	JsonObject mapObject = configObject.createNestedObject("MAP");

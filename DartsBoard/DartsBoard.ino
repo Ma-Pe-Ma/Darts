@@ -44,7 +44,7 @@ void setup() {
 	Resources::initialize();
 	playerContainer.init();
 	gameContainer.init();
-	gameLogic.init();	
+	gameLogic.init();
 	
 	bluetooth.btSwitch = &gameLogic.androidMode;
 

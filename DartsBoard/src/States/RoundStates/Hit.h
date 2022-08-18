@@ -21,7 +21,7 @@ public:
     Hit(GamePlayingScreen* gamePlayingScreen) : RoundState(gamePlayingScreen) {}
 
     void initialize() {
-        audioFileName = Resources::getAudioFieByID(Resources::AudioFile::pathetic);
+        //audioFileName = Resources::getAudioFileByID(Resources::AudioFile::pathetic);
     }
 };
 

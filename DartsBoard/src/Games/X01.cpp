@@ -1,5 +1,27 @@
 #include "X01.h"
 
+void X01::initialize(DisplayContainer* displayContainer, PlayerContainer* playerContainer) {
+	this->displayContainer = displayContainer;
+	this->playerContainer = playerContainer;
+	
+	gameID = "X01";
+	name = "X01";
+
+	scoreMap.insert(0, 301);
+	scoreMap.insert(1, 501);
+	scoreMap.insert(2, 701);
+	scoreMap.insert(3, 901);
+	scoreMap.insert(4, 1001);
+
+	/*simpleString = Resources::getTextByID(Resources::Text::x01Simple);
+	doubleString = Resources::getTextByID(Resources::Text::x01Double);
+	masterString = Resources::getTextByID(Resources::Text::x01Master);
+	
+	inLabel = Resources::getTextByID(Resources::Text::x01In);
+	outLabel = Resources::getTextByID(Resources::Text::x01Out);
+	scoreLabel = Resources::getTextByID(Resources::Text::x01Score);*/
+}
+
 String X01::getInOutString(int cursor) {
 	if (cursor == 1) {
 		return doubleString;

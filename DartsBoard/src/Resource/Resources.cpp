@@ -115,7 +115,7 @@ namespace Resources {
         textNameMap.insert(String("x01"), Text::x01);
         textNameMap.insert(String("config"), Text::config);
 
-        textNameMap.insert(String("cricketScore"), Text::cricketScore);
+        /*textNameMap.insert(String("cricketScore"), Text::cricketScore);
         textNameMap.insert(String("cricketNoscore"), Text::cricketNoscore);
         textNameMap.insert(String("cricketCutthroat"), Text::cricketCutthroat);
 
@@ -143,7 +143,7 @@ namespace Resources {
 
         textNameMap.insert(String("x01In"), Text::x01In);
         textNameMap.insert(String("x01Out"), Text::x01Out);
-        textNameMap.insert(String("x01Score"), Text::x01Score);
+        textNameMap.insert(String("x01Score"), Text::x01Score);*/   
 
         String textPath = path + "text/" + textSetNameMap.getValueByKey(textSet) + ".txt";        
 
@@ -180,7 +180,7 @@ namespace Resources {
         return textMap.getValueByKey(text);
     }
 
-    String getAudioFieByID(AudioFile audioFile) {
+    String getAudioFileByID(AudioFile audioFile) {
         return audioMap.getValueByKey(audioFile);
     }
 }

@@ -1,5 +1,20 @@
 #include "RoundTheClock.h"
 
+void RoundTheClock::initialize(DisplayContainer* displayContainer, PlayerContainer* playerContainer) {
+	this->displayContainer = displayContainer;
+	this->playerContainer = playerContainer;
+
+	gameID = "RTC";
+	name = "Round The Clock";
+
+	/*sectorOnlyString = Resources::getTextByID(Resources::Text::rtcSector);
+	multiplierString = Resources::getTextByID(Resources::Text::rtcMultiplier);
+	multiplierWithPointsString = Resources::getTextByID(Resources::Text::rtcMultiplierWithPoints);
+
+	rtcClassicString = Resources::getTextByID(Resources::Text::rtcClassic);
+	shootOutString = Resources::getTextByID(Resources::Text::shootOut);*/
+}
+
 void RoundTheClock::serializeConfigCustom(JsonObject& configObject) {
 	
 }

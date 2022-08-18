@@ -85,7 +85,7 @@ namespace Resources {
 
     extern SimpleMap<AudioFile, String> audioMap;
     String getTextByID(Text text); 
-    String getAudioFieByID(AudioFile audioFile);
+    String getAudioFileByID(AudioFile audioFile);
 }
 
 #endif
