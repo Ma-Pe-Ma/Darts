@@ -18,13 +18,13 @@ private:
 	Button previousScore, nextScore;
 	Button inButton, outButton;
 
-	String simpleString;
-	String doubleString;
-	String masterString;
+	char* simpleString;
+	char* doubleString;
+	char* masterString;
 
-	String inLabel;
-	String outLabel;
-	String scoreLabel;
+	char* inLabel;
+	char* outLabel;
+	char* scoreLabel;
 
 	String inString;
 	String outString;
@@ -54,7 +54,7 @@ public:
 
 	AbstractScore* setProperScoreContainer() override {
 		X01Score* x01Score = new X01Score(displayContainer, playerContainer);
-		x01Score->setGameProperties(inCursor, outCursor, scoreMap.getValueByKey(scoreCursor), &inString, &outString);
+		x01Score->setGameProperties(inCursor, outCursor, scoreMap.getValueByKey(scoreCursor), (char*) inString.c_str(), (char*) outString.c_str());
 		return x01Score;
 	}
 

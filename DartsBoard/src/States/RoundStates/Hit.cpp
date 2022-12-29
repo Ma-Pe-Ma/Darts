@@ -14,8 +14,8 @@ void Hit::start() {
 	Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
 
 	//Write current hit
-	gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, BLACK, CYAN, textSize, "       ");	
-	gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, BLACK, currentPlayer->getColor(), textSize, text);
+	gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, TFT_BLACK, TFT_CYAN, textSize, "       ");	
+	gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, TFT_BLACK, currentPlayer->getColor(), textSize, text.c_str());
 
 	gamePlayingScreen->sendHit(dart);
 	
@@ -32,7 +32,7 @@ void Hit::update(Pair pair) {
 
 		//Write to dart list
 		String text = String(dartID + 1) + ": " + DisplayContainer::sectorText(dart);
-		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * dartID, dartStatusStartY, BLACK, CYAN, 2, text);
+		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * dartID, dartStatusStartY, TFT_BLACK, TFT_CYAN, 2, text.c_str());
 		
 		//Draw Status
 		Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();

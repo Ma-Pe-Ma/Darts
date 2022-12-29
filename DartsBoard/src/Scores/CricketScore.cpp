@@ -235,16 +235,16 @@ void CricketScore::drawSectorIndicator(int position, int number, int innerState,
 	int halfRectWidth = int(SCR_WIDTH * 0.0625f);
 	int halfRectHeigth = int(SCR_HEIGHT * 0.04167f);
 
-	int outerStateLeft = CYAN;
-	int outerStateRight = CYAN;
+	int outerStateLeft =TFT_CYAN;
+	int outerStateRight =TFT_CYAN;
 
 	//Drawing outer indicator
 	if (outerState == 1 || outerState > 2) {
-		outerStateLeft = BLUE;
+		outerStateLeft = TFT_BLUE;
 	}
 	
 	if (outerState > 1) {
-		outerStateRight = BLUE;
+		outerStateRight = TFT_BLUE;
 	}
 
 	int border = int(SCR_WIDTH * 0.005f);
@@ -253,8 +253,8 @@ void CricketScore::drawSectorIndicator(int position, int number, int innerState,
 	displayContainer->getTFT()->fillRect(centerX, centerY - halfRectHeigth - border, halfRectWidth + border, 2 * (halfRectHeigth + border), outerStateRight);
 	
 	//Drawing inner indicator	
-	int rightSide = innerState > 1 ? GREEN : CYAN;
-	int leftSide = (innerState == 1 || innerState > 2) ? GREEN : CYAN;
+	int rightSide = innerState > 1 ? TFT_GREEN : TFT_CYAN;
+	int leftSide = (innerState == 1 || innerState > 2) ? TFT_GREEN : TFT_CYAN;
 
 	displayContainer->getTFT()->fillRect(centerX - halfRectWidth, centerY - halfRectHeigth, halfRectWidth, 2 * halfRectHeigth, leftSide);
 	displayContainer->getTFT()->fillRect(centerX, centerY - halfRectHeigth, halfRectWidth, 2 * halfRectHeigth, rightSide);
@@ -262,7 +262,7 @@ void CricketScore::drawSectorIndicator(int position, int number, int innerState,
 	//Writing number to the center
 	int textSize = 2;
 	int pos = number < 10 ? (- textSize * 6) / 2 : (- 2 * textSize * 6) / 2;
-	displayContainer->write(centerX + pos, centerY - textSize * 6 / 2, RED, textSize, String(number));
+	displayContainer->write(centerX + pos, centerY - textSize * 6 / 2, TFT_RED, textSize, String(number).c_str());
 }
 
 float CricketScore::getAverageScore() {

@@ -22,12 +22,12 @@ private:
 	RTCType rtcType = roundTheClock;
 	RTCSubType rtcSubType = sectorOnly;
 
-	String rtcClassicString;
-	String shootOutString;
+	char* rtcClassicString;
+	char* shootOutString;
 
-	String sectorOnlyString;
-	String multiplierString;
-	String multiplierWithPointsString;
+	char* sectorOnlyString;
+	char* multiplierString;
+	char* multiplierWithPointsString;
 
 	void drawProperButtons(int, int);
 public:

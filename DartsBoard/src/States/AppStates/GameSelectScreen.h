@@ -7,7 +7,7 @@
 
 class GameSelectScreen : public AppState {
 private:
-    String gameSchemeString;
+    char* gameSchemeString;
 
 public:
     void initialize() override;

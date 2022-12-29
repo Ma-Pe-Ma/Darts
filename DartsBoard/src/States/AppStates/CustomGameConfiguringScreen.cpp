@@ -2,7 +2,7 @@
 #include "../GameLogic.h"
 
 void CustomGameConfiguringScreen::start() {
-    getGameLogic()->displayContainer->getTFT()->fillScreen(YELLOW);
+    getGameLogic()->displayContainer->getTFT()->fillScreen(TFT_YELLOW);
 	
     DartsGame* currentGame = gameLogic->gameContainer->getCurrentGame();
 

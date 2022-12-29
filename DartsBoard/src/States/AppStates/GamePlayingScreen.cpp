@@ -13,16 +13,16 @@ void GamePlayingScreen::initialize() {
 }
 
 void GamePlayingScreen::start() {
-    getGameLogic()->displayContainer->getTFT()->fillScreen(CYAN);
+    getGameLogic()->displayContainer->getTFT()->fillScreen(TFT_CYAN);
 	
 	int buttonSize = SCR_WIDTH / 10;
 	int squareOffset = int(SCR_WIDTH * 0.08f);
 
-    gameLogic->nextMenu.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, RED, GREEN, MAGENTA, "P", 3);	
+    gameLogic->nextMenu.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, TFT_RED, TFT_GREEN, TFT_MAGENTA, "P", 3);	
 
-    gameLogic->delete1.setImage(getGameLogic()->displayContainer->getTFT(), dartStatusStartX + 0 * dartStatusOffsetX, dartStatusStartY, dartStatusWidth, dartStatusHeight, WHITE, CYAN, BLACK, "del1", 2);
-    gameLogic->delete2.setImage(getGameLogic()->displayContainer->getTFT(), dartStatusStartX + 1 * dartStatusOffsetX, dartStatusStartY, dartStatusWidth, dartStatusHeight, WHITE, CYAN, BLACK, "del2", 2);
-    gameLogic->delete3.setImage(getGameLogic()->displayContainer->getTFT(), dartStatusStartX + 2 * dartStatusOffsetX, dartStatusStartY, dartStatusWidth, dartStatusHeight, WHITE, CYAN, BLACK, "del3", 2);
+    gameLogic->delete1.setImage(getGameLogic()->displayContainer->getTFT(), dartStatusStartX + 0 * dartStatusOffsetX, dartStatusStartY, dartStatusWidth, dartStatusHeight, TFT_WHITE, TFT_CYAN, TFT_BLACK, "del1", 2);
+    gameLogic->delete2.setImage(getGameLogic()->displayContainer->getTFT(), dartStatusStartX + 1 * dartStatusOffsetX, dartStatusStartY, dartStatusWidth, dartStatusHeight, TFT_WHITE, TFT_CYAN, TFT_BLACK, "del2", 2);
+    gameLogic->delete3.setImage(getGameLogic()->displayContainer->getTFT(), dartStatusStartX + 2 * dartStatusOffsetX, dartStatusStartY, dartStatusWidth, dartStatusHeight, TFT_WHITE, TFT_CYAN, TFT_BLACK, "del3", 2);
 
     gameLogic->prevMenu.guiButton.drawButton(true);
     gameLogic->nextMenu.guiButton.drawButton(true);
@@ -95,13 +95,13 @@ void GamePlayingScreen::invertDart(int position) {
 
 		if (del[position]) {
 			currentPlayer->getScore()->deleteThrow(dart);
-			getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * position, dartStatusStartY, BLACK, RED, 2, "      ");
+			getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * position, dartStatusStartY, TFT_BLACK, TFT_RED, 2, "      ");
 		}
 		else {
 			currentPlayer->getScore()->scoreThrow(dart);
 			String text = String(position + 1) + ": " + DisplayContainer::sectorText(dart);
-			getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * position, dartStatusStartY, BLACK, CYAN, 2, "      ");
-			getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * position, dartStatusStartY, BLACK, CYAN, 2, text);
+			getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * position, dartStatusStartY, TFT_BLACK, TFT_CYAN, 2, "      ");
+			getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * position, dartStatusStartY, TFT_BLACK, TFT_CYAN, 2, text.c_str());
 		}
 	}	
 
@@ -118,7 +118,7 @@ void GamePlayingScreen::correct() {
 		
 		gameLogic->playerContainer->getCurrentPlayer()->getScore()->correct(currentDart);
 		String text = String(boardContainer.getCurrentDartID() + 1) + ": " + DisplayContainer::sectorText(currentDart);
-		getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * boardContainer.getCurrentDartID(), dartStatusStartY, BLACK, CYAN, 2, text);
+		getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * boardContainer.getCurrentDartID(), dartStatusStartY, TFT_BLACK, TFT_CYAN, 2, text.c_str());
 
 		if (currentState != &throwing) {
 			this->transitionTo(&throwing);

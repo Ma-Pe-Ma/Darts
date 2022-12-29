@@ -12,7 +12,7 @@ protected:
 
     int dartStatusStartY = SCR_HEIGHT / 2;
 
-    String audioFileName;
+    char* audioFileName;
 
 public:
     virtual void start() override;

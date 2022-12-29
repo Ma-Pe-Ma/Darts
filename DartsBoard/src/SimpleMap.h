@@ -37,8 +37,6 @@ public:
 				return this->value[i];
 			}
 		}
-		
-		Serial.println("Key not found: " + String(key));
 	}
 
 	T getKeyByValue(U value) {

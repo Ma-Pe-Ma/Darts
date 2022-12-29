@@ -40,12 +40,12 @@ void RTCScore::initThrowing() {
     if (rtcSubType != multiplierWithPoint) {
         int y = int(SCR_HEIGHT * 0.6f) + (int(SCR_HEIGHT * 0.4f) - textSize * 6) / 2;
 
-        displayContainer->writeCenterX(y, YELLOW, BLUE, textSize, sectorText);
+        displayContainer->writeCenterX(y, TFT_YELLOW, TFT_BLUE, textSize, sectorText.c_str());
     }
     else {
         String scoreText = String(playerScore)  + "/" + String(MULTI_MAX_SCORE);
-        displayContainer->writeWithBackground(int(0.1f * SCR_WIDTH), int(SCR_HEIGHT * 0.6f), YELLOW, BLUE, textSize, sectorText);
-        displayContainer->writeWithBackground(int(0.5f * SCR_WIDTH), int(SCR_HEIGHT * 0.6f), YELLOW, BLUE, textSize, scoreText);
+        displayContainer->writeWithBackground(int(0.1f * SCR_WIDTH), int(SCR_HEIGHT * 0.6f), TFT_YELLOW, TFT_BLUE, textSize, sectorText.c_str());
+        displayContainer->writeWithBackground(int(0.5f * SCR_WIDTH), int(SCR_HEIGHT * 0.6f), TFT_YELLOW, TFT_BLUE, textSize, scoreText.c_str());
     }
 }
 

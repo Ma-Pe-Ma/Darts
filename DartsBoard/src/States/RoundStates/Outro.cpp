@@ -11,11 +11,11 @@ void Outro::start() {
 void Outro::update(Pair pair) {
 	if ((millis() / 1000) % 2 == 0) {
 		Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
-		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, currentPlayer->getInverseColor(), currentPlayer->getColor(), textSize, text);	
+		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, currentPlayer->getInverseColor(), currentPlayer->getColor(), textSize, text.c_str());
 	}		
 	else {
 		Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();
-		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, currentPlayer->getColor(), currentPlayer->getInverseColor(), textSize, text);	
+		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(x, y, currentPlayer->getColor(), currentPlayer->getInverseColor(), textSize, text.c_str());
 	}
 	
 	if (gamePlayingScreen->getGameLogic()->nextMenu.simple()) {

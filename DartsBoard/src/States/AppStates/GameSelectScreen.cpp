@@ -6,7 +6,7 @@ void GameSelectScreen::initialize() {
 }
 
 void GameSelectScreen::start() {
-    getGameLogic()->displayContainer->getTFT()->fillScreen(GREEN);
+    getGameLogic()->displayContainer->getTFT()->fillScreen(TFT_GREEN);
 	
 	int textSize = 3;
 	int squareOffset = int(SCR_WIDTH * 0.08f);
@@ -17,20 +17,20 @@ void GameSelectScreen::start() {
 	//Write choosing + chosen game name
 	DartsGame* currentGame = gameLogic->gameContainer->getCurrentGame();
 
-    getGameLogic()->displayContainer->write(int(SCR_WIDTH * 0.0625f), int(SCR_HEIGHT * 0.40f), RED, textSize, gameSchemeString);
-    getGameLogic()->displayContainer->writeCenterX(yPos - textSize * 6 / 2, RED, GREEN, textSize, "               ");
-    getGameLogic()->displayContainer->writeCenterX(yPos - textSize * 6 / 2, RED, GREEN, textSize, currentGame->getName());
+    getGameLogic()->displayContainer->write(int(SCR_WIDTH * 0.0625f), int(SCR_HEIGHT * 0.40f), TFT_RED, textSize, gameSchemeString);
+    getGameLogic()->displayContainer->writeCenterX(yPos - textSize * 6 / 2, TFT_RED, TFT_GREEN, textSize, "               ");
+    getGameLogic()->displayContainer->writeCenterX(yPos - textSize * 6 / 2, TFT_RED, TFT_GREEN, textSize, currentGame->getName().c_str());
     
 	//draw game chooser buttons
-	gameLogic->prevCursor.setImage(getGameLogic()->displayContainer->getTFT(), squareOffset, yPos, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<", 2);
-    gameLogic->nextCursor.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH -squareOffset, yPos, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">", 2);
+	gameLogic->prevCursor.setImage(getGameLogic()->displayContainer->getTFT(), squareOffset, yPos, buttonSize, buttonSize, TFT_WHITE, TFT_CYAN, TFT_BLACK, "<", 2);
+    gameLogic->nextCursor.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH -squareOffset, yPos, buttonSize, buttonSize, TFT_WHITE, TFT_CYAN, TFT_BLACK, ">", 2);
 	
     gameLogic->prevCursor.guiButton.drawButton(true);
     gameLogic->nextCursor.guiButton.drawButton(true);
     
 	//draw menu cursor buttons
-    gameLogic->prevMenu.setImage(getGameLogic()->displayContainer->getTFT(), squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<<", 2);
-    gameLogic->nextMenu.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">>", 2);
+    gameLogic->prevMenu.setImage(getGameLogic()->displayContainer->getTFT(), squareOffset, squareOffset, buttonSize, buttonSize, TFT_WHITE, TFT_CYAN, TFT_BLACK, "<<", 2);
+    gameLogic->nextMenu.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, TFT_WHITE, TFT_CYAN, TFT_BLACK, ">>", 2);
     
     gameLogic->prevMenu.guiButton.drawButton(true);
     gameLogic->nextMenu.guiButton.drawButton(true);
@@ -56,8 +56,8 @@ void GameSelectScreen::update(Pair touch) {
 
 		currentGame = gameLogic->gameContainer->prevGame();
 		gameLogic->gameContainer->setCurrentGame(currentGame);
-		getGameLogic()->displayContainer->writeCenterX(yPos, RED, GREEN, textSize, "               ");
-		getGameLogic()->displayContainer->writeCenterX(yPos, RED, GREEN, textSize, currentGame->getName());
+		getGameLogic()->displayContainer->writeCenterX(yPos, TFT_RED, TFT_GREEN, textSize, "               ");
+		getGameLogic()->displayContainer->writeCenterX(yPos, TFT_RED, TFT_GREEN, textSize, currentGame->getName().c_str());
 	}
 	
 	//incrementing gametype
@@ -70,8 +70,8 @@ void GameSelectScreen::update(Pair touch) {
 		
 		currentGame = gameLogic->gameContainer->nextGame();
 		gameLogic->gameContainer->setCurrentGame(currentGame);
-		getGameLogic()->displayContainer->writeCenterX(yPos, RED, GREEN, textSize, "               ");
-		getGameLogic()->displayContainer->writeCenterX(yPos, RED, GREEN, textSize, currentGame->getName());
+		getGameLogic()->displayContainer->writeCenterX(yPos, TFT_RED, TFT_GREEN, textSize, "               ");
+		getGameLogic()->displayContainer->writeCenterX(yPos, TFT_RED, TFT_GREEN, textSize, currentGame->getName().c_str());
 	}
 
 	//visualization

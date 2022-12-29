@@ -9,7 +9,7 @@ void Cricket::initialize(DisplayContainer* displayContainer, PlayerContainer* pl
 	
 	this->initializeMaps();
 
-	/*scoreString = Resources::getTextByID(Resources::Text::cricketScore);
+	scoreString = Resources::getTextByID(Resources::Text::cricketScore);
 	noscoreString = Resources::getTextByID(Resources::Text::cricketNoscore);
 	cutthroatString = Resources::getTextByID(Resources::Text::cricketCutthroat);
 
@@ -22,7 +22,7 @@ void Cricket::initialize(DisplayContainer* displayContainer, PlayerContainer* pl
 	chaoticString = Resources::getTextByID(Resources::Text::cricketChaotic);
 
 	nrOfNrsString = Resources::getTextByID(Resources::Text::cricketNrOfNrs);
-	startingNrString = Resources::getTextByID(Resources::Text::cricketStartingNr);*/
+	startingNrString = Resources::getTextByID(Resources::Text::cricketStartingNr);
 }
 
 void Cricket::initializeMaps() {
@@ -74,9 +74,9 @@ void Cricket::configStart() {
 	int buttonOffsetX = int(SCR_WIDTH * 0.6f);
 	int buttonOffsetY = int(SCR_HEIGHT * 0.25f);
 
-	scoreButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) scoreString.c_str(), 2);
-	noscoreButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) noscoreString.c_str(), 2);
-	cutthroatButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) cutthroatString.c_str(), 2);
+	scoreButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, scoreString, 2);
+	noscoreButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, noscoreString, 2);
+	cutthroatButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, cutthroatString, 2);
 
 	switch (cricketType) {
 		case score:
@@ -92,9 +92,9 @@ void Cricket::configStart() {
 			break;
 	}
 	
-	classicButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) classicString.c_str(), 2);
-	allButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) allString.c_str(), 2);
-	customButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) customString.c_str(), 2);
+	classicButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, classicString, 2);
+	allButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, allString, 2);
+	customButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, customString, 2);
 	
 	switch (cricketNumberSet) {
 		case classicNumbers:
@@ -172,9 +172,9 @@ bool Cricket::customStart() {
 	int buttonOffsetY = int(SCR_HEIGHT * 0.25f);
 	
 	//setting up 
-	intervalButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) intervalString.c_str(), 2);
-	randomIntervalButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) randintervalString.c_str(), 2);
-	chaoticButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) chaoticString.c_str(), 2);
+	intervalButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, intervalString, 2);
+	randomIntervalButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, randintervalString, 2);
+	chaoticButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, chaoticString, 2);
 	
 	switch (cricketCustomSet) {
 		case interval:
@@ -204,14 +204,14 @@ bool Cricket::customStart() {
 	int textStartY = nrButtonY - buttonSize - int(textSize * 6);
 
 	//Draw number of numbers selector + buttons
-	displayContainer->write(textStartX, textStartY, RED, textSize, nrOfNrsString.c_str());
+	displayContainer->write(textStartX, textStartY, TFT_RED, textSize, nrOfNrsString);
 	drawCricketNr();
 
 	int nrButtonX = int(SCR_WIDTH * 0.7f);
 	int nrButtonOffsetX = int(SCR_WIDTH * 0.2f);
 	
-	prevNr.setImage(displayContainer->getTFT(), nrButtonX, nrButtonY, buttonSize, buttonSize, WHITE, GREEN, BLACK, "<", 2);
-	nextNr.setImage(displayContainer->getTFT(), nrButtonX + nrButtonOffsetX, nrButtonY, buttonSize, buttonSize, WHITE, GREEN, BLACK, ">", 2);
+	prevNr.setImage(displayContainer->getTFT(), nrButtonX, nrButtonY, buttonSize, buttonSize, TFT_WHITE, TFT_GREEN, TFT_BLACK, "<", 2);
+	nextNr.setImage(displayContainer->getTFT(), nrButtonX + nrButtonOffsetX, nrButtonY, buttonSize, buttonSize, TFT_WHITE, TFT_GREEN, TFT_BLACK, ">", 2);
 	prevNr.guiButton.drawButton(true);
 	nextNr.guiButton.drawButton(true);
 	
@@ -220,11 +220,11 @@ bool Cricket::customStart() {
 		int startButtonY = int(SCR_HEIGHT * 0.875f);
 		
 		textStartY = startButtonY - buttonSize - int(textSize * 6);
-		displayContainer->write(textStartX, textStartY, RED, textSize, startingNrString.c_str());
+		displayContainer->write(textStartX, textStartY, TFT_RED, textSize, startingNrString);
 		this->drawCricketStart();
 		
-		prevStart.setImage(displayContainer->getTFT(), nrButtonX, startButtonY, buttonSize, buttonSize, WHITE, GREEN, BLACK, "<", 2);
-		nextStart.setImage(displayContainer->getTFT(), nrButtonX + nrButtonOffsetX, startButtonY, buttonSize, buttonSize, WHITE, GREEN, BLACK, ">", 2);
+		prevStart.setImage(displayContainer->getTFT(), nrButtonX, startButtonY, buttonSize, buttonSize, TFT_WHITE, TFT_GREEN, TFT_BLACK, "<", 2);
+		nextStart.setImage(displayContainer->getTFT(), nrButtonX + nrButtonOffsetX, startButtonY, buttonSize, buttonSize, TFT_WHITE, TFT_GREEN, TFT_BLACK, ">", 2);
 
 		prevStart.guiButton.drawButton(true);
 		nextStart.guiButton.drawButton(true);		
@@ -248,7 +248,7 @@ bool Cricket::custom(Pair touch) {
 		nextStart.guiButton.drawButton(true);
 		drawCricketStart();
 
-		displayContainer->write(textStartX, textStartY, RED, 2, (char*) startingNrString.c_str());
+		displayContainer->write(textStartX, textStartY, TFT_RED, 2, startingNrString);
 		serializeConfig();
 	}
 	
@@ -259,7 +259,7 @@ bool Cricket::custom(Pair touch) {
 		chaoticButton.guiButton.drawButton(true);
 
 		int textLength = 12;
-		displayContainer->getTFT()->fillRect(textStartX, textStartY, textLength * textSize * 6 , rectSize, YELLOW);
+		displayContainer->getTFT()->fillRect(textStartX, textStartY, textLength * textSize * 6 , rectSize, TFT_YELLOW);
 		serializeConfig();
 	}
 	
@@ -270,7 +270,7 @@ bool Cricket::custom(Pair touch) {
 		chaoticButton.guiButton.drawButton(false);
 
 		int textLength = 12;
-		displayContainer->getTFT()->fillRect(textStartX, textStartY, textLength * textSize * 6 , rectSize, YELLOW);
+		displayContainer->getTFT()->fillRect(textStartX, textStartY, textLength * textSize * 6 , rectSize, TFT_YELLOW);
 		serializeConfig();
 	}
 	
@@ -356,15 +356,16 @@ bool Cricket::custom(Pair touch) {
 void Cricket::drawCricketNr() {
 	int startX = int(SCR_WIDTH * 0.775f);
 	int startY = int(SCR_HEIGHT * 0.48f);
-
-	displayContainer->writeWithBackground(startX, startY, RED, YELLOW, 2, cricketNr > 9 ? String(cricketNr) : " " + String(cricketNr));
+	String cricketNrString = cricketNr > 9 ? String(cricketNr) : " " + String(cricketNr);
+	displayContainer->writeWithBackground(startX, startY, TFT_RED, TFT_YELLOW, 2, cricketNrString.c_str());
 }
 
 void Cricket::drawCricketStart() {
 	int startX = int(SCR_WIDTH * 0.775f);
 	int startY = int(SCR_HEIGHT * 0.85f);
 
-	displayContainer->writeWithBackground(startX, startY, RED, YELLOW, 2, cricketStart > 9 ? String(cricketStart) : " " +String(cricketStart));
+	String cricketStartString = cricketStart > 9 ? String(cricketStart) : " " + String(cricketStart);
+	displayContainer->writeWithBackground(startX, startY, TFT_RED, TFT_YELLOW, 2, cricketStartString.c_str());
 }
 
 void Cricket::initializeGame() {
