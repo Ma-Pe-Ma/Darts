@@ -9,24 +9,24 @@ void PlayerScreen::initialize() {
 }
 
 void PlayerScreen::start() {
-    getGameLogic()->displayContainer->getTFT()->fillScreen(MAGENTA);
+    getGameLogic()->displayContainer->getTFT()->fillScreen(TFT_MAGENTA);
     
     int squareOffset = int(SCR_WIDTH * 0.08f);
     int buttonSize = int(SCR_WIDTH * 0.1f);
 
-    gameLogic->prevMenu.setImage(getGameLogic()->displayContainer->getTFT(), squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<<", 2);
-    gameLogic->nextMenu.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">>", 2);
+    gameLogic->prevMenu.setImage(getGameLogic()->displayContainer->getTFT(), squareOffset, squareOffset, buttonSize, buttonSize, TFT_WHITE, TFT_CYAN, TFT_BLACK, "<<", 2);
+    gameLogic->nextMenu.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, TFT_WHITE, TFT_CYAN, TFT_BLACK, ">>", 2);
     
-    getGameLogic()->displayContainer->writeCenterX(buttonSize / 2, BLACK, MAGENTA, 3, playersString);
+    getGameLogic()->displayContainer->writeCenterX(buttonSize / 2, TFT_BLACK, TFT_MAGENTA, 3, playersString);
     
     if (gameLogic->androidMode) {
         if (gameLogic->playerContainer->getNumberOfPlayers() == 0) {
             int textSize = 2;
             int y = (SCR_HEIGHT - 6 * textSize) / 2;
-            getGameLogic()->displayContainer->writeCenterX(y, BLACK, MAGENTA, textSize, android1String);
+            getGameLogic()->displayContainer->writeCenterX(y, TFT_BLACK, TFT_MAGENTA, textSize, android1String);
             
             y += SCR_HEIGHT / 6;
-            getGameLogic()->displayContainer->writeCenterX(y, BLACK, MAGENTA, textSize, android2String);
+            getGameLogic()->displayContainer->writeCenterX(y, TFT_BLACK, TFT_MAGENTA, textSize, android2String);
         }
         else {
             int xOffset = int(SCR_WIDTH * 0.15f);
@@ -42,7 +42,7 @@ void PlayerScreen::start() {
                 int y = yOffset + (i % 4) * yDiff;
                 String text = "P" + String(i + 1) + ":" + checkable->getNick();
                 int textSize = 3;
-                getGameLogic()->displayContainer->writeWithBackground(x, y, checkable->getInverseColor(), checkable->getColor(), textSize, text);
+                getGameLogic()->displayContainer->writeWithBackground(x, y, checkable->getInverseColor(), checkable->getColor(), textSize, text.c_str());
             }
             
             gameLogic->nextMenu.guiButton.drawButton(true);
@@ -52,17 +52,17 @@ void PlayerScreen::start() {
         gameLogic->playerContainer->setNumberOfPlayers(1);
 
         //Writing explanation text
-        int x = (SCR_WIDTH - playerNrString.length() * 6 * 2) / 2 - int(SCR_WIDTH * 0.1375f);
+        int x = (SCR_WIDTH - strlen(playerNrString) * 6 * 2) / 2 - int(SCR_WIDTH * 0.1375f);
         int y = int(SCR_HEIGHT * 0.4f);
-        getGameLogic()->displayContainer->writeWithBackground(x, y, BLACK, MAGENTA, 2, (char*) playerNrString.c_str());
+        getGameLogic()->displayContainer->writeWithBackground(x, y, TFT_BLACK, TFT_MAGENTA, 2, playerNrString);
 
         //drawing player count + buttons
         int yPos = int(SCR_HEIGHT * 0.666f);
         int textSize = 3;
-        getGameLogic()->displayContainer->writeCenterX(yPos - textSize * 6 / 2, BLACK, MAGENTA, textSize, String(gameLogic->playerContainer->getNumberOfPlayers()));
+        getGameLogic()->displayContainer->writeCenterX(yPos - textSize * 6 / 2, TFT_BLACK, TFT_MAGENTA, textSize, String(gameLogic->playerContainer->getNumberOfPlayers()).c_str());
 
-        gameLogic->prevCursor.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH / 2 - int(buttonSize * 1.1f), yPos, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<", 2);
-        gameLogic->nextCursor.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH / 2 + int(buttonSize * 1.1f), yPos, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">", 2);
+        gameLogic->prevCursor.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH / 2 - int(buttonSize * 1.1f), yPos, buttonSize, buttonSize, TFT_WHITE, TFT_CYAN, TFT_BLACK, "<", 2);
+        gameLogic->nextCursor.setImage(getGameLogic()->displayContainer->getTFT(), SCR_WIDTH / 2 + int(buttonSize * 1.1f), yPos, buttonSize, buttonSize, TFT_WHITE, TFT_CYAN, TFT_BLACK, ">", 2);
     
         gameLogic->prevCursor.guiButton.drawButton(true);
         gameLogic->nextCursor.guiButton.drawButton(true);
@@ -113,7 +113,7 @@ void PlayerScreen::update(Pair touch) {
             int yPos = int(SCR_HEIGHT * 0.666f);
             yPos -= textSize * 6 / 2;
 
-			getGameLogic()->displayContainer->writeCenterX(yPos, BLACK, MAGENTA, textSize, String(gameLogic->playerContainer->getNumberOfPlayers()));
+			getGameLogic()->displayContainer->writeCenterX(yPos, TFT_BLACK, TFT_MAGENTA, textSize, String(gameLogic->playerContainer->getNumberOfPlayers()).c_str());
 		}
 		
         //pushing player increment
@@ -129,7 +129,7 @@ void PlayerScreen::update(Pair touch) {
             int yPos = int(SCR_HEIGHT * 0.666f);
             yPos -= textSize * 6 / 2;
 			
-			getGameLogic()->displayContainer->writeCenterX(yPos, BLACK, MAGENTA, 3, String(gameLogic->playerContainer->getNumberOfPlayers()));
+			getGameLogic()->displayContainer->writeCenterX(yPos, TFT_BLACK, TFT_MAGENTA, 3, String(gameLogic->playerContainer->getNumberOfPlayers()).c_str());
 		}
 		
         //visualizaton 

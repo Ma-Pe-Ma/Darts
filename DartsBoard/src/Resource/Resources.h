@@ -10,10 +10,12 @@
 #define NUMBER_OF_AUDIO_SETS 2
 #define NUMBER_OF_AUDIO_FILES 6
 
+#define STRING_RESOURCE_LENGTH 32
+
 namespace Resources {
     extern String path;
 
-    enum TextSet {
+    enum class TextSet {
         en,
         hu
     };
@@ -64,28 +66,29 @@ namespace Resources {
         x01Score
     };
 
-    extern SimpleMap<Text, String> textMap;
+    extern SimpleMap<Text, char*> textMap;
 
     void initialize();
     void processLine(String line, String& key, String& value);
 
-    enum AudioSet {
-        normal,
-        mk
+    enum class AudioSet {
+        en,
+        hu
     };
 
     extern AudioSet audioSet;
     extern SimpleMap<AudioSet, String> audioSetNameMap;
 
-    enum AudioFile {
+    //TODO: create audiofiles
+    enum class AudioFile {
         start,
         round,
         pathetic
     };
 
-    extern SimpleMap<AudioFile, String> audioMap;
-    String getTextByID(Text text); 
-    String getAudioFileByID(AudioFile audioFile);
+    extern SimpleMap<AudioFile, char*> audioMap;
+    char* getTextByID(Text text); 
+    char* getAudioFileByID(AudioFile audioFile);
 }
 
 #endif

@@ -9,8 +9,8 @@ private:
     uint8_t out = 0;
     int startingScore = 301;
 
-    String* inString;
-    String* outString;
+    char* inString;
+    char* outString;
 
 public:
     X01Score(DisplayContainer*, PlayerContainer*);
@@ -25,7 +25,7 @@ public:
     void serializePlayerStatus(JsonObject&) override;
     void serializeDartStatus(JsonObject body, Sector sector) override;
 
-    void setGameProperties(uint8_t, uint8_t, int, String*, String*);
+    void setGameProperties(uint8_t, uint8_t, int, char*, char*);
 };
 
 #endif

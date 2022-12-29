@@ -6,10 +6,11 @@
 
 class PlayerScreen : public AppState {
 private:
-    String playersString;
-    String android1String;
-    String android2String;
-    String playerNrString;
+    char* playersString;
+    char* android1String;
+    char* android2String;
+    char* playerNrString;
+
 public:
     void initialize() override;
     void start() override;

@@ -11,7 +11,7 @@ void Busted::update(Pair touch) {
 
 		//Write to dart list
 		String text = String(dartID + 1) + ": " + DisplayContainer::sectorText(dart);
-		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * dartID, dartStatusStartY, BLACK, CYAN, 2, text);
+		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * dartID, dartStatusStartY, TFT_BLACK, TFT_CYAN, 2, text.c_str());
 		
 		//Draw Status
 		Player* currentPlayer = gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer();

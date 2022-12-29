@@ -15,7 +15,8 @@ void Intro::start() {
 		roundText += "";
 	}
 	int textSize = 7;
-	gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(SCR_WIDTH / 8, SCR_WIDTH / 8, WHITE, BLACK, textSize, roundText);
+	gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(SCR_WIDTH / 8, SCR_WIDTH / 8, TFT_BLACK, TFT_CYAN, textSize, "       ");	
+	gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(SCR_WIDTH / 8, SCR_WIDTH / 8, TFT_WHITE, TFT_BLACK, textSize, roundText.c_str());
 	
 	//delete thrown dart data
 	gamePlayingScreen->boardContainer.setCurrentDartID(0);
@@ -33,7 +34,7 @@ void Intro::start() {
 
 	for (int i = 0; i < 3; i++) {
 		Sector dart = gamePlayingScreen->boardContainer.getThrownDartByNumber(i);
-		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, BLACK, CYAN, 2, String(i + 1) + ": " + DisplayContainer::sectorText(dart));
+		gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, TFT_BLACK, TFT_CYAN, 2, (String(i + 1) + ": " + DisplayContainer::sectorText(dart)).c_str());
 	}		
 	
 	/*for (int i = 0; i < LIST_MAX; i++) {

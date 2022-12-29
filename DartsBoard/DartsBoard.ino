@@ -34,8 +34,8 @@ void setup() {
 
 	Serial.println("Setup started!");
 	
-	Resources::textSet = Resources::en;
-	Resources::audioSet = Resources::mk;
+	Resources::textSet = Resources::TextSet::en;
+	Resources::audioSet = Resources::AudioSet::en;
 
 	//Setting piezo speaker output
 	//pinMode(22, OUTPUT);
@@ -67,7 +67,7 @@ void setup() {
 	Serial.println("Setup finished!");
 }
 
-void loop() {	
+void loop() {
 	//bluetooth input
 	bluetooth.process();
 

@@ -19,8 +19,8 @@ void AbstractScore::status() {
 	int x = SCR_WIDTH / 8;
 	int y = SCR_WIDTH / 8;
 
-	displayContainer->writeWithBackground(x, y, BLACK, CYAN, textSize, "       ");	
-	displayContainer->writeWithBackground(x, y, currentPlayer->getInverseColor(), currentPlayer->getColor(), textSize, point);
+	displayContainer->writeWithBackground(x, y, TFT_BLACK, TFT_CYAN, textSize, "       ");	
+	displayContainer->writeWithBackground(x, y, currentPlayer->getInverseColor(), currentPlayer->getColor(), textSize, point.c_str());
 
 	int numberOfPlayers = playerContainer->getNumberOfPlayers();
 
@@ -30,7 +30,7 @@ void AbstractScore::status() {
 		int x = int(SCR_WIDTH * 0.8f);
 		int y = int(SCR_HEIGHT * 0.25f);
 
-		displayContainer->getTFT()->drawFastHLine(x, y, 2 * s2 * 6 * 3, BLACK);
+		displayContainer->getTFT()->drawFastHLine(x, y, 2 * s2 * 6 * 3, TFT_BLACK);
 		Player* nextPlayer;
 		
 		int playerCursor = playerContainer->getPlayerCursor();
@@ -52,6 +52,6 @@ void AbstractScore::status() {
 			point += " ";
 		}
 		
-		displayContainer->writeWithBackground(x, y + int(0.02f * SCR_HEIGHT), BLACK, CYAN, s2, point);
+		displayContainer->writeWithBackground(x, y + int(0.02f * SCR_HEIGHT), TFT_BLACK, TFT_CYAN, s2, point.c_str());
 	}
 }

@@ -1,5 +1,7 @@
 #include "RoundTheClock.h"
 
+#include <MCUFRIEND_kbv.h>
+
 void RoundTheClock::initialize(DisplayContainer* displayContainer, PlayerContainer* playerContainer) {
 	this->displayContainer = displayContainer;
 	this->playerContainer = playerContainer;
@@ -7,12 +9,12 @@ void RoundTheClock::initialize(DisplayContainer* displayContainer, PlayerContain
 	gameID = "RTC";
 	name = "Round The Clock";
 
-	/*sectorOnlyString = Resources::getTextByID(Resources::Text::rtcSector);
+	sectorOnlyString = Resources::getTextByID(Resources::Text::rtcSector);
 	multiplierString = Resources::getTextByID(Resources::Text::rtcMultiplier);
 	multiplierWithPointsString = Resources::getTextByID(Resources::Text::rtcMultiplierWithPoints);
 
 	rtcClassicString = Resources::getTextByID(Resources::Text::rtcClassic);
-	shootOutString = Resources::getTextByID(Resources::Text::shootOut);*/
+	shootOutString = Resources::getTextByID(Resources::Text::shootOut);
 }
 
 void RoundTheClock::serializeConfigCustom(JsonObject& configObject) {
@@ -45,8 +47,8 @@ void RoundTheClock::configStart() {
 	int buttonOffsetX = int(SCR_WIDTH * 0.6f);
 	int buttonOffsetY = int(SCR_HEIGHT * 0.25f);
 	
-	rtcButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) rtcClassicString.c_str(), 2);
-	shootoutButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) shootOutString.c_str(), 2);
+	rtcButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, rtcClassicString, 2);
+	shootoutButton.setImage(displayContainer->getTFT(), buttonStartX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, shootOutString, 2);
 
 	switch (rtcType) {
 		case roundTheClock:
@@ -61,9 +63,9 @@ void RoundTheClock::configStart() {
 			break;
 	}
 
-	sectorOnlyButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) sectorOnlyString.c_str(), 2);
-	multiplierButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) multiplierString.c_str(), 2);
-	multiplierWithPointButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) multiplierWithPointsString.c_str(), 2);
+	sectorOnlyButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 0 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, sectorOnlyString, 2);
+	multiplierButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, multiplierString, 2);
+	multiplierWithPointButton.setImage(displayContainer->getTFT(), buttonStartX + buttonOffsetX, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, multiplierWithPointsString, 2);
 
 	switch (rtcSubType) {
 		case sectorOnly:

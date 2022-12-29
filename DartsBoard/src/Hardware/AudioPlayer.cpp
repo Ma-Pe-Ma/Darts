@@ -10,25 +10,28 @@ namespace AudioPlayer {
 
     void play(Resources::AudioFile audioFile) {
         //String fileName = "/res/audio/";
-        String fileName = Resources::getAudioFileByID(audioFile);
-        Serial.println("Playing file: " + fileName);
+        char* fileName = Resources::getAudioFileByID(audioFile);
+        Serial.print("Playing file: ");
+        Serial.println(fileName);
         delay(200);
 
         play(fileName);
     }
 
-    void play(String filename) {
-        File myFile = SD.open(filename.c_str());
+    void play(char* filename) {
+        File myFile = SD.open(filename);
         
         if (!myFile) {
-            Serial.println("Error opening: " + filename);
+            Serial.print("Error opening: ");
+            Serial.println(filename);
             return;
         }
 
         const int S = 1024; // Number of samples to read in block
         short buffer[S];
 
-        Serial.print("Playing file: " + filename);
+        Serial.print("Playing file: ");
+        Serial.println(filename);
  
         while (myFile.available()) {
             myFile.read(buffer, sizeof(buffer));

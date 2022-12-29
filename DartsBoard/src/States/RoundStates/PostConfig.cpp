@@ -3,18 +3,18 @@
 #include "../GameLogic.h"
 
 void PostConfig::start() {
-    gamePlayingScreen->getGameLogic()->displayContainer->getTFT()->fillScreen(WHITE);
+    gamePlayingScreen->getGameLogic()->displayContainer->getTFT()->fillScreen(TFT_WHITE);
 		
     String text = "Visszavago?";
     int y = int(SCR_HEIGHT * 0.0625);
-    gamePlayingScreen->getGameLogic()->displayContainer->writeCenterX(y, BLACK, MAGENTA, 4, text);
+    gamePlayingScreen->getGameLogic()->displayContainer->writeCenterX(y, TFT_BLACK, TFT_MAGENTA, 4, text.c_str());
 
 	int buttonSize = int(SCR_WIDTH * 0.1f);
 
 	int squareOffset = int(SCR_WIDTH * 0.08f);
     
-    gameLogic->prevMenu.setImage(gamePlayingScreen->getGameLogic()->displayContainer->getTFT(), squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, "<<", 2);
-    gameLogic->nextMenu.setImage(gamePlayingScreen->getGameLogic()->displayContainer->getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, WHITE, CYAN, BLACK, ">>", 2);
+    gameLogic->prevMenu.setImage(gamePlayingScreen->getGameLogic()->displayContainer->getTFT(), squareOffset, squareOffset, buttonSize, buttonSize, TFT_WHITE, TFT_CYAN, TFT_BLACK, "<<", 2);
+    gameLogic->nextMenu.setImage(gamePlayingScreen->getGameLogic()->displayContainer->getTFT(), SCR_WIDTH - squareOffset, squareOffset, buttonSize, buttonSize, TFT_WHITE, TFT_CYAN, TFT_BLACK, ">>", 2);
     
     gameLogic->prevMenu.guiButton.drawButton(true);
     gameLogic->nextMenu.guiButton.drawButton(true);
@@ -27,9 +27,9 @@ void PostConfig::start() {
 	int optionWidth = SCR_WIDTH / 3;
 	int optionHeight = SCR_HEIGHT / 6;
 
-    gameLogic->prevCursor.setImage(gamePlayingScreen->getGameLogic()->displayContainer->getTFT(), optionStartX, optionStartY + 0 * optionOffsetY, optionWidth, optionHeight, GREEN, CYAN, BLACK, "Ciklikus", 2);
-    gameLogic->middleCursor.setImage(gamePlayingScreen->getGameLogic()->displayContainer->getTFT(), optionStartX, optionStartY + 1 * optionOffsetY, optionWidth, optionHeight, GREEN, CYAN, BLACK, "Ford.", 2);
-    gameLogic->nextCursor.setImage(gamePlayingScreen->getGameLogic()->displayContainer->getTFT(), optionStartX, optionStartY + 2 * optionOffsetY, optionWidth, optionHeight, GREEN, CYAN, BLACK, "UA.", 2);
+    gameLogic->prevCursor.setImage(gamePlayingScreen->getGameLogic()->displayContainer->getTFT(), optionStartX, optionStartY + 0 * optionOffsetY, optionWidth, optionHeight, TFT_GREEN, TFT_CYAN, TFT_BLACK, "Ciklikus", 2);
+    gameLogic->middleCursor.setImage(gamePlayingScreen->getGameLogic()->displayContainer->getTFT(), optionStartX, optionStartY + 1 * optionOffsetY, optionWidth, optionHeight, TFT_GREEN, TFT_CYAN, TFT_BLACK, "Ford.", 2);
+    gameLogic->nextCursor.setImage(gamePlayingScreen->getGameLogic()->displayContainer->getTFT(), optionStartX, optionStartY + 2 * optionOffsetY, optionWidth, optionHeight, TFT_GREEN, TFT_CYAN, TFT_BLACK, "UA.", 2);
     
     gameLogic->prevCursor.guiButton.drawButton(false);
     gameLogic->middleCursor.guiButton.drawButton(true);

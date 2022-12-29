@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "../Hardware/Color.h"
+#include <MCUFRIEND_kbv.h>
 #include "../Scores/AbstractScore.h";
 
 class Player {

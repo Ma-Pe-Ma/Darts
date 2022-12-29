@@ -6,7 +6,7 @@
 
 class GameConfiguringScreen : public AppState {
 protected:
-    String settingsString;
+    char* settingsString;
 public:
     void initialize() override;
     void start() override;

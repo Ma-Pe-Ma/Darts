@@ -5,15 +5,15 @@ namespace Resources {
     String path = "/res/";
 
     TextSet textSet = TextSet::en;
-    SimpleMap<Text, String> textMap(NUMBER_OF_TEXTS);
+    SimpleMap<Text, char*> textMap(NUMBER_OF_TEXTS);
 
-    AudioSet audioSet = AudioSet::normal;
+    AudioSet audioSet = AudioSet::en;
     SimpleMap<AudioSet, String> audioSetNameMap(NUMBER_OF_AUDIO_SETS);
-    SimpleMap<AudioFile, String> audioMap(NUMBER_OF_AUDIO_FILES);
+    SimpleMap<AudioFile, char*> audioMap(NUMBER_OF_AUDIO_FILES);
 
     SimpleMap<String, Text> textNameMap(NUMBER_OF_TEXTS);
 
-    void readFile(File* myFile, void(*processKeyPair)(String, String)) {
+    void readFile(File* myFile, void(*processKeyPair)(String&, String&)) {
         String line = "";
         String key = "";
         String value = "";
@@ -54,16 +54,25 @@ namespace Resources {
         }
     }
 
-    void addText(String keyString, String value) {
+    void addText(String& keyString, String& value) {
         Serial.println("key: " + keyString + ", value: " + value);
 
         Text key = textNameMap.getValueByKey(keyString);
-        textMap.insert(key, value);
+        int resLength = value.length() > STRING_RESOURCE_LENGTH ? STRING_RESOURCE_LENGTH : value.length();
+
+        char* newString = new char[resLength + 1];
+        newString[resLength] = '\0';
+
+        memcpy(newString, value.c_str(), resLength);
+        textMap.insert(key, newString);
     }
 
     void addAudio(AudioFile key, String value) {
         String fileLocation = path + "audio/" + audioSetNameMap.getValueByKey(audioSet) + "/" + value + ".wav";
-        audioMap.insert(key, fileLocation);
+        char* rawFileChar = new char[fileLocation.length() + 1];
+        rawFileChar[fileLocation.length()] = '\0';
+        memcpy(rawFileChar, fileLocation.c_str(), fileLocation.length());
+        audioMap.insert(key, rawFileChar);
     }
 
     void printDirectory(File dir, int numTabs) {
@@ -96,8 +105,7 @@ namespace Resources {
     }
 
     void initialize() {
-        SimpleMap<TextSet, String> textSetNameMap(NUMBER_OF_TEXT_SETS);
-        
+        SimpleMap<TextSet, String> textSetNameMap(NUMBER_OF_TEXT_SETS);        
 
         textSetNameMap.insert(TextSet::en, String("en"));
         textSetNameMap.insert(TextSet::hu, String("hu"));
@@ -115,7 +123,7 @@ namespace Resources {
         textNameMap.insert(String("x01"), Text::x01);
         textNameMap.insert(String("config"), Text::config);
 
-        /*textNameMap.insert(String("cricketScore"), Text::cricketScore);
+        textNameMap.insert(String("cricketScore"), Text::cricketScore);
         textNameMap.insert(String("cricketNoscore"), Text::cricketNoscore);
         textNameMap.insert(String("cricketCutthroat"), Text::cricketCutthroat);
 
@@ -143,7 +151,7 @@ namespace Resources {
 
         textNameMap.insert(String("x01In"), Text::x01In);
         textNameMap.insert(String("x01Out"), Text::x01Out);
-        textNameMap.insert(String("x01Score"), Text::x01Score);*/   
+        textNameMap.insert(String("x01Score"), Text::x01Score);
 
         String textPath = path + "text/" + textSetNameMap.getValueByKey(textSet) + ".txt";        
 
@@ -154,16 +162,22 @@ namespace Resources {
 
         readFile(&myFile, addText);
 
-        /*File root = SD.open("/");
-        printDirectory(root, 0);*/
+        Serial.println("Text resources reading finished...");
 
-        audioSetNameMap.insert(AudioSet::normal, String("normal"));
-        //audioSetNameMap.insert(AudioSet::mk, String("mk"));
+        //File root = SD.open("/");
+        //printDirectory(root, 0);
+
+        audioSetNameMap.insert(AudioSet::en, String("en"));
+        audioSetNameMap.insert(AudioSet::hu, String("hu"));
 
         addAudio(AudioFile::start, "start");
         addAudio(AudioFile::round, "round");
-        
-        textNameMap.~SimpleMap<String, Text>();        
+        addAudio(AudioFile::pathetic, "pathetic");
+
+        textNameMap.~SimpleMap<String, Text>();
+        audioSetNameMap.~SimpleMap<AudioSet, String>();
+
+        Serial.println("Resource reading finished...");     
     }
 
     void processLine(String line, String& key, String& value) {
@@ -176,11 +190,11 @@ namespace Resources {
         }
     }
 
-    String getTextByID(Text text) {
+    char* getTextByID(Text text) {
         return textMap.getValueByKey(text);
     }
 
-    String getAudioFileByID(AudioFile audioFile) {
+    char* getAudioFileByID(AudioFile audioFile) {
         return audioMap.getValueByKey(audioFile);
     }
 }

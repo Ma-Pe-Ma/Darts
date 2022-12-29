@@ -22,7 +22,7 @@ void Winning::start() {
 		}
 	}
 
-	gamePlayingScreen->getGameLogic()->displayContainer->getTFT()->fillScreen(WHITE);
+	gamePlayingScreen->getGameLogic()->displayContainer->getTFT()->fillScreen(TFT_WHITE);
 
 	String winnerText;
 
@@ -38,7 +38,7 @@ void Winning::start() {
 		winnerText = String(currentPlayer->getScore()->getPosition()) + ". pos: " + nick;
 	}
 	
-	gamePlayingScreen->getGameLogic()->displayContainer->writeCenterX(SCR_HEIGHT / 5, currentPlayer->getColor(), currentPlayer->getInverseColor(), 4, winnerText);
+	gamePlayingScreen->getGameLogic()->displayContainer->writeCenterX(SCR_HEIGHT / 5, currentPlayer->getColor(), currentPlayer->getInverseColor(), 4, winnerText.c_str());
 
 	gamePlayingScreen->sendDump();
 	timer = millis();
@@ -58,7 +58,7 @@ void Winning::update(Pair pair) {
 			}
 		}
 		else {
-			gamePlayingScreen->getGameLogic()->displayContainer->getTFT()->fillScreen(CYAN);
+			gamePlayingScreen->getGameLogic()->displayContainer->getTFT()->fillScreen(TFT_CYAN);
 			gameLogic->prevMenu.guiButton.drawButton(true);
 			gameLogic->nextMenu.guiButton.drawButton(true);
 
@@ -70,7 +70,7 @@ void Winning::update(Pair pair) {
 			//redraw status
 			for (int i = 0; i < 3; i++) {
 				Sector dart = gamePlayingScreen->boardContainer.getThrownDartByNumber(i);
-				gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, BLACK, CYAN, 2, String(i + 1) + ": " + DisplayContainer::sectorText(dart));
+				gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(dartStatusStartX + dartStatusOffsetX * i, dartStatusStartY, TFT_BLACK, TFT_CYAN, 2, (String(i + 1) + ": " + DisplayContainer::sectorText(dart)).c_str());
 			}
 
 			gamePlayingScreen->getGameLogic()->playerContainer->getCurrentPlayer()->getScore()->drawCompleteCustomStatus();

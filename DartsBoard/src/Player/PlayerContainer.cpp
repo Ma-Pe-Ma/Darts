@@ -1,18 +1,20 @@
 #include "PlayerContainer.h"
 
+#include <MCUFRIEND_kbv.h>
+
 PlayerContainer::PlayerContainer() {
 
 }
 
 void PlayerContainer::init() {			
-	players[0].setColor(YELLOW);			
-	players[1].setColor(MAGENTA);			
-	players[2].setColor(BLUE);			
-	players[3].setColor(WHITE);			
-	players[4].setColor(GREEN);
-	players[5].setColor(RED);			
-	players[6].setColor(YELLOW / 2);			
-	players[7].setColor(CYAN);
+	players[0].setColor(TFT_YELLOW);			
+	players[1].setColor(TFT_MAGENTA);			
+	players[2].setColor(TFT_BLUE);			
+	players[3].setColor(TFT_WHITE);			
+	players[4].setColor(TFT_GREEN);
+	players[5].setColor(TFT_RED);			
+	players[6].setColor(TFT_ORANGE);			
+	players[7].setColor(TFT_CYAN);
 
 	for (int i = 0; i < NR_OF_PLAYERS; i++) {
 		players[i].setID(i);

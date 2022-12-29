@@ -3,13 +3,13 @@
 
 #include <MCUFRIEND_kbv.h>
 #include <TouchScreen.h>
-#include "Color.h"
+//#include "Color.h"
 #include "Sector.h"
 #include "Pair.h"
 #include <SD.h>
 #include <SPI.h>
 
-/*//corner values for touchscreen calibration
+//corner values for touchscreen calibration
 #define TL_X_V 902
 #define TL_Y_V 238
 
@@ -20,9 +20,9 @@
 #define BL_Y_V 479	//595
 
 #define BR_X_V 122 //108
-#define BR_Y_V 585 //675*/
+#define BR_Y_V 585 //675
 
-#define TL_X_V 912
+/*#define TL_X_V 912
 #define TL_Y_V 225
 
 #define TR_X_V 120
@@ -91,15 +91,15 @@ public:
 	void getCalibratedValue(int& calX, int& calY, int rawX, int rawY);
 	
 	//printing to display
-	void write(int x, int y, int color, int size, String text);
-	void writeRight(int a, int b, int color, int size,  String text);
+	void write(int x, int y, int color, int size, const char* text);
+	void writeRight(int a, int b, int color, int size, const char* text);
 
-	void writeWithBackground(int x, int y, int color, int back, int size, String text);
-	void writeCenterX(int y, int color, int backColor, int size, String text);
-	void writeCenterY(int x, int color, int backColor, int size, String text);
-	void writeCenter(String text, int size);
+	void writeWithBackground(int x, int y, int color, int back, int size, const char* text);
+	void writeCenterX(int y, int color, int backColor, int size, const char* text);
+	void writeCenterY(int x, int color, int backColor, int size, const char* text);
+	void writeCenter(const char* text, int size);
 
-	static String sectorText(Sector sector);
+	static String sectorText(Sector& sector);
 
 	uint8_t showBMP(char *nm, int x, int y);
 	uint16_t read16(File& f);

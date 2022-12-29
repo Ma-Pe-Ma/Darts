@@ -58,20 +58,20 @@ private:
 
 	int scoreMap[21];
 
-	String scoreString;
-	String noscoreString;
-	String cutthroatString;
+	char* scoreString;
+	char* noscoreString;
+	char* cutthroatString;
 
-	String classicString;
-	String allString;
-	String customString;
+	char* classicString;
+	char* allString;
+	char* customString;
 
-	String intervalString;
-	String randintervalString;
-	String chaoticString;
+	char* intervalString;
+	char* randintervalString;
+	char* chaoticString;
 
-	String nrOfNrsString;
-	String startingNrString;
+	char* nrOfNrsString;
+	char* startingNrString;
 
 public:
 	void configStart() override;

@@ -13,13 +13,13 @@ void X01::initialize(DisplayContainer* displayContainer, PlayerContainer* player
 	scoreMap.insert(3, 901);
 	scoreMap.insert(4, 1001);
 
-	/*simpleString = Resources::getTextByID(Resources::Text::x01Simple);
+	simpleString = Resources::getTextByID(Resources::Text::x01Simple);
 	doubleString = Resources::getTextByID(Resources::Text::x01Double);
 	masterString = Resources::getTextByID(Resources::Text::x01Master);
 	
 	inLabel = Resources::getTextByID(Resources::Text::x01In);
 	outLabel = Resources::getTextByID(Resources::Text::x01Out);
-	scoreLabel = Resources::getTextByID(Resources::Text::x01Score);*/
+	scoreLabel = Resources::getTextByID(Resources::Text::x01Score);
 }
 
 String X01::getInOutString(int cursor) {
@@ -43,10 +43,10 @@ void X01::processConfig(JsonObject&) {
 
 void X01::configStart() {
 
-	displayContainer->write(SCR_WIDTH / 20, buttonStartY + 0 * buttonOffsetY - buttonHeight / 5, BLACK, 2, (char*) scoreLabel.c_str());
+	displayContainer->write(SCR_WIDTH / 20, buttonStartY + 0 * buttonOffsetY - buttonHeight / 5, TFT_BLACK, 2, scoreLabel);
 
-	previousScore.setImage(displayContainer->getTFT(), buttonStartX + SCR_WIDTH / 20, buttonStartY + 0 * buttonOffsetY, buttonWidth / 3, buttonHeight, WHITE, GREEN, BLACK, "<", 2);
-	nextScore.setImage(displayContainer->getTFT(), buttonStartX + SCR_WIDTH / 20 + int(SCR_WIDTH * 0.25f), buttonStartY + 0 * buttonOffsetY, buttonWidth / 3, buttonHeight, WHITE, GREEN, BLACK, ">", 2);
+	previousScore.setImage(displayContainer->getTFT(), buttonStartX + SCR_WIDTH / 20, buttonStartY + 0 * buttonOffsetY, buttonWidth / 3, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, "<", 2);
+	nextScore.setImage(displayContainer->getTFT(), buttonStartX + SCR_WIDTH / 20 + int(SCR_WIDTH * 0.25f), buttonStartY + 0 * buttonOffsetY, buttonWidth / 3, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, ">", 2);
 	
 	int currentScore = scoreMap.getValueByKey(scoreCursor);
 	String currentScoreString = String(currentScore);
@@ -54,15 +54,15 @@ void X01::configStart() {
 		currentScoreString = " " + currentScoreString;
 	}
 
-	displayContainer->writeWithBackground(buttonStartX + SCR_WIDTH / 8, buttonStartY + 0 * buttonOffsetY - buttonHeight / 5, BLACK, CYAN, 2, currentScoreString);
+	displayContainer->writeWithBackground(buttonStartX + SCR_WIDTH / 8, buttonStartY + 0 * buttonOffsetY - buttonHeight / 5, TFT_BLACK, TFT_CYAN, 2, currentScoreString.c_str());
 
-	displayContainer->write(SCR_WIDTH / 20, buttonStartY + 1 * buttonOffsetY - buttonHeight / 5, BLACK, 2, (char*) inLabel.c_str());
+	displayContainer->write(SCR_WIDTH / 20, buttonStartY + 1 * buttonOffsetY - buttonHeight / 5, TFT_BLACK, 2, inLabel);
 	String inString = getInOutString(inCursor);
-	inButton.setImage(displayContainer->getTFT(), buttonStartX + SCR_WIDTH / 6, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) inString.c_str(), 2);
+	inButton.setImage(displayContainer->getTFT(), buttonStartX + SCR_WIDTH / 6, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, (char*) inString.c_str(), 2);
 
-	displayContainer->write(SCR_WIDTH / 20, buttonStartY + 2 * buttonOffsetY - buttonHeight / 5, BLACK, 2, (char*) outLabel.c_str());
+	displayContainer->write(SCR_WIDTH / 20, buttonStartY + 2 * buttonOffsetY - buttonHeight / 5, TFT_BLACK, 2, outLabel);
 	String outString = getInOutString(outCursor);
-	outButton.setImage(displayContainer->getTFT(), buttonStartX + SCR_WIDTH / 6, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) outString.c_str(), 2);
+	outButton.setImage(displayContainer->getTFT(), buttonStartX + SCR_WIDTH / 6, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, (char*) outString.c_str(), 2);
 
 	previousScore.guiButton.drawButton(true);
 	nextScore.guiButton.drawButton(true);
@@ -88,7 +88,7 @@ void X01::config(Pair touch) {
 			currentScoreString = " " + currentScoreString;
 		}
 
-		displayContainer->writeWithBackground(buttonStartX + SCR_WIDTH / 8, buttonStartY + 0 * buttonOffsetY - buttonHeight / 5, BLACK, CYAN, 2, currentScoreString);
+		displayContainer->writeWithBackground(buttonStartX + SCR_WIDTH / 8, buttonStartY + 0 * buttonOffsetY - buttonHeight / 5, TFT_BLACK, TFT_CYAN, 2, currentScoreString.c_str());
 	}
 
 	if (nextScore.simple()) {
@@ -104,7 +104,7 @@ void X01::config(Pair touch) {
 			currentScoreString = " " + currentScoreString;
 		}
 
-		displayContainer->writeWithBackground(buttonStartX + SCR_WIDTH / 8, buttonStartY + 0 * buttonOffsetY - buttonHeight / 5, BLACK, CYAN, 2, currentScoreString);
+		displayContainer->writeWithBackground(buttonStartX + SCR_WIDTH / 8, buttonStartY + 0 * buttonOffsetY - buttonHeight / 5, TFT_BLACK, TFT_CYAN, 2, currentScoreString.c_str());
 	}
 
 	inButton.detect(touch);
@@ -118,7 +118,7 @@ void X01::config(Pair touch) {
 		}
 
 		String inString = getInOutString(inCursor);
-		inButton.setImage(displayContainer->getTFT(), buttonStartX + SCR_WIDTH / 6, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) inString.c_str(), 2);
+		inButton.setImage(displayContainer->getTFT(), buttonStartX + SCR_WIDTH / 6, buttonStartY + 1 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, (char*) inString.c_str(), 2);
 	}
 
 	if (outButton.simple()) {
@@ -129,7 +129,7 @@ void X01::config(Pair touch) {
 		}
 
 		String outString = getInOutString(outCursor);
-		outButton.setImage(displayContainer->getTFT(), buttonStartX + SCR_WIDTH / 6, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, WHITE, GREEN, BLACK, (char*) outString.c_str(), 2);
+		outButton.setImage(displayContainer->getTFT(), buttonStartX + SCR_WIDTH / 6, buttonStartY + 2 * buttonOffsetY, buttonWidth, buttonHeight, TFT_WHITE, TFT_GREEN, TFT_BLACK, (char*) outString.c_str(), 2);
 	}
 
 	//visualization
@@ -159,6 +159,6 @@ bool X01::custom(Pair touch) {
 }
 
 void X01::initializeGame() {
-	inString = inLabel + " " + getInOutString(inCursor);
-	outString = outLabel + " " + getInOutString(outCursor);
+	inString = String(inLabel) + " " + getInOutString(inCursor);
+	outString = String(outLabel) + " " + getInOutString(outCursor);
 }

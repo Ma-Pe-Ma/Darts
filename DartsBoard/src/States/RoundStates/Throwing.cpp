@@ -59,12 +59,12 @@ void Throwing::update(Pair pair) {
 						// msg = " HOLD.";
 						gamePlayingScreen->stuckSector = dartsBoard->key[i].kchar;
 						Sector stuck = gamePlayingScreen->boardContainer.sectorMapping(dartsBoard->key[i].kchar);
-						gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(SCR_WIDTH / 2, int(SCR_HEIGHT * 0.04f), RED, CYAN, 2, "Stuck: " + DisplayContainer::sectorText(stuck));
+						gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(SCR_WIDTH / 2, int(SCR_HEIGHT * 0.04f), TFT_RED, TFT_CYAN, 2, ("Stuck: " + DisplayContainer::sectorText(stuck)).c_str());
 						break;
 					}
 					case RELEASED:
 						if (dartsBoard->key[i].kchar == gamePlayingScreen->stuckSector) {
-							gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(SCR_WIDTH / 2, int(SCR_HEIGHT * 0.04f), RED, CYAN, 2, "          ");
+							gamePlayingScreen->getGameLogic()->displayContainer->writeWithBackground(SCR_WIDTH / 2, int(SCR_HEIGHT * 0.04f), TFT_RED, TFT_CYAN, 2, "          ");
 						}
 						// msg = " RELEASED.";
 						break;
