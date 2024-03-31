@@ -1,0 +1,27 @@
+[submodule "DartsBoard/lib/Audio"]
+	path = DartsBoard/lib/Audio
+	url = https://github.com/arduino-libraries/Audio.git
+[submodule "DartsBoard/lib/ArduinoJson"]
+	path = DartsBoard/lib/ArduinoJson
+	url = https://github.com/bblanchon/ArduinoJson.git
+[submodule "DartsBoard/lib/SD"]
+	path = DartsBoard/lib/SD
+	url = https://github.com/arduino-libraries/SD
+[submodule "DartsBoard/lib/Keypad"]
+	path = DartsBoard/lib/Keypad
+	url = https://github.com/Chris--A/Keypad.git
+[submodule "DartsBoard/lib/Adafruit_TouchScreen"]
+	path = DartsBoard/lib/Adafruit_TouchScreen
+	url = https://github.com/adafruit/Adafruit_TouchScreen.git
+[submodule "DartsBoard/lib/Adafruit-GFX-Library"]
+	path = DartsBoard/lib/Adafruit-GFX-Library
+	url = https://github.com/adafruit/Adafruit-GFX-Library.git
+[submodule "DartsBoard/lib/MCUFRIEND_kbv"]
+	path = DartsBoard/lib/MCUFRIEND_kbv
+	url = https://github.com/prenticedavid/MCUFRIEND_kbv.git
+[submodule "DartsBoard/lib/ArduinoQueue"]
+	path = DartsBoard/lib/ArduinoQueue
+	url = https://github.com/EinarArnason/ArduinoQueue.git
+[submodule "DartsBoard/lib/Adafruit_BusIO"]
+	path = DartsBoard/lib/Adafruit_BusIO
+	url = https://github.com/adafruit/Adafruit_BusIO.git

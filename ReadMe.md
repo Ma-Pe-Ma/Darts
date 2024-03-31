@@ -2,13 +2,13 @@
 
 ![status](https://badgen.net/badge/status/in%20development/orange) ![license](https://badgen.net/github/license/Ma-Pe-Ma/Darts)
 
-![Arduino](https://badgen.net/badge/Arduino/working/green) ![Android client](https://badgen.net/badge/Android%20client/failing/red) 
+![Board](https://badgen.net/badge/Board/working/green) ![Android client](https://badgen.net/badge/Android%20client/failing/red) 
 
 This is a hobby project which transforms a generic electronic dartboard to a smart one with the help of an Arduino Due.
 
-The goal of the project is to create a simple Arduino-project which can replace the default software of any dartboard.
+The goal of the project is to create an application which can replace the default software of any dartboard. The application is developed as a [PlatformIO](https://platformio.org/) project.
 
-Moreover another important aspect of the project is the simple extendability of the games.
+Moreover another important aspect of the project is the simple extendibility of the games.
 
 ## Android companion app
 
@@ -122,12 +122,14 @@ Only the Due is needed to be powered: it can be powered with 7-12 volts on the p
 ### Dependencies/Libraries
 
 The following libraries are needed, they can be installed directly from the Arduino IDE's library manager:
-* [Audio](https://www.arduino.cc/en/reference/audio) - used to prouduce sound effects
-* [ArduinoJSON](https://arduinojson.org/) - used for the communicatition between the Arduino and the Android client
-* [SD](https://www.arduino.cc/en/Reference/SD) - used to handle sd card read/write processes (configuration happens in [DisplayContainer](./DartsBoard/src/Hardware/DisplayContainer.cpp))
-* [Keypad](https://www.arduino.cc/reference/en/libraries/keypad/) - used to handle dart input (configuration happens in [BoardContainer](./DartsBoard/src/Hardware/BoardContainer.cpp))
+* [Audio](https://github.com/arduino-libraries/Audio) - used to prouduce sound effects
+* [ArduinoJSON](https://github.com/bblanchon/ArduinoJson) - used for the communicatition between the Arduino and the Android client
+* [ArduinoQueue](https://github.com/EinarArnason/ArduinoQueue) - used to create queues
+* [SD](https://github.com/arduino-libraries/SD) - used to handle sd card read/write processes (see the [Config file](./DartsBoard/src/Configuration.h) and [DisplayContainer](./DartsBoard/src/app/Hardware/DisplayContainer.cpp))
+* [Keypad](https://www.arduino.cc/reference/en/libraries/keypad/) - used to handle dart input (see the [Config file](./DartsBoard/src/Configuration.h) and [BoardContainer](./DartsBoard/src/app/Hardware/BoardContainer.cpp))
 * [Adafruit TouchScreen Library](https://github.com/adafruit/Adafruit_TouchScreen) - used to handle touch inputs on the display
 * [Adafruit GFX Library](https://github.com/adafruit/Adafruit-GFX-Library) - used to create gui buttons
+* [Adafruit Bus IO](https://github.com/adafruit/Adafruit_BusIO) - used by the other Adafruit libraries
 * [MCUFRIEND_kbv](https://github.com/prenticedavid/MCUFRIEND_kbv) - driver for the display (To configure it see the project's ReadMe)
 
 ### Resources

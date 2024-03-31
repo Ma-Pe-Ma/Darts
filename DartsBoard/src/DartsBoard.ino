@@ -1,14 +1,14 @@
-#include "src/Hardware/Bluetooth/BluetoothCommunicator.h"
+#include "app/Hardware/Bluetooth/BluetoothCommunicator.h"
 
-#include "src/States/GameLogic.h"
+#include "app/States/GameLogic.h"
 
-#include "src/Hardware/DisplayContainer.h"
-#include "src/Player/PlayerContainer.h"
-#include "src/Games/GameContainer.h"
+#include "app/Hardware/DisplayContainer.h"
+#include "app/Player/PlayerContainer.h"
+#include "app/Games/GameContainer.h"
 
-#include "src/Resource/Resources.h"
+#include "app/Resource/Resources.h"
 
-#include "src/Hardware/AudioPlayer.h"
+#include "app/Hardware/AudioPlayer.h"
 
 /*//#include <soft_uart.h>
 #define RX_PIN 22 // software serial port's reception pin
