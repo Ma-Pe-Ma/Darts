@@ -1,8 +1,8 @@
 # Darts with Arduino
 
-![status](https://badgen.net/badge/status/in%20development/orange) ![license](https://badgen.net/github/license/Ma-Pe-Ma/Darts)
+![status](https://badgen.net/badge/status/halted/orange) ![license](https://badgen.net/github/license/Ma-Pe-Ma/Darts)
 
-![Board](https://badgen.net/badge/Board/working/green) ![Android client](https://badgen.net/badge/Android%20client/failing/red) 
+![Board](https://github.com/Ma-Pe-Ma/Darts/actions/workflows/platformio-game-host.yaml/badge.svg) ![Android client](https://badgen.net/badge/Android%20client/failing/red) 
 
 This is a hobby project which transforms a generic electronic dartboard to a smart one with the help of an Arduino Due.
 
