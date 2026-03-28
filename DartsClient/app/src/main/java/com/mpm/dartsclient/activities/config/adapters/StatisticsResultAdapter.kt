@@ -2,15 +2,12 @@ package com.mpm.dartsclient.activities.config.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.mpm.dartsclient.PlayerProfile
 import com.mpm.dartsclient.R
 import com.mpm.dartsclient.loadedSQLData.AverageScore
-import kotlinx.android.synthetic.main.player_config_row.view.*
 
 class StatisticsResultAdapter(var resultMap : HashMap<Int, AverageScore>) : RecyclerView.Adapter<StatisticsResultAdapter.Result>() {
 

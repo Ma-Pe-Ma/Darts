@@ -323,7 +323,7 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
 
         //remove earlier callbacks if they exists (by some error)
         playerNameTextHandler.removeCallbacks(newRoundIntroEnd)
-        playerNameTextHandler.removeCallbacks(flashing)
+        //playerNameTextHandler.removeCallbacks(flashing)
 
         playerScore!!.text = PlayerProfile.currentPlayer!!.score!!.score.toString()
         playerName?.text = "P${PlayerProfile.currentCursor + 1} - ${PlayerProfile.currentPlayer!!.nickname}"

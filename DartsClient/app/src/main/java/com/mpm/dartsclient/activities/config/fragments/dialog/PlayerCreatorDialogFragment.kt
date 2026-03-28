@@ -230,10 +230,10 @@ class PlayerCreatorDialogFragment() : DialogFragment() {
     }
 
     private fun checkTakenName() : Boolean {
-        var modifiableName = tempPlayer!!.name.toLowerCase()
+        var modifiableName = tempPlayer!!.name.lowercase()
 
         for ((i, playerProfile) in PlayerProfile.playerProfiles.withIndex()) {
-            var nameFromList = playerProfile.name.toLowerCase()
+            var nameFromList = playerProfile.name.lowercase()
             if (nameFromList == modifiableName) {
                 if (position != null && position == i) {
                     continue
@@ -246,10 +246,10 @@ class PlayerCreatorDialogFragment() : DialogFragment() {
     }
 
     private fun checkTakenNickname() : Boolean {
-        var modifiableNick = tempPlayer!!.nickname.toLowerCase()
+        var modifiableNick = tempPlayer!!.nickname.lowercase()
 
         for ((i, playerProfile) in PlayerProfile.playerProfiles.withIndex()) {
-            var nickFromList = playerProfile.nickname.toLowerCase()
+            var nickFromList = playerProfile.nickname.lowercase()
 
             if (nickFromList == modifiableNick) {
                 if (position != null && position == i) {
@@ -309,6 +309,10 @@ class PlayerCreatorDialogFragment() : DialogFragment() {
         override fun onRefresh(colorEnvelope: ColorEnvelope) {
             textView.text = "#" + colorEnvelope.hexCode
             alphaTileView.setPaintColor(colorEnvelope.color)
+        }
+
+        override fun onFlipped(p0: Boolean?) {
+            TODO("Not yet implemented")
         }
     }
 

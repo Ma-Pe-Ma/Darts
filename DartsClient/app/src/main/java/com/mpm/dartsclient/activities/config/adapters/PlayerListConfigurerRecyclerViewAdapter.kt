@@ -148,12 +148,12 @@ class PlayerListConfigurerRecyclerViewAdapter(var activity : Config, var chosenP
                 }
                 else {
                     val resultsModel: MutableList<PlayerProfile> = ArrayList()
-                    val searchStr = constraint.toString().toLowerCase()
+                    val searchStr = constraint.toString().lowercase()
 
                     for (playerProfile in PlayerProfile.playerProfiles) {
 
-                        val lowerCasePlayerName : String = playerProfile.name.toLowerCase()
-                        val lowerCasePlayerNickname : String = playerProfile.nickname.toLowerCase()
+                        val lowerCasePlayerName : String = playerProfile.name.lowercase()
+                        val lowerCasePlayerNickname : String = playerProfile.nickname.lowercase()
 
                         if (lowerCasePlayerName.length >= searchStr.length) {
                             if (lowerCasePlayerName.substring(0, searchStr.length) == searchStr) {

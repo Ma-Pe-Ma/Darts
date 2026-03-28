@@ -105,7 +105,7 @@ class StartActivity : AppCompatActivity(), BTStateReceiver{
         if (bluetoothAdapter == null) {
             // Device doesn't support Bluetooth
         } else {
-            if (!bluetoothAdapter?.isEnabled) {
+            if (!bluetoothAdapter.isEnabled) {
                 val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
             } else {
