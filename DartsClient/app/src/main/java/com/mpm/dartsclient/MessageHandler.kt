@@ -5,10 +5,10 @@ import com.mpm.dartsclient.sqlhelper.SQLTables
 import org.json.JSONObject
 
 object MessageHandler {
-    private fun createPlayerJson() : JSONObject {
+    private fun createPlayerJson(playerProfiles: MutableList<PlayerProfile>) : JSONObject {
         var players = JSONObject()
 
-        for ((i, player) in PlayerProfile.chosenPlayerProfiles.withIndex()) {
+        for ((i, player) in playerProfiles.withIndex()) {
             var playerJ = JSONObject()
             playerJ.put("COLOR", player.backgroundColor)
             playerJ.put("NICK", player.nickname)
@@ -19,13 +19,13 @@ object MessageHandler {
         return players
     }
 
-    fun sendPlayers() {
+    fun sendPlayers(playerProfiles: MutableList<PlayerProfile>) {
         var jsonObject = JSONObject()
         jsonObject.put("STATE", "PLAYERS")
 
         var body = JSONObject()
 
-        var players = createPlayerJson()
+        var players = createPlayerJson(playerProfiles)
         body.put("PLAYERS", players)
 
         var gameNr : Int = SQLTables.GamesTable.findGameNr()
@@ -36,15 +36,15 @@ object MessageHandler {
         DartsClientApplication.getBluetoothCommunicator().sendMessage(jsonObject)
     }
 
-    @Synchronized fun sendGameConfig() {
+    @Synchronized fun sendGameConfig(dartsGameContainer: DartsGameContainer) {
         var jsonObject = JSONObject()
         jsonObject.put("STATE", "CONFIG")
 
         var body = JSONObject()
 
-        body.put("GAME", DartsGameContainer.currentGame!!.gameID)
+        body.put("GAME", dartsGameContainer.currentGame!!.gameID)
 
-        var configObject = DartsGameContainer.currentGame!!.serializeConfigParameters()
+        var configObject = dartsGameContainer.currentGame!!.serializeConfigParameters()
         body.put("CONFIG", configObject)
 
         jsonObject.put("BODY", body)
@@ -52,7 +52,7 @@ object MessageHandler {
         DartsClientApplication.getBluetoothCommunicator().sendMessage(jsonObject)
     }
 
-    fun sendDump() {
+    fun sendDump(playerProfiles: MutableList<PlayerProfile>, dartsGameContainer: DartsGameContainer) {
         var dump = JSONObject()
         dump.put("STATE", "DUMP")
 
@@ -61,12 +61,12 @@ object MessageHandler {
         var gameNr : Int = SQLTables.GamesTable.findGameNr()
 
         body.put("GAMENR", gameNr)
-        body.put("PLAYERS", createPlayerJson())
-        body.put("GAME", DartsGameContainer.currentGame!!.gameID)
+        body.put("PLAYERS", createPlayerJson(playerProfiles))
+        body.put("GAME", dartsGameContainer.currentGame!!.gameID)
 
         var configObject = JSONObject()
 
-        for (game in DartsGameContainer.games) {
+        for (game in dartsGameContainer.games) {
             configObject.put(game.gameID!!, game.serializeConfigParameters())
         }
 

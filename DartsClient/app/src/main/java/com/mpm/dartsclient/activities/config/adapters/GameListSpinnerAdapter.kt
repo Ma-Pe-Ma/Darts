@@ -10,25 +10,20 @@ import android.widget.TextView
 import com.mpm.dartsclient.games.DartsGameContainer
 import com.mpm.dartsclient.R
 
-class GameListSpinnerAdapter : SpinnerAdapter {
+class GameListSpinnerAdapter(var gameIds: List<String>) : SpinnerAdapter {
     override fun isEmpty(): Boolean {
-        if (DartsGameContainer.games.size == 0) {
-            return true
-        }
-        return false
+        return gameIds.count() == 0
     }
 
     @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        //TODO("Not yet implemented")
         val inflater = LayoutInflater.from(parent!!.context)
-        var view: View = inflater.inflate(R.layout.game_name_row, parent, false)
+        val view: View = inflater.inflate(R.layout.game_name_row, parent, false)
 
-        var text = view.findViewById<TextView>(R.id.gameNameRow)
+        val text = view.findViewById<TextView>(R.id.gameNameRow)
 
         text.apply {
-            text.text = DartsGameContainer.games[position].gameID
-            //text.textSize = 20F
+            text.text = gameIds[position]
         }
 
         return view
@@ -42,10 +37,10 @@ class GameListSpinnerAdapter : SpinnerAdapter {
         return R.layout.game_name_row
     }
 
-    override fun getItem(position: Int): Any {
+    override fun getItem(position: Int): Any? {
         //TODO("Not yet implemented")
 
-        return DartsGameContainer.games[position]
+        return null
     }
 
     override fun getViewTypeCount(): Int {
@@ -62,15 +57,13 @@ class GameListSpinnerAdapter : SpinnerAdapter {
     }
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        //TODO("Not yet implemented")
         val inflater = LayoutInflater.from(parent!!.context)
-        var view : View = inflater.inflate(R.layout.game_name_row, parent, false)
+        val view : View = inflater.inflate(R.layout.game_name_row, parent, false)
 
-        var text = view.findViewById<TextView>(R.id.gameNameRow)
+        val text = view.findViewById<TextView>(R.id.gameNameRow)
 
         text.apply {
-            text.text = DartsGameContainer.games[position].gameID
-            //text.textSize = 20F
+            text.text = gameIds[position]
         }
 
         return view
@@ -81,6 +74,6 @@ class GameListSpinnerAdapter : SpinnerAdapter {
     }
 
     override fun getCount(): Int {
-        return DartsGameContainer.games.size
+        return gameIds.count()
     }
 }

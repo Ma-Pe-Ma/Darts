@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mpm.dartsclient.PlayerProfile
+import com.mpm.dartsclient.ProfileContainer
 import com.mpm.dartsclient.R
 
 //this adapter is used for two cases, when score is checked, and when the (partial) results are shown!
-class PlayerScoreRecyclerViewAdapter(var activity : Activity, var cursor : Int, var result : Boolean, var playerProfiles : MutableList<PlayerProfile>) : RecyclerView.Adapter<PlayerScoreRecyclerViewAdapter.PlayerScoreHolder>() {
+class PlayerScoreRecyclerViewAdapter(var activity : Activity, var cursor : Int, var result : Boolean, var profileContainer: ProfileContainer) : RecyclerView.Adapter<PlayerScoreRecyclerViewAdapter.PlayerScoreHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerScoreHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -25,7 +26,7 @@ class PlayerScoreRecyclerViewAdapter(var activity : Activity, var cursor : Int, 
     override fun onBindViewHolder(holder: PlayerScoreHolder, position: Int) {
         holder.sequencNr.text = "" +(position + 1) +"."
 
-        var player = playerProfiles[position]
+        var player = profileContainer.playerProfiles[position]
         holder.playerName.text = player.nickname
         holder.playerName.setBackgroundColor(player.backgroundColor!!)
         holder.playerName.setTextColor(player.textColor!!)
@@ -42,7 +43,7 @@ class PlayerScoreRecyclerViewAdapter(var activity : Activity, var cursor : Int, 
 
         if (result) {
             var idOfPlayer = -1;
-            for ((i, chosenPlayer) in PlayerProfile.chosenPlayerProfiles.withIndex()) {
+            for ((i, chosenPlayer) in profileContainer.chosenPlayerProfiles.withIndex()) {
                 if (chosenPlayer == player) {
                     idOfPlayer = i
                     break
@@ -66,7 +67,7 @@ class PlayerScoreRecyclerViewAdapter(var activity : Activity, var cursor : Int, 
     }
 
     override fun getItemCount(): Int {
-        return playerProfiles.size
+        return profileContainer.playerProfiles.size
     }
 
     class PlayerScoreHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

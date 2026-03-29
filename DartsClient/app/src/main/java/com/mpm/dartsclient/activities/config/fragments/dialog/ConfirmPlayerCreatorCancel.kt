@@ -5,7 +5,9 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 
 class ConfirmPlayerCreatorCancel() : DialogFragment() {
 
@@ -14,17 +16,15 @@ class ConfirmPlayerCreatorCancel() : DialogFragment() {
 
         builder.setTitle("Biztos?")
         builder.setPositiveButton(
-            "Jah",
+            "Igen",
             DialogInterface.OnClickListener { dialogInterface: DialogInterface, i: Int ->
-                PlayerCreatorDialogFragment.tempPlayer = null
-                PlayerCreatorDialogFragment.position = null
+                setFragmentResult("CANCEL_REQUEST", bundleOf("result" to true))
             })
 
         builder.setNegativeButton(
-            "Nope",
+            "Nem",
             DialogInterface.OnClickListener { dialogInterface: DialogInterface, i: Int ->
-                var playerCreatorDialogFragment = PlayerCreatorDialogFragment()
-                playerCreatorDialogFragment.show(parentFragmentManager, "CREATOR")
+                setFragmentResult("CANCEL_REQUEST", bundleOf("result" to false))
             })
 
         return builder.create()
@@ -32,7 +32,6 @@ class ConfirmPlayerCreatorCancel() : DialogFragment() {
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        PlayerCreatorDialogFragment.tempPlayer = null
-        PlayerCreatorDialogFragment.position = null
+        setFragmentResult("CANCEL_REQUEST", bundleOf("result" to true))
     }
 }

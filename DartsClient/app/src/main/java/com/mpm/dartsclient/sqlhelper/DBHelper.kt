@@ -3,7 +3,6 @@ package com.mpm.dartsclient.sqlhelper
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
 import java.sql.SQLException
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -17,11 +16,10 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         try{
             db?.execSQL(SQLTables.PlayersTable.SQL_CREATE_PLAYERS)
             db?.execSQL(SQLTables.GamesTable.SQL_CREATE_GAMES)
-            db?.execSQL(SQLTables.GamePlayerTable.SQL_CREATE_GAME_PLAYER)
-            //Log.i("DARTS", "db created!")
+            db?.execSQL(SQLTables.PlayerMatchData.SQL_CREATE_PLAYER_MATCH_DATA)
         }
         catch (e : SQLException) {
-            //Log.i("DARTS", "ERROR WITH creating")
+
         }
     }
 

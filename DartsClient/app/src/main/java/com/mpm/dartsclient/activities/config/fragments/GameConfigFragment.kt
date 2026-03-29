@@ -16,41 +16,28 @@ import com.mpm.dartsclient.activities.config.Config
 import com.mpm.dartsclient.activities.config.adapters.GameListSpinnerAdapter
 import com.mpm.dartsclient.games.DartsGameContainer
 
-class GameConfigFragment : Fragment(), Config.FragmentCommunicator {
-    var gameButton : Button? = null
+class GameConfigFragment(var dartsGameContainer: DartsGameContainer) : Fragment(), Config.FragmentCommunicator {
     var spinner : Spinner? = null
 
-    private var previousFrag : Int = -1
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        var view = inflater.inflate(R.layout.fragment_game_config, container, false)
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_game_config, container, false)
         setupSpinner(view)
-        //createButton(view)
 
-        // Inflate the layout for this fragment
         return view
     }
 
     private fun setupSpinner(view: View) {
+        val gameIds: List<String> = dartsGameContainer.games.map { it.gameID }
+
         spinner = view.findViewById(R.id.gameSpinner)
-        spinner!!.adapter = GameListSpinnerAdapter()
+        spinner!!.adapter = GameListSpinnerAdapter(gameIds)
 
         spinner!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
+
             }
 
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 setProperConfigFragment(position)
             }
         }
@@ -63,20 +50,12 @@ class GameConfigFragment : Fragment(), Config.FragmentCommunicator {
 
     //called when spinner changed or new data comes from dartboard
     fun setProperConfigFragment(gameNr: Int) {
-        DartsGameContainer.currentGame = DartsGameContainer.games[gameNr]
-        DartsGameContainer.currentGame!!.subtype = "DEFAULT"
+        dartsGameContainer.currentGame = dartsGameContainer.games[gameNr]
+        dartsGameContainer.currentGame!!.subtype = "DEFAULT"
 
-        //var fragment = activity?.supportFragmentManager?.findFragmentById(R.id.gameConfigFragment)
         val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.gameConfigFragment, DartsGameContainer.currentGame!!.getConfigFragment())
+        fragmentTransaction.replace(R.id.gameConfigFragment, dartsGameContainer.currentGame!!.getConfigFragment(dartsGameContainer))
         fragmentTransaction.commit()
-
-        //if spinner changed send down data not when board sends update!
-        if (previousFrag != gameNr) {
-            MessageHandler.sendGameConfig()
-        }
-
-        previousFrag = gameNr
     }
 
     override fun notifyPlayerConfigFragment(position: Int) {
@@ -88,14 +67,10 @@ class GameConfigFragment : Fragment(), Config.FragmentCommunicator {
     }
 
     override fun notifyGameConfigFragmentAboutUpdate(position: Int) {
-        setProperConfigFragment(position)
+
     }
 
     override fun notifyStatisticsButton() {
 
     }
-}
-
-private operator fun AdapterView.OnItemSelectedListener?.invoke(function: () -> Unit) {
-
 }

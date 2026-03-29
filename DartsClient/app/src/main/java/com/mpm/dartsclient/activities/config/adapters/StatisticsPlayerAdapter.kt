@@ -10,12 +10,14 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mpm.dartsclient.PlayerProfile
+import com.mpm.dartsclient.ProfileContainer
 import com.mpm.dartsclient.R
 import com.mpm.dartsclient.activities.config.ExpandableCardView
 import com.mpm.dartsclient.loadedSQLData.LoadedMatch
+import com.mpm.dartsclient.loadedSQLData.MatchContainer
 
 
-class StatisticsPlayerAdapter(var activity: Activity) :  RecyclerView.Adapter<StatisticsPlayerAdapter.Player>() {
+class StatisticsPlayerAdapter(var activity: Activity, var profileContainer: ProfileContainer, var matchContainer: MatchContainer) :  RecyclerView.Adapter<StatisticsPlayerAdapter.Player>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Player {
         val inflater = LayoutInflater.from(parent.context)
@@ -25,24 +27,24 @@ class StatisticsPlayerAdapter(var activity: Activity) :  RecyclerView.Adapter<St
     }
 
     override fun onBindViewHolder(holder: Player, position: Int) {
-        var player = PlayerProfile.chosenPlayerProfiles[position]
+        var player = profileContainer.chosenPlayerProfiles[position]
         holder.resultPos. apply {
             text = position.toString()
         }
 
         setupResultHeader(holder.resultHeader)
 
-        var resultAdapter = StatisticsResultAdapter(LoadedMatch.playerStatistics[player]!!.second)
+        var resultAdapter = StatisticsResultAdapter(matchContainer.playerStatistics[player]!!.second)
 
         holder.statisticsID.text = "${(position + 1)}."
         holder.statisticsPlayerNameText.text = player.nickname
         holder.statisticsPlayerNameText.setTextColor(player.textColor!!)
         holder.statisticsPlayerNameText.setBackgroundColor(player.backgroundColor!!)
 
-        if (LoadedMatch.loadedMatches.size > 0) {
-            holder.statisticsAveragePositionValue.text = LoadedMatch.playerStatistics[player]!!.first.averagePosition.toString()
-            holder.statisticsAverageRoundValue.text = LoadedMatch.playerStatistics[player]!!.first.averageRound.toString()
-            holder.statisticsAverageScoreValue.text = LoadedMatch.playerStatistics[player]!!.first.averageScore.toString()
+        if (matchContainer.loadedMatches.size > 0) {
+            holder.statisticsAveragePositionValue.text = matchContainer.playerStatistics[player]!!.first.averagePosition.toString()
+            holder.statisticsAverageRoundValue.text = matchContainer.playerStatistics[player]!!.first.averageRound.toString()
+            holder.statisticsAverageScoreValue.text = matchContainer.playerStatistics[player]!!.first.averageScore.toString()
         }
         else {
             holder.statisticsAveragePositionValue.text = "-"
@@ -75,7 +77,7 @@ class StatisticsPlayerAdapter(var activity: Activity) :  RecyclerView.Adapter<St
 
         holder.cardView.resultRecyclerListWithHeader?.visibility = View.INVISIBLE
 
-        if (LoadedMatch.loadedMatches.size > 0) {
+        if (matchContainer.loadedMatches.size > 0) {
             holder.cardView.setOnClickListener {
                 //holder.cardView.toggle()
                 if (holder.cardView.resultRecyclerListWithHeader!!.visibility == View.INVISIBLE) {
@@ -89,7 +91,7 @@ class StatisticsPlayerAdapter(var activity: Activity) :  RecyclerView.Adapter<St
     }
 
     override fun getItemCount(): Int {
-        return PlayerProfile.chosenPlayerProfiles.size
+        return profileContainer.chosenPlayerProfiles.size
     }
 
     override fun getItemViewType(position: Int): Int {

@@ -10,15 +10,14 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mpm.dartsclient.PlayerProfile
+import com.mpm.dartsclient.ProfileContainer
 import com.mpm.dartsclient.R
 import com.mpm.dartsclient.activities.config.Config
 import com.mpm.dartsclient.activities.config.adapters.PlayerListConfigurerRecyclerViewAdapter
+import com.mpm.dartsclient.games.DartsGameContainer
+import com.mpm.dartsclient.loadedSQLData.MatchContainer
 
-class PlayerListConfigurerDialogFragment : DialogFragment(), Config.FragmentCommunicator {
-    companion object {
-        var chosenPlayers : MutableList<PlayerProfile>? = null
-    }
-
+class PlayerListConfigurerDialogFragment(var profileContainer: ProfileContainer, var matchContainer: MatchContainer, var dartsGameContainer: DartsGameContainer) : DialogFragment(), Config.FragmentCommunicator {
     private var recyclerView : RecyclerView? = null
     private var searchview : SearchView? = null
     private var playerListConfigurerRecyclerViewAdapter : PlayerListConfigurerRecyclerViewAdapter? = null
@@ -48,7 +47,7 @@ class PlayerListConfigurerDialogFragment : DialogFragment(), Config.FragmentComm
             }
         })
 
-        playerListConfigurerRecyclerViewAdapter = PlayerListConfigurerRecyclerViewAdapter(activity as Config, chosenPlayers!!)
+        playerListConfigurerRecyclerViewAdapter = PlayerListConfigurerRecyclerViewAdapter(activity as Config, profileContainer, matchContainer, dartsGameContainer)
 
         recyclerView = view.findViewById<RecyclerView>(R.id.availablePlayers)
         recyclerView?.apply {
@@ -59,7 +58,8 @@ class PlayerListConfigurerDialogFragment : DialogFragment(), Config.FragmentComm
 
     override fun onResume() {
         super.onResume()
-        dialog!!.window!!.setLayout(700, 700)
+        val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
+        dialog?.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
     override fun onAttach(context: Context) {

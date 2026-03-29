@@ -6,15 +6,14 @@ import androidx.fragment.app.Fragment
 import com.mpm.dartsclient.DartsClientApplication
 import com.mpm.dartsclient.R
 import com.mpm.dartsclient.activities.config.fragments.gameconfig.CricketConfig
+import com.mpm.dartsclient.games.DartsGame
 import com.mpm.dartsclient.games.DartsGameContainer
 import com.mpm.dartsclient.scoring.scoring.CricketScore
 import com.mpm.dartsclient.scoring.scoring.GameScore
 import org.json.JSONObject
 
-class Cricket(gameID : String, name :String) : DartsGameContainer(gameID, name) {
-    companion object {
-        var scoreMap = Array(21) {0}
-    }
+class Cricket(gameID : String, name :String) : DartsGame(gameID, name) {
+    var scoreMap = Array(21) {0}
 
     override fun parseConfigParameters(config: JSONObject) {
         var context = DartsClientApplication.context
@@ -39,7 +38,7 @@ class Cricket(gameID : String, name :String) : DartsGameContainer(gameID, name) 
 
         cricketSharedPrefEditor.apply()
 
-        currentGame!!.subtype = cricketType
+        //currentGame!!.subtype = cricketType
 
         var rawMap = config["MAP"] as JSONObject
         scoreMap = Array(21) {0}
@@ -83,8 +82,8 @@ class Cricket(gameID : String, name :String) : DartsGameContainer(gameID, name) 
         return configObject
     }
 
-    override fun getConfigFragment() : Fragment {
-        return CricketConfig()
+    override fun getConfigFragment(dartsGameContainer: DartsGameContainer) : Fragment {
+        return CricketConfig(dartsGameContainer)
     }
 
     override fun getScoreObject() : GameScore {

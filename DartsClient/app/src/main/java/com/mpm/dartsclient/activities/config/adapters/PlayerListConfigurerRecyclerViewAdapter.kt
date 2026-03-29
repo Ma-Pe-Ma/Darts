@@ -7,16 +7,19 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.mpm.dartsclient.PlayerProfile
+import com.mpm.dartsclient.ProfileContainer
 import com.mpm.dartsclient.R
 import com.mpm.dartsclient.activities.config.Config
 import com.mpm.dartsclient.activities.config.fragments.dialog.DeleteProfileDialogFragment
 import com.mpm.dartsclient.activities.config.fragments.dialog.PlayerCreatorDialogFragment
+import com.mpm.dartsclient.games.DartsGameContainer
+import com.mpm.dartsclient.loadedSQLData.MatchContainer
 import com.mpm.dartsclient.sqlhelper.SQLTables
 
-class PlayerListConfigurerRecyclerViewAdapter(var activity : Config, var chosenPlayers : List<PlayerProfile>)
+class PlayerListConfigurerRecyclerViewAdapter(var activity : Config, var profileContainer : ProfileContainer, var matchContainer: MatchContainer, var dartsGameContainer: DartsGameContainer)
     : RecyclerView.Adapter<PlayerListConfigurerRecyclerViewAdapter.PlayerHolder>(), Filterable {
 
-    var filteredPlayers : MutableList<PlayerProfile> = PlayerProfile.playerProfiles
+    var filteredPlayers : MutableList<PlayerProfile> = profileContainer.playerProfiles
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerHolder {
         val inflater = LayoutInflater.from(parent.context)
         var view: View = inflater.inflate(viewType, parent, false)
@@ -67,7 +70,7 @@ class PlayerListConfigurerRecyclerViewAdapter(var activity : Config, var chosenP
             filteredPlayers?.size -> {
 
                 imageButton.setOnClickListener {
-                    var playerCreatorDialogFragment = PlayerCreatorDialogFragment(null)
+                    var playerCreatorDialogFragment = PlayerCreatorDialogFragment(null, profileContainer)
                     playerCreatorDialogFragment.show(activity.supportFragmentManager, "PLAYERCREATOR")
                 }
 
@@ -87,18 +90,18 @@ class PlayerListConfigurerRecyclerViewAdapter(var activity : Config, var chosenP
 
                 editButton.setOnClickListener {
                     var i : Int = 0
-                    for (player in PlayerProfile.playerProfiles) {
+                    for (player in profileContainer.playerProfiles) {
                         if (player == filteredPlayers[position] ) {
                             break;
                         }
                         i++
                     }
 
-                    var playerCreatorDialogFragment = PlayerCreatorDialogFragment(i)
+                    var playerCreatorDialogFragment = PlayerCreatorDialogFragment(i, profileContainer)
                     playerCreatorDialogFragment.show(activity.supportFragmentManager, "PLAYERCREATOR")
                 }
 
-                if (chosenPlayers.contains(filteredPlayers[position])) {
+                if (profileContainer.chosenPlayerProfiles.contains(filteredPlayers[position])) {
                     holder.holderView.setBackgroundColor(ContextCompat.getColor(activity, R.color.listBackgroundInactiveLight))
 
                     textView.setOnClickListener {
@@ -115,7 +118,7 @@ class PlayerListConfigurerRecyclerViewAdapter(var activity : Config, var chosenP
                 else {
                     textView.setOnClickListener {
                         activity.notifyPlayerConfigFragment(position)
-                        SQLTables.createStatistics()
+                        matchContainer.createStatistics(profileContainer, dartsGameContainer)
                     }
 
                     imageButton.setOnClickListener {
@@ -129,7 +132,7 @@ class PlayerListConfigurerRecyclerViewAdapter(var activity : Config, var chosenP
     }
 
     private fun deleteProfile(position: Int) {
-        DeleteProfileDialogFragment(position).show(activity.supportFragmentManager, "PlayerDeleteDialog")
+        DeleteProfileDialogFragment(position, profileContainer).show(activity.supportFragmentManager, "PlayerDeleteDialog")
     }
 
     class PlayerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -143,14 +146,14 @@ class PlayerListConfigurerRecyclerViewAdapter(var activity : Config, var chosenP
                 if (constraint == null || constraint.length == 0) {
                     //filterResults.count = towns.size();
                     //filterResults.values = towns;
-                    filterResults.count = PlayerProfile.playerProfiles.size
-                    filterResults.values = PlayerProfile.playerProfiles
+                    filterResults.count = profileContainer.playerProfiles.size
+                    filterResults.values = profileContainer.playerProfiles
                 }
                 else {
                     val resultsModel: MutableList<PlayerProfile> = ArrayList()
                     val searchStr = constraint.toString().lowercase()
 
-                    for (playerProfile in PlayerProfile.playerProfiles) {
+                    for (playerProfile in profileContainer.playerProfiles) {
 
                         val lowerCasePlayerName : String = playerProfile.name.lowercase()
                         val lowerCasePlayerNickname : String = playerProfile.nickname.lowercase()

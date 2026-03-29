@@ -15,15 +15,21 @@ import com.mpm.dartsclient.activities.gamePlay.GamePlay
 import com.mpm.dartsclient.activities.config.adapters.ViewPager2Adapter
 import com.mpm.dartsclient.activities.config.fragments.dialog.NeedPlayers
 import com.mpm.dartsclient.games.DartsGameContainer
-import com.mpm.dartsclient.sqlhelper.DBHelper
+import com.mpm.dartsclient.loadedSQLData.MatchContainer
 import com.mpm.dartsclient.sqlhelper.SQLTables
-import org.json.JSONException
 import org.json.JSONObject
+
 
 class Config : FragmentActivity(), BTMessageReceiver {
     var tabLayout : TabLayout? = null
     var viewPager2: ViewPager2? = null
     var previousTabIndex = 0
+
+    var profileContainer: ProfileContainer = ProfileContainer.getInstance()
+
+    var matchContainer: MatchContainer = MatchContainer.getInstance()
+
+    var dartsGameContainer: DartsGameContainer = DartsGameContainer.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,18 +40,18 @@ class Config : FragmentActivity(), BTMessageReceiver {
 
         //deleteDatabase(DBHelper.DATABASE_NAME)
         //read the players from the sqlite database
-        SQLTables.PlayersTable.readPlayers()
+
+        profileContainer.playerProfiles = SQLTables.PlayersTable.readPlayers()
 
         //setup the start button
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            if (PlayerProfile.chosenPlayerProfiles.size == 0) {
+            if (profileContainer.chosenPlayerProfiles.size == 0) {
                 var needPlayers = NeedPlayers()
                 needPlayers.show(supportFragmentManager, "NEED")
             }
             else {
                 val intent = Intent(this, GamePlay::class.java)
                 startActivity(intent)
-                //MessageHandler.requestGameStart(0)
             }
         }
 
@@ -71,14 +77,12 @@ class Config : FragmentActivity(), BTMessageReceiver {
         viewPager2 = findViewById(R.id.viewPager2)
         tabLayout = findViewById(R.id.tabLayout)
 
-        //var titles = Array<String>(2) {getString(R.string.tab1_name), getString(R.string.tab2_name)}
         var titles =  arrayOf<String>(
-            getString(R.string.tab1_name), getString(
-                R.string.tab2_name
-            )
+            getString(R.string.tab1_name),
+            getString(R.string.tab2_name)
         )
 
-        viewPager2!!.adapter = ViewPager2Adapter(supportFragmentManager, lifecycle)
+        viewPager2!!.adapter = ViewPager2Adapter(supportFragmentManager, lifecycle, profileContainer, matchContainer, dartsGameContainer)
 
         TabLayoutMediator(tabLayout!!, viewPager2!!) { tab, position ->
             tab.text = titles[position]
@@ -90,11 +94,11 @@ class Config : FragmentActivity(), BTMessageReceiver {
                 if (tab.position != previousTabIndex ) {
                     when (tab.position) {
                         0-> {
-                            MessageHandler.sendGameConfig()
+                            MessageHandler.sendGameConfig(dartsGameContainer)
                         }
 
                         1-> {
-                            MessageHandler.sendPlayers()
+                            MessageHandler.sendPlayers(profileContainer.chosenPlayerProfiles)
                         }
                     }
                 }
@@ -127,7 +131,7 @@ class Config : FragmentActivity(), BTMessageReceiver {
             fragmentCommunicator.notifyPlayerConfigFragment(position)
         }
 
-        MessageHandler.sendPlayers()
+        MessageHandler.sendPlayers(profileContainer.chosenPlayerProfiles)
     }
 
     fun notifyAboutModifiedPlayerEntry(position: Int) {
@@ -135,7 +139,7 @@ class Config : FragmentActivity(), BTMessageReceiver {
             fragmentCommunicator.notifyAboutModifiedPlayerEntry(position)
         }
 
-        MessageHandler.sendPlayers()
+        MessageHandler.sendPlayers(profileContainer.chosenPlayerProfiles)
     }
 
     fun notifyGameConfigFragmentAboutUpdate(position: Int) {
@@ -156,17 +160,17 @@ class Config : FragmentActivity(), BTMessageReceiver {
         var tab = tabLayout!!.getTabAt(1)
         tab!!.select()
 
-        MessageHandler.sendDump()
+        MessageHandler.sendDump(profileContainer.chosenPlayerProfiles, dartsGameContainer)
     }
 
     override fun onConfig(body : JSONObject) {
-        DartsGameContainer.currentGame = DartsGameContainer.findGameByName(body["GAME"] as String)
-        DartsGameContainer.currentGame?.parseConfigParameters(body["CONFIG"] as JSONObject)
+        dartsGameContainer.currentGame = dartsGameContainer.findGameByName(body["GAME"] as String)
+        dartsGameContainer.currentGame?.parseConfigParameters(body["CONFIG"] as JSONObject)
 
         var tab = tabLayout!!.getTabAt(0)
         tab!!.select()
 
-        var nrOfGame = DartsGameContainer.findNumberOfGame(DartsGameContainer.currentGame)
+        var nrOfGame = dartsGameContainer.findNumberOfGame(dartsGameContainer.currentGame)
         notifyGameConfigFragmentAboutUpdate(nrOfGame!!)
     }
 

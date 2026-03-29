@@ -12,22 +12,19 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mpm.dartsclient.PlayerProfile
+import com.mpm.dartsclient.ProfileContainer
 import com.mpm.dartsclient.R
 import com.mpm.dartsclient.activities.gamePlay.SaveProgress
 import com.mpm.dartsclient.activities.gamePlay.adapters.PlayerScoreRecyclerViewAdapter
 
-class WinningMessageDialogFragment(var finishingPlayer : PlayerProfile?) : DialogFragment() {
-    companion object {
-        var saveProgress = SaveProgress.inProgress
-    }
-
+class WinningMessageDialogFragment(var finishingPlayer : PlayerProfile?, var profileContainer: ProfileContainer) : DialogFragment() {
+    var saveProgress = SaveProgress.inProgress
     var messageText : TextView? = null
     var titleText : TextView? = null
     var partialResultText : TextView? = null
     var okButton : Button? = null
     var recyclerView : RecyclerView? = null
     var explainingRow : ConstraintLayout? = null
-
     var message : String = ""
     var title : String = ""
     var partial : String = ""
@@ -36,13 +33,11 @@ class WinningMessageDialogFragment(var finishingPlayer : PlayerProfile?) : Dialo
 
     init {
         finishedPlayers = mutableListOf()
-
-        for (player in PlayerProfile.chosenPlayerProfiles) {
+        for (player in profileContainer.chosenPlayerProfiles) {
             if (player.score!!.position > 0) {
                 finishedPlayers.add(player)
             }
         }
-
         finishedPlayers = finishedPlayers.sortedWith(compareBy { it.score!!.position }).toMutableList()
     }
 
@@ -81,7 +76,7 @@ class WinningMessageDialogFragment(var finishingPlayer : PlayerProfile?) : Dialo
             dismiss()
 
             //if game is finishing and active
-            if (PlayerProfile.chosenPlayerProfiles.size == finishedPlayers.size) {
+            if (profileContainer.chosenPlayerProfiles.size == finishedPlayers.size) {
                 var postConfigDialog = PostConfigDialog()
                 postConfigDialog.show(parentFragmentManager, "POSTCONF")
             }
@@ -94,8 +89,8 @@ class WinningMessageDialogFragment(var finishingPlayer : PlayerProfile?) : Dialo
 
         recyclerView = playerList.findViewById(R.id.playerRecyclerList)
         recyclerView?.apply {
-            var highlightPosition = if (PlayerProfile.chosenPlayerProfiles.size == finishedPlayers.size) -1 else finishedPlayers.size
-            recyclerView?.adapter = PlayerScoreRecyclerViewAdapter(requireActivity(), highlightPosition, true, finishedPlayers)
+            var highlightPosition = if (profileContainer.chosenPlayerProfiles.size == finishedPlayers.size) -1 else finishedPlayers.size
+            recyclerView?.adapter = PlayerScoreRecyclerViewAdapter(requireActivity(), highlightPosition, true, profileContainer)
             layoutManager = LinearLayoutManager(activity)
         }
 
@@ -108,11 +103,11 @@ class WinningMessageDialogFragment(var finishingPlayer : PlayerProfile?) : Dialo
         super.onCancel(dialog)
 
         //if game is finishing
-        if (PlayerProfile.chosenPlayerProfiles.size == finishedPlayers.size) {
+        if (profileContainer.chosenPlayerProfiles.size == finishedPlayers.size) {
             when (saveProgress) {
                 //when saving not finished reshow this window
                 SaveProgress.inProgress -> {
-                    var newWinningMessage = WinningMessageDialogFragment(finishingPlayer)
+                    var newWinningMessage = WinningMessageDialogFragment(finishingPlayer, profileContainer)
                     newWinningMessage.show(parentFragmentManager, "WINNING")
                 }
 
@@ -136,7 +131,8 @@ class WinningMessageDialogFragment(var finishingPlayer : PlayerProfile?) : Dialo
     }
 
     private fun findMessageByProgress(saveProgress: SaveProgress) : String {
-        return when (Companion.saveProgress) {
+        this.saveProgress = saveProgress
+        return when (saveProgress) {
             SaveProgress.inProgress -> {
                 getString(R.string.savingInProgress)
             }
@@ -153,7 +149,7 @@ class WinningMessageDialogFragment(var finishingPlayer : PlayerProfile?) : Dialo
 
     private fun assignCorrectTexts(finishingPlayer: PlayerProfile?) {
         //if 1 player is playing or last one remaining show game finished dialog
-        if (finishedPlayers.size == PlayerProfile.chosenPlayerProfiles.size) {
+        if (finishedPlayers.size == profileContainer.chosenPlayerProfiles.size) {
             title = getString(R.string.gameFinishedTitle)
             partial = getString(R.string.finalPartial)
             message = findMessageByProgress(saveProgress)

@@ -21,7 +21,7 @@ import com.mpm.dartsclient.games.cricket.CricketSet
 import com.mpm.dartsclient.games.cricket.SubCricket
 import com.mpm.dartsclient.sqlhelper.SQLTables
 
-class CricketConfig : Fragment() {
+class CricketConfig (var dartsGameContainer: DartsGameContainer) : Fragment() {
     private var cricketSharedPref = activity?.getSharedPreferences(
         getString(R.string.cricketSharedPreference), Context.MODE_PRIVATE)
 
@@ -65,7 +65,7 @@ class CricketConfig : Fragment() {
         setupSetButtons(view)
         setupCustomButtons(view)
 
-        SQLTables.createStatistics()
+        //createStatistics()
 
         return view
     }
@@ -73,7 +73,7 @@ class CricketConfig : Fragment() {
     private fun setupTypeButtons(view : View) {
         val defaultType = SubCricket.SCORE.toString()
         cricketType = SubCricket.valueOf(cricketSharedPref!!.getString("CricketType", defaultType)!!)
-        DartsGameContainer.currentGame!!.subtype = cricketType.toString()
+        dartsGameContainer.currentGame!!.subtype = cricketType.toString()
 
         var score = view.findViewById<RadioButton>(R.id.score)
         var noScore = view.findViewById<RadioButton>(R.id.noScore)
@@ -108,14 +108,14 @@ class CricketConfig : Fragment() {
     }
 
     private fun processTypeButton(type : SubCricket) {
-        DartsGameContainer.currentGame?.subtype = type.toString()
+        dartsGameContainer.currentGame?.subtype = type.toString()
 
         cricketType = type
         cricketSharedPrefEditor!!.putString("CricketType", type.toString())
         cricketSharedPrefEditor!!.commit()
 
-        MessageHandler.sendGameConfig()
-        SQLTables.createStatistics()
+        MessageHandler.sendGameConfig(dartsGameContainer)
+        //SQLTables.createStatistics()
     }
 
     private fun setupSetButtons(view: View) {
@@ -175,7 +175,7 @@ class CricketConfig : Fragment() {
         cricketSharedPrefEditor!!.putString("CricketNumberSet", cricketNumberSet.toString())
         cricketSharedPrefEditor!!.commit()
 
-        MessageHandler.sendGameConfig()
+        MessageHandler.sendGameConfig(dartsGameContainer)
     }
 
     private fun setupCustomButtons(view: View) {
@@ -276,7 +276,7 @@ class CricketConfig : Fragment() {
         cricketSharedPrefEditor!!.putString("CricketCustomSet", customSetType.toString())
         cricketSharedPrefEditor!!.apply()
 
-        MessageHandler.sendGameConfig()
+        MessageHandler.sendGameConfig(dartsGameContainer)
     }
 
     private fun createNrOfNrPicker() {
@@ -301,7 +301,7 @@ class CricketConfig : Fragment() {
 
                 cricketSharedPrefEditor!!.apply()
 
-                MessageHandler.sendGameConfig()
+                MessageHandler.sendGameConfig(dartsGameContainer)
             }
         }
 
@@ -319,7 +319,7 @@ class CricketConfig : Fragment() {
                 cricketSharedPrefEditor!!.putInt("CricketStart", intervalStartingNrValue)
                 cricketSharedPrefEditor!!.apply()
 
-                MessageHandler.sendGameConfig()
+                MessageHandler.sendGameConfig(dartsGameContainer)
             }
         }
 

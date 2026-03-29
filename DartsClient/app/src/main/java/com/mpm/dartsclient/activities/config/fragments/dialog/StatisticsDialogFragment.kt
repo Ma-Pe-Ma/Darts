@@ -8,11 +8,13 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.mpm.dartsclient.ProfileContainer
 import com.mpm.dartsclient.R
 import com.mpm.dartsclient.activities.config.adapters.StatisticsPlayerAdapter
 import com.mpm.dartsclient.loadedSQLData.LoadedMatch
+import com.mpm.dartsclient.loadedSQLData.MatchContainer
 
-class StatisticsDialogFragment : DialogFragment() {
+class StatisticsDialogFragment(var profileContainer: ProfileContainer, var matchContainer: MatchContainer) : DialogFragment() {
 
     var recyclerView : RecyclerView? = null
 
@@ -32,9 +34,9 @@ class StatisticsDialogFragment : DialogFragment() {
         recyclerView = view.findViewById(R.id.statisticsRecycler)
 
         var commonMatchNumber = view.findViewById<TextView>(R.id.commonMatchNumber)
-        commonMatchNumber.text =requireActivity().getString(R.string.commonMatchNumber) +  " " + LoadedMatch.loadedMatches.size.toLong()
+        commonMatchNumber.text =requireActivity().getString(R.string.commonMatchNumber) +  " " + matchContainer.loadedMatches.size.toLong()
 
-        var statisticsAdapter = StatisticsPlayerAdapter(requireActivity())
+        var statisticsAdapter = StatisticsPlayerAdapter(requireActivity(), profileContainer, matchContainer)
 
         recyclerView!!.apply {
             adapter = statisticsAdapter

@@ -1,47 +1,45 @@
 package com.mpm.dartsclient.games
 
-import androidx.fragment.app.Fragment
 import com.mpm.dartsclient.games.cricket.Cricket
-import com.mpm.dartsclient.scoring.scoring.GameScore
-import org.json.JSONObject
 
-abstract class DartsGameContainer(var gameID : String, var name : String) {
-
-    var subtype : String = ""
-
+class DartsGameContainer {
     companion object {
-        var games : MutableList<DartsGameContainer> = ArrayList()
-        var currentGame : DartsGameContainer? = null
+        @Volatile
+        private var instance: DartsGameContainer? = null
 
-        init {
-            games.add(Cricket("CRICKET", "Cricket"))
-            games.add(RoundTheClock("RTC", "Round the Clock"))
-            games.add(X01("X01", "X01"))
-        }
-
-        fun findGameByName (ID : String) : DartsGameContainer?{
-            for (game in games) {
-                if (game.gameID == ID) {
-                    return game
-                }
+        fun getInstance(): DartsGameContainer {
+            return instance ?: synchronized(this) {
+                instance ?: DartsGameContainer().also { instance = it }
             }
-
-            return currentGame
         }
+    }public
 
-        fun findNumberOfGame(searchedGame : DartsGameContainer?) : Int? {
-            for ((numberG, game) in games.withIndex()) {
-                if (game == searchedGame) {
-                    return numberG
-                }
-            }
+    var games : MutableList<DartsGame> = ArrayList()
+    var currentGame : DartsGame? = null
 
-            return null
-        }
+    init {
+        games.add(Cricket("CRICKET", "Cricket"))
+        games.add(RoundTheClock("RTC", "Round the Clock"))
+        games.add(X01("X01", "X01"))
     }
 
-    abstract fun parseConfigParameters(jsonObject: JSONObject)
-    abstract fun serializeConfigParameters() : JSONObject
-    abstract fun getConfigFragment() : Fragment
-    abstract fun getScoreObject() : GameScore
+    fun findGameByName (ID : String) : DartsGame?{
+        for (game in games) {
+            if (game.gameID == ID) {
+                return game
+            }
+        }
+
+        return currentGame
+    }
+
+    fun findNumberOfGame(searchedGame : DartsGame?) : Int? {
+        for ((numberG, game) in games.withIndex()) {
+            if (game == searchedGame) {
+                return numberG
+            }
+        }
+
+        return null
+    }
 }

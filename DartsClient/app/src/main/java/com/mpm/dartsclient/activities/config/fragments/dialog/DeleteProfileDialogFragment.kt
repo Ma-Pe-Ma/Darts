@@ -12,10 +12,11 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import com.mpm.dartsclient.PlayerProfile
+import com.mpm.dartsclient.ProfileContainer
 import com.mpm.dartsclient.R
 import com.mpm.dartsclient.activities.config.Config
 
-class DeleteProfileDialogFragment(var position : Int) : DialogFragment() {
+class DeleteProfileDialogFragment(var position : Int, var profileContainer: ProfileContainer) : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
@@ -33,7 +34,7 @@ class DeleteProfileDialogFragment(var position : Int) : DialogFragment() {
         var okButton = view.findViewById<Button>(R.id.okButton)
         okButton.isEnabled = false
         okButton.setOnClickListener {
-            PlayerProfile.playerProfiles.removeAt(position)
+            profileContainer.playerProfiles.removeAt(position)
             (activity as Config).notifyAboutModifiedPlayerEntry(position)
             dialog?.dismiss()
         }

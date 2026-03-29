@@ -6,28 +6,22 @@ import com.mpm.dartsclient.scoring.scoring.CricketScore
 import com.mpm.dartsclient.scoring.scoring.GameScore
 import org.json.JSONObject
 
-class RoundTheClock(gameID : String, name :String) : DartsGameContainer(gameID, name) {
+class RoundTheClock(gameID : String, name :String) : DartsGame(gameID, name) {
 
     override fun parseConfigParameters(jsonObject: JSONObject) {
 
     }
 
-    override fun getConfigFragment(): Fragment {
-        //TODO("Not yet implemented")
+    override fun getConfigFragment(dartsGameContainer: DartsGameContainer): Fragment {
         return RoundTheClockConfig()
     }
 
     override fun serializeConfigParameters(): JSONObject {
         var config = JSONObject()
-
-
-
-
         return config
     }
 
     override fun getScoreObject(): GameScore {
-        //TODO("Not yet implemented")
         return CricketScore()
     }
 }

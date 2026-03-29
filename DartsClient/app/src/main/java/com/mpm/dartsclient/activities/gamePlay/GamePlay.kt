@@ -21,6 +21,7 @@ import com.mpm.dartsclient.activities.gamePlay.fragments.PlayerScoreDialogFragme
 import com.mpm.dartsclient.activities.gamePlay.fragments.PostConfigDialog
 import com.mpm.dartsclient.activities.gamePlay.fragments.WinningMessageDialogFragment
 import com.mpm.dartsclient.games.DartsGameContainer
+import com.mpm.dartsclient.loadedSQLData.MatchContainer
 import com.mpm.dartsclient.nativeElements.CustomGLSurfaceView
 import com.mpm.dartsclient.scoring.Dart
 import com.mpm.dartsclient.sqlhelper.SQLTables
@@ -37,6 +38,12 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
     private var playerScore : TextView? = null
     private var dartID : Int = 0
     private var flashing : Runnable? = null
+
+    var profileContainer: ProfileContainer = ProfileContainer.getInstance()
+
+    var matchContainer: MatchContainer = MatchContainer.getInstance()
+
+    var dartsGameContainer: DartsGameContainer = DartsGameContainer.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,7 +100,7 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
         }
         playerScore = findViewById(R.id.playerScoreGame)
         playerScore!!.setOnClickListener {
-            PlayerScoreDialogFragment().show(supportFragmentManager, "PLAYERSORE")
+            PlayerScoreDialogFragment(profileContainer).show(supportFragmentManager, "PLAYERSORE")
         }
 
         initializeMaps()
@@ -167,7 +174,7 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
     }
 
     private fun onGameStart(body: JSONObject) {
-        WinningMessageDialogFragment.saveProgress = SaveProgress.inProgress
+        //WinningMessageDialogFragment.saveProgress = SaveProgress.inProgress
         getGameDump()
     }
 
@@ -182,7 +189,7 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
         scoreTextHandler.removeCallbacks(dartHitEnd)
 
         //show the current hit dart info
-        PlayerProfile.currentPlayer?.score?.score = throwObject["SC"] as Int
+        profileContainer.currentPlayer?.score?.score = throwObject["SC"] as Int
 
         var thrownText = "" + (dartID + 1) + ": " + multiplierMap[multiplier]+sector
         dartMap[dartID]?.text = thrownText
@@ -199,7 +206,7 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
     //finishing showing hit dart info
     private var scoreTextHandler = Handler()
     private var dartHitEnd = Runnable {
-        playerScore?.text = PlayerProfile.currentPlayer!!.score!!.score.toString()
+        playerScore?.text = profileContainer.currentPlayer!!.score!!.score.toString()
         playerScore?.setBackgroundColor(getColor(R.color.WHITE))
 
         (mGLView as CustomGLSurfaceView).customRenderer?.highlightSector(0, 0)
@@ -233,16 +240,16 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
 
                 if ((++counter) % 2 == 1) {
                     runOnUiThread() {
-                        //playerName?.setBackgroundColor(PlayerProfile.currentPlayer!!.textColor!!)
-                        //playerName?.setTextColor(PlayerProfile.currentPlayer!!.backgroundColor!!)
-                        playerName?.setBackgroundColor((0xFFFFFF - PlayerProfile.currentPlayer!!.backgroundColor!!).or(0xFF000000.toInt()))
-                        playerName?.setTextColor((0xFFFFFF - PlayerProfile.currentPlayer!!.textColor!!).or(0xFF000000.toInt()))
+                        //playerName?.setBackgroundColor(profileContainer.currentPlayer!!.textColor!!)
+                        //playerName?.setTextColor(profileContainer.currentPlayer!!.backgroundColor!!)
+                        playerName?.setBackgroundColor((0xFFFFFF - profileContainer.currentPlayer!!.backgroundColor!!).or(0xFF000000.toInt()))
+                        playerName?.setTextColor((0xFFFFFF - profileContainer.currentPlayer!!.textColor!!).or(0xFF000000.toInt()))
                     }
                 }
                 else {
                     runOnUiThread() {
-                        playerName?.setBackgroundColor(PlayerProfile.currentPlayer!!.backgroundColor!!)
-                        playerName?.setTextColor(PlayerProfile.currentPlayer!!.textColor!!)
+                        playerName?.setBackgroundColor(profileContainer.currentPlayer!!.backgroundColor!!)
+                        playerName?.setTextColor(profileContainer.currentPlayer!!.textColor!!)
 
                         //inverse  = (0xFFFFFF - textColor!!).or(0xFF000000.toInt())
                     }
@@ -313,32 +320,32 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
         var player  = parsePlayerObject(playerObject)
 
         //set the cursor
-        for ((i, playerNumbered) in PlayerProfile.chosenPlayerProfiles.withIndex()) {
+        for ((i, playerNumbered) in profileContainer.chosenPlayerProfiles.withIndex()) {
             if (player == playerNumbered) {
-                PlayerProfile.currentCursor = i
+                profileContainer.currentCursor = i
             }
         }
 
-        PlayerProfile.currentPlayer = player
+        profileContainer.currentPlayer = player
 
         //remove earlier callbacks if they exists (by some error)
         playerNameTextHandler.removeCallbacks(newRoundIntroEnd)
         //playerNameTextHandler.removeCallbacks(flashing)
 
-        playerScore!!.text = PlayerProfile.currentPlayer!!.score!!.score.toString()
-        playerName?.text = "P${PlayerProfile.currentCursor + 1} - ${PlayerProfile.currentPlayer!!.nickname}"
+        playerScore!!.text = profileContainer.currentPlayer!!.score!!.score.toString()
+        playerName?.text = "P${profileContainer.currentCursor + 1} - ${profileContainer.currentPlayer!!.nickname}"
 
         (mGLView as CustomGLSurfaceView).customRenderer?.setCurrentColor(player!!.backgroundColor!!)
         (mGLView as CustomGLSurfaceView).customRenderer?.highlightSector(0, 0)
-        playerName?.setBackgroundColor(PlayerProfile.currentPlayer!!.backgroundColor!!)
-        playerName?.setTextColor(PlayerProfile.currentPlayer!!.textColor!!)
+        playerName?.setBackgroundColor(profileContainer.currentPlayer!!.backgroundColor!!)
+        playerName?.setTextColor(profileContainer.currentPlayer!!.textColor!!)
 
         when(dartID) {
             0 -> {
                 //Show New Round details
                 playerName?.setBackgroundColor(getColor(R.color.BLACK))
                 playerName?.setTextColor(getColor(R.color.WHITE))
-                playerName?.text = "R${PlayerProfile.currentPlayer!!.score!!.roundCount} - ${PlayerProfile.currentCursor}"
+                playerName?.text = "R${profileContainer.currentPlayer!!.score!!.roundCount} - ${profileContainer.currentCursor}"
                 //Show regular dart waiting screen 1,5 sec later
                 playerNameTextHandler.postDelayed(newRoundIntroEnd, 1500)
             }
@@ -357,7 +364,7 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
             val winningEarlier : WinningMessageDialogFragment? = supportFragmentManager.findFragmentByTag("WINNING") as WinningMessageDialogFragment?
             winningEarlier?.dismiss()
 
-            var winningMessage = WinningMessageDialogFragment(player)
+            var winningMessage = WinningMessageDialogFragment(player, profileContainer)
             winningMessage.show(supportFragmentManager, "WINNING")
 
             setRoundEndFlashing()
@@ -367,10 +374,10 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
     //new round info showing finished
     private var playerNameTextHandler = Handler()
     private var newRoundIntroEnd  = Runnable {
-        playerScore?.text = PlayerProfile.currentPlayer!!.score!!.score.toString()
-        playerName?.setBackgroundColor(PlayerProfile.currentPlayer!!.backgroundColor!!)
-        playerName?.setTextColor(PlayerProfile.currentPlayer!!.textColor!!)
-        playerName?.text = "P${PlayerProfile.currentCursor + 1} - ${PlayerProfile.currentPlayer!!.nickname}"
+        playerScore?.text = profileContainer.currentPlayer!!.score!!.score.toString()
+        playerName?.setBackgroundColor(profileContainer.currentPlayer!!.backgroundColor!!)
+        playerName?.setTextColor(profileContainer.currentPlayer!!.textColor!!)
+        playerName?.text = "P${profileContainer.currentCursor + 1} - ${profileContainer.currentPlayer!!.nickname}"
     }
 
     fun debugGameDump() : JSONObject {
@@ -434,8 +441,8 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
             newPlayerList[slot] = player
 
             if (currentNick == player.nickname) {
-                PlayerProfile.currentCursor = slot
-                PlayerProfile.currentPlayer = player
+                profileContainer.currentCursor = slot
+                profileContainer.currentPlayer = player
             }
         }
 
@@ -446,11 +453,11 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
             nonNullList.add(player!!)
         }
 
-        PlayerProfile.chosenPlayerProfiles = nonNullList
+        profileContainer.chosenPlayerProfiles = nonNullList
 
         //finding how many players are still playing
         var activePlayers = 0
-        for (player in PlayerProfile.chosenPlayerProfiles) {
+        for (player in profileContainer.chosenPlayerProfiles) {
             if (player.score!!.position == 0) {
                 activePlayers++
                 break
@@ -468,32 +475,42 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
                 Calendar.SECOND
             )
 
-            SQLTables.addMatch(
+            var success : SaveProgress = SQLTables.addMatch(
                 this,
                 gameNr,
-                DartsGameContainer.currentGame!!.gameID,
-                DartsGameContainer.currentGame!!.subtype,
+                dartsGameContainer.currentGame!!.gameID,
+                dartsGameContainer.currentGame!!.subtype,
                 dateTimeString,
-                PlayerProfile.chosenPlayerProfiles
+                profileContainer.chosenPlayerProfiles
             )
+
+            notifyWinningFragment(SaveProgress.success)
+
+            if (success == SaveProgress.success) {
+                //var thread2 = Thread() {
+                    //matchContainer.createStatistics()
+                //}
+
+                //thread2.start()
+            }
 
             val winningEarlier : WinningMessageDialogFragment? = supportFragmentManager.findFragmentByTag("WINNING") as WinningMessageDialogFragment?
             winningEarlier?.dismiss()
 
-            var winningMessage = WinningMessageDialogFragment(null)
+            var winningMessage = WinningMessageDialogFragment(null, profileContainer)
             winningMessage.show(supportFragmentManager, "WINNING")
         }
         else if (newResultPlayer != null && newResultPlayer.score!!.position > 0) {
             val winningEarlier : WinningMessageDialogFragment? = supportFragmentManager.findFragmentByTag("WINNING") as WinningMessageDialogFragment?
             winningEarlier?.dismiss()
 
-            var winningMessage = WinningMessageDialogFragment(newResultPlayer)
+            var winningMessage = WinningMessageDialogFragment(newResultPlayer, profileContainer)
             winningMessage.show(supportFragmentManager, "WINNING")
         }
     }
 
     private fun parsePlayerObject(playerObject: JSONObject) : PlayerProfile? {
-        var player = PlayerProfile.findPlayerByNick(playerObject["NICK"] as String)
+        var player = profileContainer.findPlayerByNick(playerObject["NICK"] as String)
 
         player?.score?.score = playerObject["SCORE"] as Int
         player?.score?.roundCount = playerObject["ROUND"] as Int
@@ -508,7 +525,7 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
 
     fun notifyWinningFragment(saveProgress: SaveProgress) {
         runOnUiThread {
-            WinningMessageDialogFragment.saveProgress = saveProgress
+            //WinningMessageDialogFragment.saveProgress = saveProgress
 
             val winningFragment : WinningMessageDialogFragment? = supportFragmentManager.findFragmentByTag("WINNING") as WinningMessageDialogFragment?
             winningFragment?.setCorrectMessageOutside(saveProgress)

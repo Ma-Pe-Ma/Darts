@@ -14,16 +14,17 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mpm.dartsclient.PlayerProfile
+import com.mpm.dartsclient.ProfileContainer
 import com.mpm.dartsclient.R
 import com.mpm.dartsclient.activities.gamePlay.adapters.PlayerScoreRecyclerViewAdapter
 
-class PlayerScoreDialogFragment : DialogFragment() {
+class PlayerScoreDialogFragment(var profileContainer: ProfileContainer) : DialogFragment() {
     var recyclerView : RecyclerView? = null
     var title : TextView? = null
 
     override fun onResume() {
         super.onResume()
-        var height = 100 + PlayerProfile.chosenPlayerProfiles.size * 200
+        var height = 100 + profileContainer.chosenPlayerProfiles.size * 200
 
         if (height > 1000) {
             height = 1000
@@ -61,7 +62,7 @@ class PlayerScoreDialogFragment : DialogFragment() {
 
         title!!.text = getString(R.string.playerScores)
 
-        var playerScoreRecyclerViewAdapter = PlayerScoreRecyclerViewAdapter(activity as Activity, PlayerProfile.currentCursor, false, PlayerProfile.chosenPlayerProfiles)
+        var playerScoreRecyclerViewAdapter = PlayerScoreRecyclerViewAdapter(activity as Activity, profileContainer.currentCursor, false, profileContainer)
 
         playerScoreRecyclerViewAdapter.notifyDataSetChanged()
 

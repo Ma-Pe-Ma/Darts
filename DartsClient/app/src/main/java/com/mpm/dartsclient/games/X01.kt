@@ -6,13 +6,13 @@ import com.mpm.dartsclient.scoring.scoring.CricketScore
 import com.mpm.dartsclient.scoring.scoring.GameScore
 import org.json.JSONObject
 
-class X01(gameID : String, name :String) : DartsGameContainer(gameID, name) {
+class X01(gameID : String, name :String) : DartsGame(gameID, name) {
 
     override fun parseConfigParameters(jsonObject: JSONObject) {
 
     }
 
-    override fun getConfigFragment(): Fragment {
+    override fun getConfigFragment(dartsGameContainer: DartsGameContainer): Fragment {
         return X01Config()
     }
 
