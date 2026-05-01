@@ -510,7 +510,7 @@ class GamePlay : AppCompatActivity(), BTMessageReceiver {
     }
 
     private fun parsePlayerObject(playerObject: JSONObject) : PlayerProfile? {
-        var player = profileContainer.findPlayerByNick(playerObject["NICK"] as String)
+        var player = profileContainer.chosenPlayerProfiles.find { it.nickname == playerObject["NICK"] as String }
 
         player?.score?.score = playerObject["SCORE"] as Int
         player?.score?.roundCount = playerObject["ROUND"] as Int

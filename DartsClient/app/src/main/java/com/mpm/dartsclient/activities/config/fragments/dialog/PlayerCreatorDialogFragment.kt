@@ -17,6 +17,7 @@ import androidx.fragment.app.DialogFragment
 import com.mpm.dartsclient.PlayerProfile
 import com.mpm.dartsclient.ProfileContainer
 import com.mpm.dartsclient.R
+import com.mpm.dartsclient.activities.config.Config
 import com.mpm.dartsclient.sqlhelper.SQLTables
 import com.skydoves.colorpickerview.AlphaTileView
 import com.skydoves.colorpickerview.ColorEnvelope
@@ -39,12 +40,9 @@ class PlayerCreatorDialogFragment : DialogFragment {
 
     var profileContainer: ProfileContainer;
 
-    constructor(position : Int?, profileContainer: ProfileContainer) : super() {
+    constructor(existingPlayer: PlayerProfile?, profileContainer: ProfileContainer) : super() {
         this.profileContainer = profileContainer
-
-        if (position != null) {
-            existingPlayer = profileContainer.playerProfiles[position]
-        }
+        this.existingPlayer = existingPlayer
     }
 
     override fun onResume() {
@@ -115,8 +113,7 @@ class PlayerCreatorDialogFragment : DialogFragment {
                     SQLTables.PlayersTable.updatePlayer(existingPlayer!!.id, existingPlayer!!.name, existingPlayer!!.nickname, existingPlayer!!.textColor!!, existingPlayer!!.backgroundColor!!)
                 }
 
-                //(activity as Config).notifyAboutModifiedPlayerEntry(position!!)
-                //existingPlayer = null
+                (activity as Config).notifyAboutModifiedPlayerEntry()
                 dialog?.dismiss()
             }
         }
@@ -155,13 +152,7 @@ class PlayerCreatorDialogFragment : DialogFragment {
         builder.setPositiveButton(
             activity?.getString(R.string.chooseColor),
             ColorEnvelopeListener { envelope, which ->
-                if (colorPicker == backColorButton) {
-                    backColorButton?.setBackgroundColor(envelope.color)
-                }
-
-                if (colorPicker == textColorButton) {
-                    textColorButton?.setBackgroundColor(envelope.color)
-                }
+                colorPicker.setBackgroundColor(envelope.color)
             })
         builder.setNegativeButton(
             activity?.getString(R.string.cancel),
@@ -173,11 +164,10 @@ class PlayerCreatorDialogFragment : DialogFragment {
         colorPickerView.flagView = CustomFlag(activity, R.layout.color_flag_layout)
 
         if (colorPicker == backColorButton) {
-            colorPickerView.pureColor = existingPlayer?.backgroundColor!!
+            colorPickerView.pureColor = existingPlayer?.backgroundColor ?: DEFAULT_BACKGROUND_COLOR
         }
-
-        if (colorPicker == textColorButton) {
-            colorPickerView.pureColor = existingPlayer?.textColor!!
+        else if (colorPicker == textColorButton) {
+            colorPickerView.pureColor = existingPlayer?.textColor ?: DEFAULT_TEXT_COLOR
         }
 
         builder.show()
@@ -193,7 +183,7 @@ class PlayerCreatorDialogFragment : DialogFragment {
         }
 
         override fun onFlipped(p0: Boolean?) {
-            TODO("Not yet implemented")
+            //TODO("Not yet implemented")
         }
     }
 

@@ -50,7 +50,7 @@ class PlayerListSelectorRecyclerViewAdapter(var activity : FragmentActivity, var
 
         val editButton = holder.holderView.findViewById<ImageButton>(R.id.editPlayer)
         editButton.setOnClickListener {
-            val playerCreatorDialogFragment = PlayerCreatorDialogFragment(position, profileContainer)
+            val playerCreatorDialogFragment = PlayerCreatorDialogFragment(currentPlayer, profileContainer)
             playerCreatorDialogFragment.show(activity.supportFragmentManager, "PLAYERCREATOR")
         }
 
@@ -58,9 +58,7 @@ class PlayerListSelectorRecyclerViewAdapter(var activity : FragmentActivity, var
         removeButton.setOnClickListener {
             profileContainer.chosenPlayerProfiles.removeAt(position)
             notifyDataSetChanged()
-            MessageHandler.sendPlayers(profileContainer.chosenPlayerProfiles)
-            matchContainer.createStatistics(profileContainer, dartsGameContainer)
-            (activity as Config).notifyStatisticsButton()
+            //matchContainer.createStatistics(profileContainer, dartsGameContainer)
         }
     }
 

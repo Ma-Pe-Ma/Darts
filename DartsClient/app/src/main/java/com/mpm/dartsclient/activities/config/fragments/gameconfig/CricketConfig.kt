@@ -343,7 +343,7 @@ class CricketConfig (var dartsGameContainer: DartsGameContainer) : Fragment() {
             value = default
         }
 
-        alertDialogBuilder.setPositiveButton("OKSZI", DialogInterface.OnClickListener() { dialogInterface: DialogInterface, i: Int ->
+        alertDialogBuilder.setPositiveButton("Rendben", DialogInterface.OnClickListener() { dialogInterface: DialogInterface, i: Int ->
                setter(numberPicker.value)
         })
 

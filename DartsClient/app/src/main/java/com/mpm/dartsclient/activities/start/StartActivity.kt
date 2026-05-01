@@ -19,10 +19,12 @@ import com.mpm.dartsclient.R
 import com.mpm.dartsclient.activities.config.Config
 import com.mpm.dartsclient.activities.start.fragments.BTDeviceSelectorDialogFragment
 
-class StartActivity : AppCompatActivity(), BTStateReceiver{
-    override fun notifyState(state: Boolean) {
-        processState(state)
-    }
+class StartActivity : AppCompatActivity() {
+    val REQUEST_ENABLE_BT : Int = 101
+    var buttonState : ButtonState = ButtonState.offline
+    var onlineButton : RadioButton? = null
+    var offlineButton : RadioButton? = null
+    var btChooserButton : Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,13 +32,11 @@ class StartActivity : AppCompatActivity(), BTStateReceiver{
 
         setupButtons()
 
-        DartsClientApplication.getBluetoothCommunicator().subscribeTpState(this)
-
         findViewById<FloatingActionButton>(R.id.fabStart).setOnClickListener { view ->
-
             when (buttonState) {
                 ButtonState.offline -> {
-                    offlineNotImplementedYet()
+                    val intent = Intent(this, Config::class.java)
+                    startActivity(intent)
                 }
 
                 ButtonState.onlineConnected -> {
@@ -51,19 +51,6 @@ class StartActivity : AppCompatActivity(), BTStateReceiver{
             }
         }
     }
-
-    override fun onDestroy() {
-        DartsClientApplication.getBluetoothCommunicator().unsubscribeToState(this)
-        super.onDestroy()
-    }
-
-    val REQUEST_ENABLE_BT : Int = 101
-
-    var buttonState : ButtonState = ButtonState.offline
-
-    var onlineButton : RadioButton? = null
-    var offlineButton : RadioButton? = null
-    var btChooserButton : Button? = null
 
     private fun setupButtons() {
         offlineButton = findViewById(R.id.offline)
@@ -83,6 +70,7 @@ class StartActivity : AppCompatActivity(), BTStateReceiver{
         }
 
         onlineButton = findViewById(R.id.online)
+        onlineButton!!.isEnabled = false
         onlineButton?.setOnCheckedChangeListener {_, isChecked ->
             if (isChecked) {
                 offlineButton?.apply {
@@ -98,6 +86,7 @@ class StartActivity : AppCompatActivity(), BTStateReceiver{
                 isChecked = true
             }
         }
+        btChooserButton!!.isEnabled = false
     }
 
     private fun initializeBluetooth() {
@@ -172,21 +161,6 @@ class StartActivity : AppCompatActivity(), BTStateReceiver{
         builder.create().show()
     }
 
-    private fun offlineNotImplementedYet() {
-        var builder = AlertDialog.Builder(this)
-
-        builder.setTitle("Nem létező mód")
-        builder.setMessage("Sajnos ez a mód még nem készült el! :(")
-        builder.setPositiveButton(
-            "Rendben",
-            DialogInterface.OnClickListener { _, _ ->
-                val intent = Intent(this, Config::class.java)
-                startActivity(intent)
-            }
-        )
-        builder.create().show()
-    }
-
     fun closeBTDialog(board : String) {
         var btDialog = supportFragmentManager.findFragmentByTag("BTLIST")
         (btDialog as DialogFragment).dismiss()
@@ -196,18 +170,5 @@ class StartActivity : AppCompatActivity(), BTStateReceiver{
 
         DartsClientApplication.getBluetoothCommunicator().boardID = board
         DartsClientApplication.getBluetoothCommunicator().joinBondedDevice()
-    }
-
-    private fun processState(state: Boolean) {
-        Log.i("DARTS", "state set to: "+state)
-
-        if (state) {
-            buttonState = ButtonState.onlineConnected
-            btChooserButton?.setBackgroundColor(getColor(R.color.GREEN))
-        }
-        else {
-            buttonState = ButtonState.onlineDisconnected
-            btChooserButton?.setBackgroundColor(getColor(R.color.RED))
-        }
     }
 }

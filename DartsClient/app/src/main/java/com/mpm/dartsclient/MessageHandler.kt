@@ -5,7 +5,7 @@ import com.mpm.dartsclient.sqlhelper.SQLTables
 import org.json.JSONObject
 
 object MessageHandler {
-    private fun createPlayerJson(playerProfiles: MutableList<PlayerProfile>) : JSONObject {
+    private fun createPlayerJson(playerProfiles: List<PlayerProfile>) : JSONObject {
         var players = JSONObject()
 
         for ((i, player) in playerProfiles.withIndex()) {
@@ -19,7 +19,7 @@ object MessageHandler {
         return players
     }
 
-    fun sendPlayers(playerProfiles: MutableList<PlayerProfile>) {
+    fun sendPlayers(playerProfiles: List<PlayerProfile>) {
         var jsonObject = JSONObject()
         jsonObject.put("STATE", "PLAYERS")
 
@@ -52,7 +52,7 @@ object MessageHandler {
         DartsClientApplication.getBluetoothCommunicator().sendMessage(jsonObject)
     }
 
-    fun sendDump(playerProfiles: MutableList<PlayerProfile>, dartsGameContainer: DartsGameContainer) {
+    fun sendDump(playerProfiles: List<PlayerProfile>, dartsGameContainer: DartsGameContainer) {
         var dump = JSONObject()
         dump.put("STATE", "DUMP")
 

@@ -19,32 +19,16 @@ class ProfileContainer {
 
     fun setPlayerOrder(mode : Int) {
         when(mode) {
-            0 -> orderCyclicModification()
-            1 -> orderReverseModification()
+            0 -> {
+                val newOrder = chosenPlayerProfiles.drop(1).toMutableList()
+                newOrder.add(chosenPlayerProfiles[0])
+                chosenPlayerProfiles = newOrder
+            }
+            1 -> {
+                chosenPlayerProfiles = chosenPlayerProfiles.reversed().toMutableList()
+            }
             2 -> {}
         }
-    }
-
-    fun orderCyclicModification() {
-        val newOrder = mutableListOf<PlayerProfile>()
-
-        for (i in 1 until chosenPlayerProfiles.size) {
-            newOrder.add(chosenPlayerProfiles[i])
-        }
-
-        newOrder.add(chosenPlayerProfiles[0])
-
-        chosenPlayerProfiles = newOrder
-    }
-
-    fun orderReverseModification() {
-        var newOrder = mutableListOf<PlayerProfile>()
-
-        for (i in chosenPlayerProfiles.size - 1..0) {
-            newOrder.add(chosenPlayerProfiles[i])
-        }
-
-        chosenPlayerProfiles = newOrder
     }
 
     var roundCounter = 0
@@ -63,10 +47,6 @@ class ProfileContainer {
                 return checkable
             }
         }
-    }
-
-    fun findPlayerByNick(nick : String) : PlayerProfile? {
-        return chosenPlayerProfiles.find { it.nickname == nick }
     }
 
     fun checkTakenNickname(existingPlayer: PlayerProfile?, newName: String): Boolean {

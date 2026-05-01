@@ -6,17 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Button
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.mpm.dartsclient.MessageHandler
 import com.mpm.dartsclient.R
 import com.mpm.dartsclient.activities.config.Config
 import com.mpm.dartsclient.activities.config.adapters.GameListSpinnerAdapter
 import com.mpm.dartsclient.games.DartsGameContainer
 
-class GameConfigFragment(var dartsGameContainer: DartsGameContainer) : Fragment(), Config.FragmentCommunicator {
+class GameConfigFragment(var dartsGameContainer: DartsGameContainer) : Fragment() {
     var spinner : Spinner? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -43,11 +41,6 @@ class GameConfigFragment(var dartsGameContainer: DartsGameContainer) : Fragment(
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        (activity as Config).subscribeToCommunicator(this)
-    }
-
     //called when spinner changed or new data comes from dartboard
     fun setProperConfigFragment(gameNr: Int) {
         dartsGameContainer.currentGame = dartsGameContainer.games[gameNr]
@@ -56,21 +49,5 @@ class GameConfigFragment(var dartsGameContainer: DartsGameContainer) : Fragment(
         val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.gameConfigFragment, dartsGameContainer.currentGame!!.getConfigFragment(dartsGameContainer))
         fragmentTransaction.commit()
-    }
-
-    override fun notifyPlayerConfigFragment(position: Int) {
-
-    }
-
-    override fun notifyAboutModifiedPlayerEntry(position: Int) {
-
-    }
-
-    override fun notifyGameConfigFragmentAboutUpdate(position: Int) {
-
-    }
-
-    override fun notifyStatisticsButton() {
-
     }
 }

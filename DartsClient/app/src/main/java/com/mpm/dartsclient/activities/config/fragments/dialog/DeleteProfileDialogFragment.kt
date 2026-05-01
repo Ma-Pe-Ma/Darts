@@ -16,11 +16,12 @@ import com.mpm.dartsclient.ProfileContainer
 import com.mpm.dartsclient.R
 import com.mpm.dartsclient.activities.config.Config
 
-class DeleteProfileDialogFragment(var position : Int, var profileContainer: ProfileContainer) : DialogFragment() {
+class DeleteProfileDialogFragment(var playerProfile: PlayerProfile, var profileContainer: ProfileContainer) : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        dialog!!.window!!.setLayout(700, 1100)
+        val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
+        dialog?.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
     override fun onCreateView(
@@ -34,8 +35,9 @@ class DeleteProfileDialogFragment(var position : Int, var profileContainer: Prof
         var okButton = view.findViewById<Button>(R.id.okButton)
         okButton.isEnabled = false
         okButton.setOnClickListener {
-            profileContainer.playerProfiles.removeAt(position)
-            (activity as Config).notifyAboutModifiedPlayerEntry(position)
+            var index = profileContainer.playerProfiles.indexOfFirst { it.name == playerProfile.name }
+            profileContainer.playerProfiles.removeAt(index)
+            (activity as Config).notifyAboutModifiedPlayerEntry()
             dialog?.dismiss()
         }
 
@@ -56,11 +58,9 @@ class DeleteProfileDialogFragment(var position : Int, var profileContainer: Prof
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                okButton.isEnabled = s.toString() == activity?.getString(R.string.confirmString)
+                okButton.isEnabled = s.toString() == playerProfile.nickname
             }
-        }
-
-        )
+        })
 
         val imm: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(confirmText, InputMethodManager.SHOW_IMPLICIT)

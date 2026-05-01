@@ -56,6 +56,7 @@
     <string name="searchPlayer">Játékos keresése...</string>
     <string name="addNewPlayer">Játékos hozzáadása</string>
     <string name="createNewPlayer">Játékos létrehozása</string>
+    <string name="neededPlayers">Játékosok megadása szükséges!</string>
 
     <string name="playerName">Név:</string>
     <string name="playerNickname">Becenév:</string>
@@ -66,12 +67,13 @@
     <string name="playerAlreadyChosen2">A játékos használatban van, ezért nem törölhető!</string>
 
     <string name="deleteTitle">Biztosan törölni szeretné?</string>
-    <string name="deleteExplanation">Ha igen, írja be hogy biztos!</string>
+    <string name="deleteExplanation">Ha igen, írja be a játékos becenevét!</string>
     <string name="confirmString">Rendben</string>
 
     <string name="creatorTitle">Játékos szerkesztése</string>
     <string name="chooseColor">Kiválaszt</string>
     <string name="cancel">mégse</string>
+    <string name="unfinished">A főjátékmód még nem érhető el</string>
 
     <string name="playerConfigTitle">Játékos választása</string>
 
